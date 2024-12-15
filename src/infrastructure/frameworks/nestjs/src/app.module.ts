@@ -4,6 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { MaintenanceModule } from './modules/maintenance.module';
 
 @Module({
   imports: [
@@ -12,12 +13,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     }),
     TypeOrmModule.forRootAsync({
       useFactory: () => {
+        console.log('AppDataSource().options', AppDataSource().options);
         return {
           ...AppDataSource().options,
           autoLoadEntities: true,
         };
       },
     }),
+    MaintenanceModule,
   ],
   controllers: [AppController],
   providers: [AppService],
