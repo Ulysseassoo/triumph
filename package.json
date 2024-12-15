@@ -1,0 +1,13 @@
+{
+  "name": "clean-architecture",
+  "version": "1.0.0",
+  "main": "app.js",
+  "author": "Ulysseassoo <uassooemane@myges.fr>",
+  "license": "MIT",
+  "dependencies": {
+    "pg": "^8.13.1",
+    "reflect-metadata": "^0.2.2",
+    "sqlite3": "^5.1.7",
+    "typeorm": "^0.3.20"
+  }
+}

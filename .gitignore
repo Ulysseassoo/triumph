@@ -1,0 +1,6 @@
+.wakatime-project
+
+node_modules
+*.lock
+dist
+.env
