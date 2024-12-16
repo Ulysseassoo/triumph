@@ -1,0 +1,92 @@
+version: '3.8'
+
+services:
+  # backendnestjs:
+  #   build:
+  #     context: ./nestjs
+  #     dockerfile: Dockerfile
+  #   tty: true
+  #   stdin_open: true
+  #   working_dir: /home/node
+  #   entrypoint: sh -c
+  #   command: '"npm install && npm run start:dev "'
+  #   depends_on:
+  #     - mongo
+  #     - database
+  #   env_file:
+  #     - .env
+  #   expose:
+  #     - 5001
+  #   ports:
+  #     - '5001:5001'
+  #   volumes:
+  #     - ./nestjs:/home/node # Le dossier backend
+  #     - ../../Domain:/Domain # Montage explicite du Domain
+  #     - ../../Application:/Application # Montage explicite de l'Application
+  #     - ../../Infrastructure:/Infrastructure # Montage explicite de l'Infrastructure
+
+  backendexpress:
+    build:
+      context: ./express
+      dockerfile: Dockerfile
+    tty: true
+    stdin_open: true
+    working_dir: /home/node
+    entrypoint: sh -c
+    command: '"npm install && npm run start:dev "'
+    depends_on:
+      - mongo
+      - database
+    env_file:
+      - .env
+    expose:
+      - 5001
+    ports:
+      - '5001:5001'
+    volumes:
+      - ./express:/home/node # Le dossier backend
+      - ../../../domain:/domain # Montage explicite du Domain
+      - ../../../application:/application # Montage explicite de l'Application
+      - ../../../infrastructure:/infrastructure # Montage explicite de l'Infrastructure
+
+  postgres:
+    image: postgres:16
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+
+  database:
+    image: adminer
+    restart: always
+    depends_on:
+      - postgres
+      - mongo
+    ports:
+      - '8080:8080'
+
+  mongo:
+    image: mongo
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-root}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-password}
+      MONGO_INITDB_DATABASE: cleanCodeDatabase
+    volumes:
+      - data-mongo:/data/db
+      - mongo-seed.js:/docker-entrypoint-initdb.d/mongo-seed.js
+    ports:
+      - '27017:27017'
+
+volumes:
+  db_data:
+  data-mongo:
+  mongo-seed.js:

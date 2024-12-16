@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "lib": ["es5", "es6", "dom"],
+        "target": "es5",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "esModuleInterop": true,
+        "paths": {
+            "@domain/*": ["../../../domain/*"],
+            "@application/*": ["../../../application/*"],
+            "@infrastructure/*": ["../../../infrastructure/*"]
+          },
+          "sourceMap": true
+        },
+        "include": [
+          "src/**/*",
+          "../../../Domain/**/*",
+          "../../../Application/**/*",
+          "../../../Infrastructure/Frameworks/backend/src/**/*"
+        ],
+        "exclude": ["node_modules"]
+    }
