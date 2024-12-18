@@ -10,6 +10,30 @@ export class TypeOrmUserRepository implements UserRepositoryInterface {
   constructor() {
     this.repository = AppDataSource().getRepository(UserOrmEntity);
   }
+  create(user: User): Promise<User> {
+    throw new Error('Method not implemented.');
+  }
+  findByEmail(email: string): Promise<User | null> {
+    throw new Error('Method not implemented.');
+  }
+  findByName(email: string): Promise<User | null> {
+    throw new Error('Method not implemented.');
+  }
+  findByRole(role: string): Promise<User[]> {
+    throw new Error('Method not implemented.');
+  }
+  findAllFilters(criteria: object): Promise<User[]> {
+    throw new Error('Method not implemented.');
+  }
+  updatePatch(id: string, pieceData: Partial<User>): Promise<User> {
+    throw new Error('Method not implemented.');
+  }
+  update(id: string, userData: Partial<User>): Promise<User> {
+    throw new Error('Method not implemented.');
+  }
+  delete(id: string): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
 
   async save(user: User): Promise<User> {
     const ormUser = this.toOrmEntity(user);

@@ -14,7 +14,7 @@ export class UserOrmEntity {
   @Column({ type: 'varchar', nullable: false })
   password: string;
 
-  @Column({ type: "timestamp" , nullable: true})
+  @Column({ type: 'datetime', nullable: true })
   passwordValidUntil?: Date;
 
   @Column({ type: "boolean", nullable: true})

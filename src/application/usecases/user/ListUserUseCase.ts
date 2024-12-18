@@ -1,5 +1,6 @@
-import { UserDomain } from "../../../domain/entities/UserDomain";
-import { UserRepositoryInterface } from './../../repositories/UserRepository';
+import { UserRepositoryInterface } from "../../repositories/UserRepositoryInterface";
+import { User } from './../../../domain/entities/user.entity';
+
 
 interface UserFilterOptions {
   name?: string;
@@ -19,7 +20,7 @@ export class ListUserUseCase {
     filterOptions: UserFilterOptions = {},
     paginationOptions: PaginationOptions = {}
   ): Promise<{
-    data: UserDomain[];
+    data: User[];
     total: number;
     page: number;
     limit: number;
