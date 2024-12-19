@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "dotenv": "^16.4.7",
-    "express": "^4.21.2",
+    "express": "file:",
     "reflect-metadata": "^0.2.2",
     "tsconfig-paths": "^4.2.0",
     "typeorm": "^0.3.20"
