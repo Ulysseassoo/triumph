@@ -1,6 +1,8 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Post } from '@nestjs/common';
 import { Maintenance } from '../../../../../domain/entities/maintenance.entity';
 import { MaintenanceService } from 'src/services/maintenance.service';
+import { CreateMaintenanceDto } from 'src/dtos/maintenance.dto';
+import { validate } from 'class-validator';
 
 @Controller('maintenances')
 export class MaintenanceController {
@@ -12,12 +14,17 @@ export class MaintenanceController {
   }
 
   @Post()
-  async createMaintenance(
-    @Body('motoId') motoId: string,
-    @Body('kilometrageInterval') kilometrageInterval: number,
-    @Body('tempsInterval') tempsInterval: number,
-    @Body('recommandations') recommandations: string
-  ) {
-    return await this.maintenanceService.addMaintenance(motoId, kilometrageInterval, tempsInterval, recommandations);
+  async createMaintenance(@Body() createMaintenanceDto: CreateMaintenanceDto) {
+    const errors = await validate(createMaintenanceDto);
+    if (errors.length > 0) {
+      throw new BadRequestException('Validation failed: ' + errors.toString());
+    }
+
+    return await this.maintenanceService.addMaintenance(
+      createMaintenanceDto.motoId,
+      createMaintenanceDto.kilometrageInterval,
+      createMaintenanceDto.tempsInterval,
+      createMaintenanceDto.recommandations
+    );
   }
 }

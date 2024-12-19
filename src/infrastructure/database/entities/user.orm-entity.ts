@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { NotificationOrmEntity } from './notification.orm-entity';
 
 @Entity('users')
 export class UserOrmEntity {
@@ -22,4 +23,7 @@ export class UserOrmEntity {
 
   @Column({ type: "simple-array", nullable: true })
   role?: string[];
+
+  @OneToMany(() => NotificationOrmEntity, (notification) => notification.user)
+  notifications: NotificationOrmEntity[];
 }

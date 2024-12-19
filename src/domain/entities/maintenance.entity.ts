@@ -21,5 +21,6 @@ export class Maintenance {
 		public maintenanceInterval: MaintenanceInterval,
 		public recommandations: string | null = null,
 		public cost: number | null = null,
+		public pieces: Piece[] = [],
 	) {}
 }

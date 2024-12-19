@@ -5,6 +5,9 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MaintenanceModule } from './modules/maintenance.module';
+import { PieceModule } from './modules/piece.module';
+import { NotificationModule } from './modules/notification.module';
+import { MotoModule } from './modules/moto.module';
 
 @Module({
   imports: [
@@ -21,6 +24,9 @@ import { MaintenanceModule } from './modules/maintenance.module';
       },
     }),
     MaintenanceModule,
+    PieceModule,
+    MotoModule,
+    NotificationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

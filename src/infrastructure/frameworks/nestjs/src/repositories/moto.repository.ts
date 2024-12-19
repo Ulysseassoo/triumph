@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { MotoRepositoryInterface } from "../../../../../application/repositories/MotoRepositoryInterface";
 import { Moto } from "../../../../../domain/entities/moto.entity";
+import { MotoMapper } from '../../../../database/mappers/moto.mapper';
 
 @Injectable()
 export class MotoRepository implements MotoRepositoryInterface {
@@ -11,8 +12,10 @@ export class MotoRepository implements MotoRepositoryInterface {
     @InjectRepository(MotoOrmEntity)
     private readonly repository: Repository<MotoOrmEntity>,
   ) {}
-  create(moto: Moto): Promise<Moto> {
-    throw new Error("Method not implemented.");
+  async create(moto: Moto): Promise<Moto | null> {
+    const motoOrmEntity = MotoMapper.toOrmEntity(moto);
+    const motoCreated = await this.repository.save(motoOrmEntity);
+    return MotoMapper.toDomainEntity(motoCreated);
   }
   findById(id: string): Promise<Moto | null> {
     throw new Error("Method not implemented.");
@@ -24,33 +27,9 @@ export class MotoRepository implements MotoRepositoryInterface {
     throw new Error("Method not implemented.");
   }
 
-  private toOrmEntity(moto: Moto): MotoOrmEntity {
-    const ormMoto = new MotoOrmEntity();
-    ormMoto.id = moto.id;
-    ormMoto.model = moto.model;
-    ormMoto.clientId = moto.clientId;
-    ormMoto.currentMileage = moto.currentMileage;
-    ormMoto.price = moto.price;
-    ormMoto.status = moto.status;
-    ormMoto.maintenances = moto.maintenances.map(this.toOrmMaintenanceEntity);
-    return ormMoto;
-  }
-  
-  private toDomainEntity(ormMoto: MotoOrmEntity): Moto {
-    return new Moto(
-      ormMoto.id,
-      ormMoto.model,
-      ormMoto.clientId,
-      ormMoto.currentMileage,
-      ormMoto.price,
-      ormMoto.status,
-      ormMoto.maintenances.map((maintenance) => maintenance.)
-    );
-  }
-
 
   async findAll(): Promise<Moto[]> {
     const motos = await this.repository.find();
-    return motos.map(moto => this.toDomainEntity(moto));
+    return motos.map(moto => MotoMapper.toDomainEntity(moto));
   }
 }

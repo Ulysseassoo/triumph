@@ -2,16 +2,23 @@ import { MaintenanceOrmEntity } from './../../../../database/entities/maintenanc
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { MaintenanceController } from 'src/controllers/maintenance.controller';
+import { MaintenanceController } from '../controllers/maintenance.controller';
 import { MaintenanceService } from 'src/services/maintenance.service';
-import { MaintenanceRepository } from 'src/repositories/maintenance.repository';
-import { AddMaintenanceUseCase } from "../../../../../application/usecases/maintenance/AddMaintenanceUseCase";
-import { SendNotificationUseCase } from "../../../../../application/usecases/notification/SendNotificationUseCase";
-import { MotoRepository } from "src/repositories/moto.repository";
-import { MotoOrmEntity } from "../../../../database/entities/moto.orm-entity";
+import { MaintenanceRepository } from "../repositories/maintenance.repository";
+import { AddMaintenanceUseCase } from '../../../../../application/usecases/maintenance/AddMaintenanceUseCase';
+import { SendNotificationUseCase } from '../../../../../application/usecases/notification/SendNotificationUseCase';
+import { MotoRepository } from '../repositories/moto.repository';
+import { MotoModule } from './moto.module';
+import { NotificationRepository } from 'src/repositories/notification.repository';
+import { NotificationModule } from './notification.module';
 
 @Module({
-  imports: [ConfigModule, TypeOrmModule.forFeature([MaintenanceOrmEntity, MotoOrmEntity])],
+  imports: [
+    ConfigModule,
+    TypeOrmModule.forFeature([MaintenanceOrmEntity]),
+    MotoModule,
+    NotificationModule,
+  ],
   controllers: [MaintenanceController],
   providers: [
     MotoRepository,
@@ -19,13 +26,18 @@ import { MotoOrmEntity } from "../../../../database/entities/moto.orm-entity";
     MaintenanceService,
     MaintenanceRepository,
     SendNotificationUseCase,
+    NotificationRepository,
     {
       provide: 'MaintenanceRepositoryInterface',
       useClass: MaintenanceRepository,
     },
-        {
+    {
       provide: 'MotoRepositoryInterface',
       useClass: MotoRepository,
+    },
+    {
+      provide: 'NotificationRepositoryInterface',
+      useClass: NotificationRepository,
     },
   ],
   exports: [
