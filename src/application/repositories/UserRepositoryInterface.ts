@@ -1,10 +1,10 @@
-import { User } from "../../domain/entities/user.entity";
+import { User } from './../../domain/entities/user.entity';
 
 export interface UserRepositoryInterface {
   create(user: User): Promise<User>;
-  findById(id: string): Promise<User>;
-  findByEmail(email: string): Promise<User>;
-  findByName(email: string): Promise<User>;
+  findById(id: string): Promise<User | null>;
+  findByEmail(email: string): Promise<User | null>;
+  findByName(email: string): Promise<User | null>;
   findAll(): Promise<User[]>;
   findByRole(role: string): Promise<User[]>;
   findAllFilters(criteria: object): Promise<User[]>;

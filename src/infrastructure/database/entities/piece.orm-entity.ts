@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import { MaintenanceOrmEntity } from "./maintenance.orm-entity";
+
 
 @Entity('piece')
 export class PieceOrmEntity {
@@ -21,6 +21,4 @@ export class PieceOrmEntity {
   @Column({ type: 'int', nullable: false })
   alertLimit: number;
 
-  @ManyToOne(() => MaintenanceOrmEntity, maintenance => maintenance.pieces)
-  maintenance: MaintenanceOrmEntity;
 }

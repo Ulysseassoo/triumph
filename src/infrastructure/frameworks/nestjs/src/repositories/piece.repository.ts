@@ -1,50 +1,162 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { PieceRepositoryInterface } from "../../../../../application/repositories/PieceRepositoryInterface";
 import { PieceOrmEntity } from '../../../../database/entities/piece.orm-entity';
+import { PieceRepositoryInterface } from '../../../../../application/repositories/PieceRepositoryInterface';
 import { Piece } from '../../../../../domain/entities/piece.entity';
+import { PieceMapper } from '../../../../database/mappers/piece.mapper';
 
 @Injectable()
 export class PieceRepository implements PieceRepositoryInterface {
   constructor(
     @InjectRepository(PieceOrmEntity)
-    private readonly repository: Repository<PieceOrmEntity>,
+    private readonly pieceRepository: Repository<PieceOrmEntity>
   ) {}
-    create(piece: Piece): Promise<Piece> {
-        throw new Error('Method not implemented.');
+
+  async findAllFilters(criteria: any): Promise<Piece[]> {
+    const { filters = {}, pagination = {} } = criteria;
+    const { name, quantity, cost, type, alertLimit } = filters;
+    const { offset = 0, limit = 10 } = pagination;
+
+    try {
+      const query: Record<string, any> = {};
+      if (name) query.name = name;
+      if (type) query.type = type;
+      if (quantity !== undefined) query.quantity = quantity;
+      if (cost !== undefined) query.cost = cost;
+      if (alertLimit !== undefined) query.alertLimit = alertLimit;
+
+      const pieces = await this.pieceRepository.find({
+        where: query,
+        skip: offset,
+        take: limit
+      });
+
+      return pieces.map(piece => PieceMapper.toDomainEntity(piece));
+    } catch (error) {
+      console.error('Error fetching filtered pieces:', error);
+      throw new Error(`Failed to fetch pieces: ${error.message}`);
     }
-    findById(id: string): Promise<Piece> {
-        throw new Error('Method not implemented.');
+  }
+
+  async create(piece: Piece): Promise<Piece> {
+    try {
+      const ormPiece = PieceMapper.toOrmEntity(piece);
+      const savedPiece = await this.pieceRepository.save(ormPiece);
+      return PieceMapper.toDomainEntity(savedPiece);
+    } catch (error) {
+      console.error('Error creating piece:', error);
+      throw new Error(`Failed to create piece: ${error.message}`);
     }
-    findByName(name: string): Promise<Piece> {
-        throw new Error('Method not implemented.');
+  }
+
+  async findById(id: string): Promise<Piece> {
+    try {
+      const piece = await this.pieceRepository.findOneBy({ id });
+      return piece ? PieceMapper.toDomainEntity(piece) : null;
+    } catch (error) {
+      throw error;
     }
-    findByType(type: string): Promise<Piece> {
-        throw new Error('Method not implemented.');
+  }
+
+  async findByName(name: string): Promise<Piece> {
+    try {
+      const piece = await this.pieceRepository.findOneBy({ name });
+      return piece ? PieceMapper.toDomainEntity(piece) : null;
+    } catch (error) {
+      throw error;
     }
-    findByQuantity(quantity: number): Promise<Piece> {
-        throw new Error('Method not implemented.');
+  }
+
+  async findByType(type: string): Promise<Piece | null> {
+    try {
+      const piece = await this.pieceRepository.findOneBy({ type });
+      return piece ? PieceMapper.toDomainEntity(piece) : null;
+    } catch (error) {
+      throw error;
     }
-    findByCost(cost: number): Promise<Piece> {
-        throw new Error('Method not implemented.');
+  }
+
+  async findByQuantity(quantity: number): Promise<Piece | null> {
+    try {
+      const piece = await this.pieceRepository.findOneBy({ quantity });
+      return piece ? PieceMapper.toDomainEntity(piece) : null;
+    } catch (error) {
+      throw error;
     }
-    findByAlertLimit(alertLimit: number): Promise<Piece> {
-        throw new Error('Method not implemented.');
+  }
+
+  async findByCost(cost: number): Promise<Piece | null> {
+    try {
+      const piece = await this.pieceRepository.findOneBy({ cost });
+      return piece ? PieceMapper.toDomainEntity(piece) : null;
+    } catch (error) {
+      throw error;
     }
-    findAll(): Promise<Piece[]> {
-        throw new Error('Method not implemented.');
+  }
+
+  async findByAlertLimit(alertLimit: number): Promise<Piece | null> {
+    try {
+      const piece = await this.pieceRepository.findOneBy({ alertLimit });
+      return piece ? PieceMapper.toDomainEntity(piece) : null;
+    } catch (error) {
+      throw error;
     }
-    findAllFilters(criteria: object): Promise<Piece[]> {
-        throw new Error('Method not implemented.');
+  }
+
+  async findAll(): Promise<Piece[]> {
+    const pieces = await this.pieceRepository.find();
+    return pieces.map(piece => PieceMapper.toDomainEntity(piece));
+  }
+
+  async update(id: string, pieceData: Partial<Piece>): Promise<Piece> {
+    try {
+      const existingPiece = await this.pieceRepository.findOneBy({ id });
+      if (!existingPiece) {
+        throw new Error(`Piece with ID ${id} not found`);
+      }
+
+      const updatedData = PieceMapper.toOrmEntity({
+        ...PieceMapper.toDomainEntity(existingPiece),
+        ...pieceData
+      } as Piece);
+
+      await this.pieceRepository.save(updatedData);
+      const updatedPiece = await this.pieceRepository.findOneBy({ id });
+      return PieceMapper.toDomainEntity(updatedPiece);
+    } catch (error) {
+      console.error('Error updating piece:', error);
+      throw error;
     }
-    update(id: string, pieceData: Partial<Piece>): Promise<Piece> {
-        throw new Error('Method not implemented.');
+  }
+
+  async updatePatch(id: string, pieceData: Partial<Piece>): Promise<Piece> {
+    try {
+      const existingPiece = await this.pieceRepository.findOneBy({ id });
+      if (!existingPiece) {
+        throw new Error(`Piece with ID ${id} not found`);
+      }
+
+      const updatedData = PieceMapper.toOrmEntity({
+        ...PieceMapper.toDomainEntity(existingPiece),
+        ...pieceData
+      } as Piece);
+
+      await this.pieceRepository.save(updatedData);
+      const piece = await this.pieceRepository.findOneBy({ id });
+      return PieceMapper.toDomainEntity(piece);
+    } catch (error) {
+      console.error('Error patching piece:', error);
+      throw new Error(`Failed to patch piece with ID ${id}: ${error.message}`);
     }
-    updatePatch(id: string, pieceData: Partial<Piece>): Promise<Piece> {
-        throw new Error('Method not implemented.');
+  }
+
+  async delete(id: string): Promise<void> {
+    try {
+      await this.pieceRepository.delete(id);
+    } catch (error) {
+      console.error('Error deleting piece:', error);
+      throw error;
     }
-    delete(id: string): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
+  }
 }
