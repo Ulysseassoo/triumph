@@ -11,13 +11,13 @@ export class OrderMapper {
     ormOrder.orderDate = order.orderDate;
     ormOrder.status = order.status;
     ormOrder.totalAmount = order.totalAmount;
-    ormOrder.pieces = order.pieces.map(PieceMapper.toOrmEntity);
+    ormOrder.pieces = order.pieces
     return ormOrder;
   }
   static toDomainEntity(ormOrder: OrderOrmEntity): Order {
     return new Order(
       ormOrder.id,
-      ormOrder.pieces.map(PieceMapper.toDomainEntity),
+      ormOrder.pieces,
       ormOrder.deliveryDate,
       ormOrder.orderDate,
       ormOrder.status,

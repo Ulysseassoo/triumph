@@ -1,12 +1,12 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
-
+import { OrderPiece } from '../../../domain/entities/order.entity';
 @Entity('orders')
 export class OrderOrmEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column('jsonb', { nullable: false })  
-  pieces: object[];
+  @Column('json', { nullable: false })  
+  pieces: OrderPiece;
 
   @Column({ type: 'decimal', nullable: false })
   totalAmount: number;
