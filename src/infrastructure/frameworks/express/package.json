@@ -10,10 +10,13 @@
   },
   "dependencies": {
     "dotenv": "^16.4.7",
-    "express": "file:",
+    "express": "^4.21.2",
     "reflect-metadata": "^0.2.2",
     "tsconfig-paths": "^4.2.0",
     "typeorm": "^0.3.20"
+  },
+  "overrides": {
+    "express": "^4.21.2"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",

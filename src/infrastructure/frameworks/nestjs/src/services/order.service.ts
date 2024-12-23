@@ -79,22 +79,6 @@ export class OrderService {
     return await this.orderRepository.findById(id);
   }
 
-  async findByStatus(status: string): Promise<Order | null> {
-    return await this.orderRepository.findByStatus(status);
-  }
-
-  async findByOrderDate(orderDate: string): Promise<Order | null> {
-    return await this.orderRepository.findByOrderDate(orderDate);
-  }
-
-  async findByDeliveryDate(deliveryDate: string): Promise<Order | null> {
-    return await this.orderRepository.findByDeliveryDate(deliveryDate);
-  }
-
-  async findByTotalAmount(totalAmount: number): Promise<Order | null> {
-    return await this.orderRepository.findByTotalAmount(totalAmount);
-  }
-
   async findAllFilters(criteria: {
     filters?: {
       orderDate?: string;

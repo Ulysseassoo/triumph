@@ -6,6 +6,22 @@ import { PieceRepositoryInterface } from '../../../../../application/repositorie
 import { Piece } from '../../../../../domain/entities/piece.entity';
 import { PieceMapper } from '../../../../database/mappers/piece.mapper';
 
+interface PieceFilters {
+  name?: string;
+  type?: string;
+  quantity?: number;
+  cost?: number;
+}
+
+interface PaginationOptions {
+  offset?: number;
+  limit?: number;
+}
+
+interface FilterCriteria {
+  filters?: PieceFilters;
+  pagination?: PaginationOptions;
+}
 @Injectable()
 export class PieceRepository implements PieceRepositoryInterface {
   constructor(
@@ -13,18 +29,17 @@ export class PieceRepository implements PieceRepositoryInterface {
     private readonly pieceRepository: Repository<PieceOrmEntity>
   ) {}
 
-  async findAllFilters(criteria: any): Promise<Piece[]> {
+  async findAllFilters(criteria: FilterCriteria): Promise<Piece[]> {
     const { filters = {}, pagination = {} } = criteria;
-    const { name, quantity, cost, type, alertLimit } = filters;
+    const { name, quantity, cost, type } = filters;
     const { offset = 0, limit = 10 } = pagination;
 
     try {
-      const query: Record<string, any> = {};
+      const query: Record<string, unknown> = {};
       if (name) query.name = name;
       if (type) query.type = type;
       if (quantity !== undefined) query.quantity = quantity;
       if (cost !== undefined) query.cost = cost;
-      if (alertLimit !== undefined) query.alertLimit = alertLimit;
 
       const pieces = await this.pieceRepository.find({
         where: query,
@@ -53,51 +68,6 @@ export class PieceRepository implements PieceRepositoryInterface {
   async findById(id: string): Promise<Piece> {
     try {
       const piece = await this.pieceRepository.findOneBy({ id });
-      return piece ? PieceMapper.toDomainEntity(piece) : null;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async findByName(name: string): Promise<Piece> {
-    try {
-      const piece = await this.pieceRepository.findOneBy({ name });
-      return piece ? PieceMapper.toDomainEntity(piece) : null;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async findByType(type: string): Promise<Piece | null> {
-    try {
-      const piece = await this.pieceRepository.findOneBy({ type });
-      return piece ? PieceMapper.toDomainEntity(piece) : null;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async findByQuantity(quantity: number): Promise<Piece | null> {
-    try {
-      const piece = await this.pieceRepository.findOneBy({ quantity });
-      return piece ? PieceMapper.toDomainEntity(piece) : null;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async findByCost(cost: number): Promise<Piece | null> {
-    try {
-      const piece = await this.pieceRepository.findOneBy({ cost });
-      return piece ? PieceMapper.toDomainEntity(piece) : null;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async findByAlertLimit(alertLimit: number): Promise<Piece | null> {
-    try {
-      const piece = await this.pieceRepository.findOneBy({ alertLimit });
       return piece ? PieceMapper.toDomainEntity(piece) : null;
     } catch (error) {
       throw error;

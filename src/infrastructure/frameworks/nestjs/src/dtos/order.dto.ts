@@ -15,9 +15,6 @@ export class CreateOrderDto {
   status: string;
 
   @IsNumber()
-  cost: number;
-
-  @IsNumber()
   totalAmount: number;
 
 }

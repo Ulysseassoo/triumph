@@ -23,7 +23,6 @@ export class CreatePieceUseCase {
          alertLimit,
     )
 
-    console.log(this.pieceRepository)
 
     const newPiece = await this.pieceRepository.create(piece);
 

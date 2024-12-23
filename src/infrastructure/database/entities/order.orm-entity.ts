@@ -14,11 +14,11 @@ export class OrderOrmEntity {
   @Column({ type: 'varchar', nullable: false })
   status: string;
 
-  @Column({ type: 'varchar', nullable: false })
-  orderDate: string;
+  @Column({ type: 'date', nullable: false })
+  orderDate: Date;
 
-  @Column({ type: 'varchar', nullable: false })
-  deliveryDate: string;
+  @Column({ type: 'date', nullable: false })
+  deliveryDate: Date;
 
 
 }

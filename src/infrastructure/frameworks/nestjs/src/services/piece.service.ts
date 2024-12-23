@@ -65,33 +65,12 @@ export class PieceService {
     return await this.pieceRepository.findById(id);
   }
 
-  async findByName(name: string): Promise<Piece> {
-    return await this.pieceRepository.findByName(name);
-  }
-
-  async findByType(type: string): Promise<Piece> {
-    return await this.pieceRepository.findByType(type);
-  }
-
-  async findByCost(cost: number): Promise<Piece> {
-    return await this.pieceRepository.findByCost(cost);
-  }
-
-  async findByQuantity(quantity: number): Promise<Piece> {
-    return await this.pieceRepository.findByQuantity(quantity);
-  }
-
-  async findByAlertLimit(alertLimit: number): Promise<Piece> {
-    return await this.pieceRepository.findByAlertLimit(alertLimit);
-  }
-
   async findAllFilters(criteria: {
     filters?: {
       name?: string;
       type?: string;
       cost?: number;
       quantity?: number;
-      alertLimit?: number;
     };
     pagination?: {
       offset?: number;

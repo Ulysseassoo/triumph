@@ -42,7 +42,7 @@ export class OrderRepository implements OrderRepositoryInterface {
     const { offset = 0, limit = 10 } = pagination;
 
     try {
-      const query: Record<string, any> = {};
+      const query: Record<string, unknown> = {};
       if (orderDate) query.orderDate = orderDate;
       if (status) query.status = status;
       if (deliveryDate) query.deliveryDate = deliveryDate;
@@ -61,42 +61,6 @@ export class OrderRepository implements OrderRepositoryInterface {
     }
   }
 
-  async findByTotalAmount(totalAmount: number): Promise<Order | null> {
-    try {
-      const order = await this.orderRepository.findOneBy({ totalAmount });
-      return order ? OrderMapper.toDomainEntity(order) : null;
-    } catch (error) {
-      throw new Error(`Failed to find order by total amount: ${error.message}`);
-    }
-  }
-
-  async findByStatus(status: string): Promise<Order | null> {
-    try {
-      const order = await this.orderRepository.findOneBy({ status });
-      return order ? OrderMapper.toDomainEntity(order) : null;
-    } catch (error) {
-      throw new Error(`Failed to find order by status: ${error.message}`);
-    }
-  }
-
-  async findByOrderDate(orderDate: string): Promise<Order | null> {
-    try {
-      const order = await this.orderRepository.findOneBy({ orderDate });
-      return order ? OrderMapper.toDomainEntity(order) : null;
-    } catch (error) {
-      throw new Error(`Failed to find order by order date: ${error.message}`);
-    }
-  }
-
-  async findByDeliveryDate(deliveryDate: string): Promise<Order | null> {
-    try {
-      const order = await this.orderRepository.findOneBy({ deliveryDate });
-      return order ? OrderMapper.toDomainEntity(order) : null;
-    } catch (error) {
-      throw new Error(`Failed to find order by delivery date: ${error.message}`);
-    }
-  }
-
   async findAll(): Promise<Order[]> {
     const orders = await this.orderRepository.find();
     return orders.map(order => OrderMapper.toDomainEntity(order));
@@ -104,10 +68,10 @@ export class OrderRepository implements OrderRepositoryInterface {
 
   async create(order: Order): Promise<Order> {
     try {
-      // First validate all pieces stock without updating anything
+     
       await this.validatePiecesStock(order.pieces);
       
-      // If validation passes, then process the order
+      
       const processedPieces = await this.processPiecesAndUpdateStock(order.pieces);
       const totalAmount = this.calculateTotalAmount(processedPieces);
       
@@ -189,13 +153,32 @@ export class OrderRepository implements OrderRepositoryInterface {
     try {
       const existingOrder = await this.orderRepository.findOneBy({ id });
       if (!existingOrder) {
-        throw new Error(`Order with ID ${id} not found`);
+        return null;
       }
 
-      const updatedOrder = { ...existingOrder, ...OrderMapper.toOrmEntity(orderData as Order) };
-      await this.orderRepository.save(updatedOrder);
-      
-      return OrderMapper.toDomainEntity(updatedOrder);
+      let totalAmount = existingOrder.totalAmount;
+
+      if (orderData.pieces) {
+        await this.validatePiecesStock(orderData.pieces);
+        const processedPieces = await Promise.all(
+          orderData.pieces.map(async (piece) => {
+            const pieceEntity = await this.findAndValidatePiece(piece.id);
+            return {
+              ...pieceEntity,
+              orderedQuantity: piece.quantity
+            };
+          })
+        );
+        totalAmount = this.calculateTotalAmount(processedPieces);
+      }
+      const updateData = OrderMapper.toOrmEntity({
+        ...orderData,
+        id,
+        totalAmount,
+      } as Order);
+      await this.orderRepository.update(id, updateData);
+      const updatedOrder = await this.orderRepository.findOneBy({ id });
+      return updatedOrder ? OrderMapper.toDomainEntity(updatedOrder) : null;
     } catch (error) {
       throw error;
     }
@@ -207,14 +190,35 @@ export class OrderRepository implements OrderRepositoryInterface {
       if (!existingOrder) {
         throw new Error(`Order with ID ${id} not found`);
       }
+      let totalAmount = existingOrder.totalAmount;
+      if (orderData.pieces) {
+        await this.validatePiecesStock(orderData.pieces);
+        const processedPieces = await Promise.all(
+          orderData.pieces.map(async (piece) => {
+            const pieceEntity = await this.findAndValidatePiece(piece.id);
+            return {
+              ...pieceEntity,
+              orderedQuantity: piece.quantity
+            };
+          })
+        );
+        totalAmount = this.calculateTotalAmount(processedPieces);
+      }
   
-      const updatedData = {
-        ...existingOrder,
-        ...OrderMapper.toOrmEntity(orderData as Order)
-      };
+      const updatedData = OrderMapper.toOrmEntity({
+        ...OrderMapper.toDomainEntity(existingOrder),
+        ...orderData,
+        totalAmount,
+      });
   
-      const savedOrder = await this.orderRepository.save(updatedData);
-      return OrderMapper.toDomainEntity(savedOrder);
+      await this.orderRepository.update(id, updatedData);
+  
+      const updatedOrder = await this.orderRepository.findOneBy({ id });
+      if (!updatedOrder) {
+        throw new Error(`Failed to retrieve updated order with ID ${id}`);
+      }
+  
+      return OrderMapper.toDomainEntity(updatedOrder);
     } catch (error) {
       throw new Error(`Failed to patch order: ${error.message}`);
     }

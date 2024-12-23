@@ -48,19 +48,17 @@ export class PieceController {
     @Query('type') type?: string,
     @Query('cost') cost?: number,
     @Query('quantity') quantity?: number,
-    @Query('alertLimit') alertLimit?: number,
     @Query('offset') offset?: number,
     @Query('limit') limit?: number,
   ): Promise<Piece[]> {
     try {
-      if (name || type || cost || quantity || alertLimit || offset || limit) {
+      if (name || type || cost || quantity || offset || limit) {
         const criteria = {
           filters: {
             ...(name && { name }),
             ...(type && { type }),
             ...(cost && { cost: Number(cost) }),
-            ...(quantity && { quantity: Number(quantity) }),
-            ...(alertLimit && { alertLimit: Number(alertLimit) })
+            ...(quantity && { quantity: Number(quantity) })
           },
           pagination: {
             ...(offset && { offset: Number(offset) }),
@@ -82,101 +80,6 @@ export class PieceController {
   async findById(@Param('id') id: string): Promise<Piece> {
     try {
       const piece = await this.pieceService.findById(id);
-      if (!piece) {
-        throw new HttpException('Piece not found', HttpStatus.NOT_FOUND);
-      }
-      return piece;
-    } catch (error) {
-      if (error.status === HttpStatus.NOT_FOUND) {
-        throw error;
-      }
-      throw new HttpException(
-        error.message || 'Failed to fetch piece',
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
-    }
-  }
-
-  @Get('name/:name')
-  async findByName(@Param('name') name: string): Promise<Piece> {
-    try {
-      const piece = await this.pieceService.findByName(name);
-      if (!piece) {
-        throw new HttpException('Piece not found', HttpStatus.NOT_FOUND);
-      }
-      return piece;
-    } catch (error) {
-      if (error.status === HttpStatus.NOT_FOUND) {
-        throw error;
-      }
-      throw new HttpException(
-        error.message || 'Failed to fetch piece',
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
-    }
-  }
-
-  @Get('type/:type')
-  async findByType(@Param('type') type: string): Promise<Piece> {
-    try {
-      const piece = await this.pieceService.findByType(type);
-      if (!piece) {
-        throw new HttpException('Piece not found', HttpStatus.NOT_FOUND);
-      }
-      return piece;
-    } catch (error) {
-      if (error.status === HttpStatus.NOT_FOUND) {
-        throw error;
-      }
-      throw new HttpException(
-        error.message || 'Failed to fetch piece',
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
-    }
-  }
-
-  @Get('quantity/:quantity')
-  async findByQuantity(@Param('quantity') quantity: number): Promise<Piece> {
-    try {
-      const piece = await this.pieceService.findByQuantity(Number(quantity));
-      if (!piece) {
-        throw new HttpException('Piece not found', HttpStatus.NOT_FOUND);
-      }
-      return piece;
-    } catch (error) {
-      if (error.status === HttpStatus.NOT_FOUND) {
-        throw error;
-      }
-      throw new HttpException(
-        error.message || 'Failed to fetch piece',
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
-    }
-  }
-
-  @Get('cost/:cost')
-  async findByCost(@Param('cost') cost: number): Promise<Piece> {
-    try {
-      const piece = await this.pieceService.findByCost(Number(cost));
-      if (!piece) {
-        throw new HttpException('Piece not found', HttpStatus.NOT_FOUND);
-      }
-      return piece;
-    } catch (error) {
-      if (error.status === HttpStatus.NOT_FOUND) {
-        throw error;
-      }
-      throw new HttpException(
-        error.message || 'Failed to fetch piece',
-        HttpStatus.INTERNAL_SERVER_ERROR
-      );
-    }
-  }
-
-  @Get('alert-limit/:alertLimit')
-  async findByAlertLimit(@Param('alertLimit') alertLimit: number): Promise<Piece> {
-    try {
-      const piece = await this.pieceService.findByAlertLimit(Number(alertLimit));
       if (!piece) {
         throw new HttpException('Piece not found', HttpStatus.NOT_FOUND);
       }

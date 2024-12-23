@@ -15,7 +15,6 @@ import { OrderModule } from './modules/order.module';
     }),
     TypeOrmModule.forRootAsync({
       useFactory: () => {
-        console.log('AppDataSource().options', AppDataSource().options);
         return {
           ...AppDataSource().options,
           autoLoadEntities: true,
