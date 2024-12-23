@@ -25,7 +25,6 @@ export class CreateOrderUseCase {
     status,
     totalAmount
   }: CreateOrderProps): Promise<Order> {
-    // await this.validatePiecesAvailability(pieces);
 
     const order = new Order(
       v4(),

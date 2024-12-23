@@ -33,7 +33,6 @@ export class UpdateOrderUseCase {
 
     if (pieces) {
       await this.restoreOldStock(existingOrder.pieces);
-      await this.validateNewPiecesAvailability(pieces);
       await this.updatePiecesStock(pieces);
     }
 
