@@ -7,11 +7,13 @@ export class OrderMapper {
     const ormOrder = new OrderOrmEntity();
 
     ormOrder.id = order.id;
-    ormOrder.deliveryDate = new Date(order.deliveryDate);
-    ormOrder.orderDate = new Date(order.orderDate);
+    ormOrder.deliveryDate = (order.deliveryDate);
+    ormOrder.orderDate = (order.orderDate);
     ormOrder.status = order.status;
     ormOrder.totalAmount = order.totalAmount;
-    ormOrder.pieces = order.pieces;
+    ormOrder.previousQuantity = order.previousQuantity;
+    ormOrder.pieces = order.pieces.map(PieceMapper.toOrmEntity);
+
     return ormOrder;
   }
   static toDomainEntity(ormOrder: OrderOrmEntity): Order {
@@ -22,6 +24,7 @@ export class OrderMapper {
       ormOrder.orderDate,
       ormOrder.status,
       ormOrder.totalAmount,
+      ormOrder.previousQuantity
     );
   }
 }

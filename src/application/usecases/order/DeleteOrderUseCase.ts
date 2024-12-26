@@ -13,9 +13,6 @@ export class DeleteOrderUseCase {
     if (!existingOrder) {
       throw new Error("Order not found");
     }
-
-    const success = await this.OrderRepository.delete(id);
-
-    return success;
+     await this.OrderRepository.delete(id);
   }
 }

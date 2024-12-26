@@ -8,12 +8,13 @@ interface UpdateProps {
   cost?: number;
   quantity?: number;
   alertLimit?: number;
+  previousQuantity? : number;
 }
 
 export class UpdatePieceUseCase {
   constructor(private readonly pieceRepository: PieceRepositoryInterface) {}
 
-  async execute({ id, name, type, cost, quantity, alertLimit }: UpdateProps): Promise<Piece | null> {
+  async execute({ id, name, type, cost, quantity, alertLimit,previousQuantity }: UpdateProps): Promise<Piece | null> {
     const existingPiece = await this.pieceRepository.findById(id);
 
     if (!existingPiece) {

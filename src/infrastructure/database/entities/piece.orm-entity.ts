@@ -1,5 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { OrderOrmEntity } from './order.orm-entity';
 
 @Entity('piece')
 export class PieceOrmEntity {
@@ -21,4 +21,6 @@ export class PieceOrmEntity {
   @Column({ type: 'int', nullable: false })
   alertLimit: number;
 
+  @OneToMany(() => OrderOrmEntity, order => order.pieces, { cascade: false})
+  orders: OrderOrmEntity[];
 }

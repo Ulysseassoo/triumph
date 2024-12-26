@@ -22,20 +22,6 @@ services:
     ports:
       - '8080:8080'
 
-  mongo:
-    image: mongo
-    restart: unless-stopped
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-root}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-password}
-      MONGO_INITDB_DATABASE: cleanCodeDatabase
-    volumes:
-      - data-mongo:/data/db
-      - mongo-seed.js:/docker-entrypoint-initdb.d/mongo-seed.js
-    ports:
-      - '27017:27017'
-
+ 
 volumes:
   db_data:
-  data-mongo:
-  mongo-seed.js:

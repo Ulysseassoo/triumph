@@ -10,6 +10,7 @@ interface CreateOrderProps {
   deliveryDate: string;
   status: string;
   totalAmount: number;
+  previousQuantity: OrderPiece[],
 }
 
 export class CreateOrderUseCase {
@@ -23,7 +24,8 @@ export class CreateOrderUseCase {
     orderDate,
     deliveryDate,
     status,
-    totalAmount
+    totalAmount,
+    previousQuantity
   }: CreateOrderProps): Promise<Order> {
 
     const order = new Order(
@@ -32,7 +34,8 @@ export class CreateOrderUseCase {
       status,
       orderDate,
       deliveryDate,
-      totalAmount
+      totalAmount,
+      previousQuantity
     );
 
     await this.updatePiecesStock(pieces);
@@ -42,27 +45,14 @@ export class CreateOrderUseCase {
     return newOrder;
   }
 
-  private async validatePiecesAvailability(pieces: OrderPiece[]): Promise<void> {
-    for (const orderPiece of pieces) {
-      const piece = await this.pieceRepository.findById(orderPiece.id);
-      if (!piece) {
-        throw new Error(`Pièce avec l'ID ${orderPiece.id} introuvable`);
-      }
 
-      if (piece.quantity < orderPiece.quantity) {
-        throw new Error(
-          `Stock insuffisant pour la pièce ${piece.name}. Stock disponible: ${piece.quantity}, Quantité demandée: ${orderPiece.quantity}`
-        );
-      }
-    }
-  }
 
   private async updatePiecesStock(pieces: OrderPiece[]): Promise<void> {
     for (const orderPiece of pieces) {
       const piece = await this.pieceRepository.findById(orderPiece.id);
       if (piece) {
-        const newQuantity = piece.quantity - orderPiece.quantity;
-        await this.pieceRepository.updatePatch(piece.id, {
+        const newQuantity = piece.quantity + orderPiece.quantity;
+        await this.pieceRepository.update(piece.id, {
           quantity: newQuantity
         });
       }

@@ -6,6 +6,5 @@ export interface PieceRepositoryInterface {
   findAll(): Promise<Piece[]>;
   findAllFilters(criteria: object): Promise<Piece[]>;
   update(id: string, pieceData: Partial<Piece>): Promise<Piece>;
-  updatePatch(id: string, pieceData: Partial<Piece>): Promise<Piece>;
   delete(id: string): Promise<void>;
 }

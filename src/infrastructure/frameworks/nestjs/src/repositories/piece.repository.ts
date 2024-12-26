@@ -100,26 +100,6 @@ export class PieceRepository implements PieceRepositoryInterface {
     }
   }
 
-  async updatePatch(id: string, pieceData: Partial<Piece>): Promise<Piece> {
-    try {
-      const existingPiece = await this.pieceRepository.findOneBy({ id });
-      if (!existingPiece) {
-        throw new Error(`Piece with ID ${id} not found`);
-      }
-
-      const updatedData = PieceMapper.toOrmEntity({
-        ...PieceMapper.toDomainEntity(existingPiece),
-        ...pieceData
-      } as Piece);
-
-      await this.pieceRepository.save(updatedData);
-      const piece = await this.pieceRepository.findOneBy({ id });
-      return PieceMapper.toDomainEntity(piece);
-    } catch (error) {
-      console.error('Error patching piece:', error);
-      throw new Error(`Failed to patch piece with ID ${id}: ${error.message}`);
-    }
-  }
 
   async delete(id: string): Promise<void> {
     try {

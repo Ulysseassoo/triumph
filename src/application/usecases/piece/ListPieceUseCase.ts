@@ -26,12 +26,12 @@ export class ListOrderUseCase {
     page: number;
     limit: number;
   }> {
-    const { name,type,cost,quantity,alertLimit } = filterOptions;
+    const { name,type,cost,quantity } = filterOptions;
     const { page = 1, limit = 10 } = paginationOptions;
     const offset = (page - 1) * limit;
 
     const pieces = await this.PieceRepository.findAllFilters({
-      filters: { name,type,cost,quantity,alertLimit },
+      filters: { name,type,cost,quantity },
       pagination: { offset, limit }
     });
 

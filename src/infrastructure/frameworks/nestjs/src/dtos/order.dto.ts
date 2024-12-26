@@ -3,7 +3,7 @@ import { IsString, IsNumber, IsObject } from 'class-validator';
 export class CreateOrderDto {
 
   @IsObject()
-  pieces: string;
+  pieces: object;
 
   @IsString()
   orderDate: string;
@@ -16,5 +16,8 @@ export class CreateOrderDto {
 
   @IsNumber()
   totalAmount: number;
+  
+  @IsObject()
+  previousQuantity: object;
 
 }

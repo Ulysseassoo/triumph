@@ -10,6 +10,7 @@ export class PieceMapper {
     ormPiece.cost = piece.cost;
     ormPiece.quantity = piece.quantity;
     ormPiece.alertLimit = piece.alertLimit;
+ 
     return ormPiece;
   }
 
@@ -20,7 +21,8 @@ export class PieceMapper {
       ormPiece.type,
       ormPiece.cost,
       ormPiece.quantity,
-      ormPiece.alertLimit
+      ormPiece.alertLimit,
+
     );
   }
 }

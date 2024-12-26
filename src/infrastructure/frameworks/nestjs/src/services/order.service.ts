@@ -20,7 +20,8 @@ export class OrderService {
     orderDate: string,
     deliveryDate: string,
     status: string,
-    totalAmount?: number
+    totalAmount?: number,
+    previousQuantity?: OrderPiece[]
   ): Promise<Order> {
     const createOrderUseCase = new CreateOrderUseCase(
       this.orderRepository,
@@ -32,7 +33,8 @@ export class OrderService {
       orderDate,
       deliveryDate,
       status,
-      totalAmount
+      totalAmount,
+      previousQuantity
     });
   }
 
@@ -40,10 +42,7 @@ export class OrderService {
     id: string,
     orderData: Partial<Order>
   ): Promise<Order | null> {
-    const updateOrderUseCase = new UpdateOrderUseCase(
-      this.orderRepository,
-      this.pieceRepository
-    );
+    const updateOrderUseCase = new UpdateOrderUseCase( this.orderRepository);
 
     return await updateOrderUseCase.execute({
       id,
@@ -56,8 +55,7 @@ export class OrderService {
     orderData: Partial<Order>
   ): Promise<Order> {
     const updateOrderUseCase = new UpdateOrderUseCase(
-      this.orderRepository,
-      this.pieceRepository
+      this.orderRepository
     );
 
     return await updateOrderUseCase.execute({

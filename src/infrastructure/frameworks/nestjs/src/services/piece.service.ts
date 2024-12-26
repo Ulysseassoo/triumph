@@ -18,6 +18,7 @@ export class PieceService {
     cost: number,
     quantity: number,
     alertLimit: number,
+    previousQuantity? : number
   ): Promise<Piece> {
     const createPieceUseCase = new CreatePieceUseCase(this.pieceRepository);
     
@@ -27,6 +28,7 @@ export class PieceService {
       cost,
       quantity,
       alertLimit,
+      previousQuantity
     });
   }
 

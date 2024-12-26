@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { OrderRepositoryInterface } from '../../../../../application/repositories/OrderRepositoryInterface';
@@ -68,16 +68,17 @@ export class OrderRepository implements OrderRepositoryInterface {
 
   async create(order: Order): Promise<Order> {
     try {
-     
-      await this.validatePiecesStock(order.pieces);
-      
-      
       const processedPieces = await this.processPiecesAndUpdateStock(order.pieces);
       const totalAmount = this.calculateTotalAmount(processedPieces);
-      
+
       const orderToSave = OrderMapper.toOrmEntity(order);
       orderToSave.totalAmount = totalAmount;
-      
+       // Save previous quantities of pieces
+       orderToSave.previousQuantity = order.pieces.map(piece => ({
+        id: piece.id,
+        quantity: piece.quantity
+      }));
+
       const savedOrder = await this.orderRepository.save(orderToSave);
       return OrderMapper.toDomainEntity(savedOrder);
     } catch (error) {
@@ -85,19 +86,7 @@ export class OrderRepository implements OrderRepositoryInterface {
     }
   }
 
-  private async validatePiecesStock(pieces: OrderPiece[]): Promise<void> {
-    await Promise.all(
-      pieces.map(async (piece) => {
-        const pieceEntity = await this.findAndValidatePiece(piece.id);
-        
-        if (pieceEntity.quantity < piece.quantity) {
-          throw new Error(
-            `Not enough stock for piece ${pieceEntity.id}. Available: ${pieceEntity.quantity}, Requested: ${piece.quantity}`
-          );
-        }
-      })
-    );
-  }
+
 
   private async processPiecesAndUpdateStock(
     pieces: OrderPiece[]
@@ -105,9 +94,9 @@ export class OrderRepository implements OrderRepositoryInterface {
     return Promise.all(
       pieces.map(async (piece) => {
         const pieceEntity = await this.findAndValidatePiece(piece.id);
-        const newQuantity = pieceEntity.quantity - piece.quantity;
-        
-        await this.pieceService.updatePatch(pieceEntity.id, {
+        const newQuantity = pieceEntity.quantity + piece.quantity;
+
+        await this.pieceService.update(pieceEntity.id, {
           quantity: newQuantity
         });
 
@@ -149,78 +138,62 @@ export class OrderRepository implements OrderRepositoryInterface {
     }
   }
 
+  private async restoreAndUpdateStock(
+    existingOrder: OrderOrmEntity,
+    newPieces: OrderPiece[]
+  ): Promise<Array<PieceOrmEntity & { orderedQuantity: number }>> {
+    return Promise.all(
+      newPieces.map(async (newPiece) => {
+        const pieceEntity = await this.findAndValidatePiece(newPiece.id);
+        const previousPieceData = existingOrder.previousQuantity.find( p => p.id === newPiece.id);
+        const restoredQuantity = pieceEntity.quantity - (previousPieceData?.quantity || 0);
+        const newQuantity = restoredQuantity + newPiece.quantity;
+        await this.pieceService.update(newPiece.id, {
+          quantity: newQuantity
+        });
+
+        return {
+          ...pieceEntity,
+          orderedQuantity: newPiece.quantity
+        };
+      })
+    );
+  }
+
   async update(id: string, orderData: Partial<Order>): Promise<Order | null> {
     try {
-      const existingOrder = await this.orderRepository.findOneBy({ id });
+      const existingOrder = await this.orderRepository.findOne({
+        where: { id },
+        relations: ['pieces']
+      });
+
       if (!existingOrder) {
         return null;
       }
 
       let totalAmount = existingOrder.totalAmount;
+      let processedPieces = [];
 
       if (orderData.pieces) {
-        await this.validatePiecesStock(orderData.pieces);
-        const processedPieces = await Promise.all(
-          orderData.pieces.map(async (piece) => {
-            const pieceEntity = await this.findAndValidatePiece(piece.id);
-            return {
-              ...pieceEntity,
-              orderedQuantity: piece.quantity
-            };
-          })
-        );
+        processedPieces = await this.restoreAndUpdateStock(existingOrder, orderData.pieces);
         totalAmount = this.calculateTotalAmount(processedPieces);
+        existingOrder.previousQuantity = orderData.pieces.map(piece => ({
+          id: piece.id,
+          quantity: piece.quantity
+        }));
       }
+
       const updateData = OrderMapper.toOrmEntity({
         ...orderData,
         id,
         totalAmount,
+        previousQuantity: existingOrder.previousQuantity
       } as Order);
-      await this.orderRepository.update(id, updateData);
+      await this.orderRepository.save(updateData);
       const updatedOrder = await this.orderRepository.findOneBy({ id });
       return updatedOrder ? OrderMapper.toDomainEntity(updatedOrder) : null;
     } catch (error) {
       throw error;
-    }
-  }
-
-  async updatePatch(id: string, orderData: Partial<Order>): Promise<Order> {
-    try {
-      const existingOrder = await this.orderRepository.findOneBy({ id });
-      if (!existingOrder) {
-        throw new Error(`Order with ID ${id} not found`);
-      }
-      let totalAmount = existingOrder.totalAmount;
-      if (orderData.pieces) {
-        await this.validatePiecesStock(orderData.pieces);
-        const processedPieces = await Promise.all(
-          orderData.pieces.map(async (piece) => {
-            const pieceEntity = await this.findAndValidatePiece(piece.id);
-            return {
-              ...pieceEntity,
-              orderedQuantity: piece.quantity
-            };
-          })
-        );
-        totalAmount = this.calculateTotalAmount(processedPieces);
-      }
-  
-      const updatedData = OrderMapper.toOrmEntity({
-        ...OrderMapper.toDomainEntity(existingOrder),
-        ...orderData,
-        totalAmount,
-      });
-  
-      await this.orderRepository.update(id, updatedData);
-  
-      const updatedOrder = await this.orderRepository.findOneBy({ id });
-      if (!updatedOrder) {
-        throw new Error(`Failed to retrieve updated order with ID ${id}`);
-      }
-  
-      return OrderMapper.toDomainEntity(updatedOrder);
-    } catch (error) {
-      throw new Error(`Failed to patch order: ${error.message}`);
     }
   }
 

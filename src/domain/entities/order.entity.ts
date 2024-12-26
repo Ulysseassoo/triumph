@@ -11,5 +11,6 @@ export interface OrderPiece {
       public readonly deliveryDate: string,
       public readonly status: string,
       public readonly totalAmount: number,
+      public readonly previousQuantity: OrderPiece[],
     ) {}
   }

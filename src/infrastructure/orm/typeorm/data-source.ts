@@ -5,7 +5,7 @@ let dataSource: DataSource;
 
 export const AppDataSource = () => {
 	if(!dataSource) {
-		const isTestEnvironment = process.env.ENVIRONMENT === "development";
+		const isTestEnvironment = process.env.ENVIRONMENT === "test";
 		if (isTestEnvironment) {
 			dataSource =  new DataSource({
 				type: "sqlite",

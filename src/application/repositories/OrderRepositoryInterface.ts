@@ -6,7 +6,6 @@ export interface OrderRepositoryInterface {
   findAll(): Promise<Order[]>;
   findAllFilters(criteria: object): Promise<Order[]>;
   update(id: string, orderData: Partial<Order>): Promise<Order>;
-  updatePatch(id: string, orderData: Partial<Order>): Promise<Order>;
   delete(id: string): Promise<void>;
 
 }
