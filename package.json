@@ -5,6 +5,7 @@
   "author": "Ulysseassoo <uassooemane@myges.fr>",
   "license": "MIT",
   "dependencies": {
+    "clean-architecture": "file:",
     "pg": "^8.13.1",
     "reflect-metadata": "^0.2.2",
     "sqlite3": "^5.1.7",

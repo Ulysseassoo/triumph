@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+
 
 @Entity('users')
 export class UserOrmEntity {
@@ -14,7 +15,7 @@ export class UserOrmEntity {
   @Column({ type: 'varchar', nullable: false })
   password: string;
 
-  @Column({ type: "timestamp" , nullable: true})
+  @Column({ type: "date" , nullable: true})
   passwordValidUntil?: Date;
 
   @Column({ type: "boolean", nullable: true})
@@ -22,4 +23,5 @@ export class UserOrmEntity {
 
   @Column({ type: "simple-array", nullable: true })
   role?: string[];
+
 }
