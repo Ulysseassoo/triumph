@@ -10,7 +10,7 @@ export class UserMapper {
     ormUser.password = user.password;
     ormUser.passwordValidUntil = user.passwordValidUntil;
     ormUser.role = user.role;
-    ormUser.isVerified = user.isVerified;
+    ormUser.isVerified = user.isVerified || false;
     return ormUser;
   }
 

@@ -1,15 +1,12 @@
-import express, { Express, Request, Response } from "express";
+
 import dotenv from "dotenv";
 import { initializeDatabase } from "../../orm/typeorm/typeorm-init";
-
+import app from "./src/app";
 dotenv.config();
 
-const app: Express = express();
+
 const PORT = process.env.PORT || 3000;
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Express + TypeScript Server");
-});
 
 initializeDatabase().then(() => {
   app.listen(PORT, () => {

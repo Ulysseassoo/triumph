@@ -13,19 +13,19 @@ export class UserService {
     name: string,
     email: string,
     password: string,
-    passwordValidUntil: Date,
-    isVerified: boolean,
-    role: string[]
+    passwordValidUntil?: Date,
+    isVerified?: boolean,
+    role?: string[]
   ): Promise<User | null> {
     const createUserUseCase = new CreateUserUseCase(this.userRepository);
-    
+
     return await createUserUseCase.execute({
       name,
       email,
       password,
-      passwordValidUntil,
-      isVerified,
-      role
+      passwordValidUntil: passwordValidUntil ?? new Date(),
+      isVerified: isVerified ?? false,
+      role: role ?? []
     });
   }
 
