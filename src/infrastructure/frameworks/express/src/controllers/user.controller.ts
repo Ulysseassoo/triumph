@@ -1,15 +1,17 @@
-
 import { Request, Response } from 'express';
 import { UserService } from '../services/user.service';
 import { User } from '../../../../../domain/entities/user.entity';
+import { TypeOrmUserRepository } from 'src/repositories/user.repository';
 
 export class UserController {
   private userService: UserService;
-  constructor(userService: UserService) {
-    this.userService = userService;
-  }
 
-  create = async (req: Request, res: Response): Promise<Response> => {
+  constructor() {
+    
+    const userRepository = new TypeOrmUserRepository();
+    this.userService = new UserService(userRepository);
+  } 
+  async create (req: Request, res: Response): Promise<Response> {
     try {
       const { name, email, password, passwordValidUntil, isVerified, role } = req.body;
 
@@ -30,7 +32,7 @@ export class UserController {
     }
   };
 
-  update = async (req: Request, res: Response): Promise<Response> => {
+   async update (req: Request, res: Response): Promise<Response>  {
     try {
       const { id } = req.params;
       const userData: Partial<User> = req.body;
@@ -49,7 +51,7 @@ export class UserController {
     }
   };
 
-  updatePatch = async (req: Request, res: Response): Promise<Response> => {
+  async updatePatch (req: Request, res: Response): Promise<Response>  {
     try {
       const { id } = req.params;
       const userData: Partial<User> = req.body;
@@ -68,7 +70,7 @@ export class UserController {
     }
   };
 
-  delete = async (req: Request, res: Response): Promise<Response> => {
+  async delete (req: Request, res: Response): Promise<Response>  {
     try {
       const { id } = req.params;
       await this.userService.delete(id);
@@ -80,7 +82,7 @@ export class UserController {
     }
   };
 
-  findAll = async (req: Request, res: Response): Promise<Response> => {
+  async findAll (req: Request, res: Response): Promise<Response>  {
     try {
       const users = await this.userService.findAll();
       return res.status(200).json(users);
@@ -91,7 +93,7 @@ export class UserController {
     }
   };
 
-  findById = async (req: Request, res: Response): Promise<Response> => {
+   async findById (req: Request, res: Response): Promise<Response>  {
     try {
       const { id } = req.params;
       const user = await this.userService.findById(id);
@@ -108,7 +110,7 @@ export class UserController {
     }
   };
 
-  findByEmail = async (req: Request, res: Response): Promise<Response> => {
+  async findByEmail (req: Request, res: Response): Promise<Response>  {
     try {
       const { email } = req.params;
       const user = await this.userService.findByEmail(email);
@@ -125,7 +127,7 @@ export class UserController {
     }
   };
 
-  findByName = async (req: Request, res: Response): Promise<Response> => {
+  async findByName (req: Request, res: Response): Promise<Response>  {
     try {
       const { name } = req.params;
       const user = await this.userService.findByName(name);
@@ -142,7 +144,7 @@ export class UserController {
     }
   };
 
-  findByRole = async (req: Request, res: Response): Promise<Response> => {
+  async findByRole (req: Request, res: Response): Promise<Response>  {
     try {
       const { role } = req.params;
       const users = await this.userService.findByRole(role);
@@ -154,7 +156,7 @@ export class UserController {
     }
   };
 
-  findAllFilters = async (req: Request, res: Response): Promise<Response> => {
+  async findAllFilters (req: Request, res: Response): Promise<Response>  {
     try {
       const filters = req.query.filters as any;
       const pagination = req.query.pagination as any;

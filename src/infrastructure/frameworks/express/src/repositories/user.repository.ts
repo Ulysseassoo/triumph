@@ -3,28 +3,16 @@ import { Repository } from 'typeorm';
 import { UserRepositoryInterface } from '../../../../../application/repositories/UserRepositoryInterface';
 import { User } from '../../../../../domain/entities/user.entity';
 import { AppDataSource } from '../config/database';
-// import { AppDataSource } from '../../../../orm/typeorm/data-source';
 import { QueryFailedError } from 'typeorm';
 import { authConfig } from '../config/auth.config';
 import argon2 from '@node-rs/argon2';
+import { UserMapper } from '../../../../database/mappers/user.mapper';
 
 export class TypeOrmUserRepository implements UserRepositoryInterface {
   private userRepository: Repository<UserOrmEntity>;
 
   constructor() {
     this.userRepository = AppDataSource.getRepository(UserOrmEntity);
-  }
-
-  private mapToUserDomain(ormUser: UserOrmEntity): User {
-    return new User(
-      ormUser.id,
-      ormUser.name,
-      ormUser.email,
-      ormUser.password,
-      ormUser.passwordValidUntil,
-      ormUser.isVerified,
-      ormUser.role
-    );
   }
 
   async create(user: User): Promise<User> {
@@ -34,20 +22,20 @@ export class TypeOrmUserRepository implements UserRepositoryInterface {
 
     try {
       const hashedPassword = await argon2.hash(user.password, authConfig.hashOptions);
-      
-      const userEntity = this.userRepository.create({
-        name: user.name,
-        email: user.email,
-        password: hashedPassword,
-        passwordValidUntil: user.passwordValidUntil,
-        isVerified: user.isVerified,
-        role: user.role
-      });
-
+      const userWithHashedPassword = new User(
+        user.id,
+        user.name,
+        user.email,
+        hashedPassword,
+        user.passwordValidUntil,
+        user.isVerified,
+        user.role
+      );
+      const userEntity = UserMapper.toOrmEntity(userWithHashedPassword);
       const savedUser = await this.userRepository.save(userEntity);
       await queryRunner.commitTransaction();
 
-      return this.mapToUserDomain(savedUser);
+      return UserMapper.toDomainEntity(savedUser);
     } catch (error) {
       await queryRunner.rollbackTransaction();
 
@@ -56,7 +44,7 @@ export class TypeOrmUserRepository implements UserRepositoryInterface {
           throw new Error('User with this email already exists');
         }
       }
-      throw new Error(`Error creating user: `+ error);
+      throw new Error(`Error creating user: ${error}`);
     } finally {
       await queryRunner.release();
     }
@@ -65,36 +53,36 @@ export class TypeOrmUserRepository implements UserRepositoryInterface {
   async findById(id: string): Promise<User | null> {
     try {
       const user = await this.userRepository.findOneBy({ id });
-      return user ? this.mapToUserDomain(user) : null;
+      return user ? UserMapper.toDomainEntity(user) : null;
     } catch (error) {
-      throw new Error(`Error finding user by ID: `+ error);
+      throw new Error(`Error finding user by ID: ${error}`);
     }
   }
 
   async findByEmail(email: string): Promise<User | null> {
     try {
       const user = await this.userRepository.findOneBy({ email });
-      return user ? this.mapToUserDomain(user) : null;
+      return user ? UserMapper.toDomainEntity(user) : null;
     } catch (error) {
-      throw new Error(`Error finding user by email: `+ error);
+      throw new Error(`Error finding user by email: ${error}`);
     }
   }
 
   async findByName(name: string): Promise<User | null> {
     try {
       const user = await this.userRepository.findOneBy({ name });
-      return user ? this.mapToUserDomain(user) : null;
+      return user ? UserMapper.toDomainEntity(user) : null;
     } catch (error) {
-      throw new Error(`Error finding user by name: `+ error);
+      throw new Error(`Error finding user by name: ${error}`);
     }
   }
 
   async findAll(): Promise<User[]> {
     try {
       const users = await this.userRepository.find();
-      return users.map(user => this.mapToUserDomain(user));
+      return users.map(user => UserMapper.toDomainEntity(user));
     } catch (error) {
-      throw new Error(`Error finding all users: `+ error);
+      throw new Error(`Error finding all users: ${error}`);
     }
   }
 
@@ -105,9 +93,9 @@ export class TypeOrmUserRepository implements UserRepositoryInterface {
         .where('user.role = :role', { role })
         .getMany();
 
-      return users.map(user => this.mapToUserDomain(user));
+      return users.map(user => UserMapper.toDomainEntity(user));
     } catch (error) {
-      throw new Error(`Error finding users by role: `+ error);
+      throw new Error(`Error finding users by role: ${error}`);
     }
   }
 
@@ -146,9 +134,9 @@ export class TypeOrmUserRepository implements UserRepositoryInterface {
         .take(limit)
         .getMany();
 
-      return users.map(user => this.mapToUserDomain(user));
+      return users.map(user => UserMapper.toDomainEntity(user));
     } catch (error) {
-      throw new Error(`Error finding filtered users: `+ error);
+      throw new Error(`Error finding filtered users: ${error}`);
     }
   }
 
@@ -179,10 +167,10 @@ export class TypeOrmUserRepository implements UserRepositoryInterface {
       }
 
       await queryRunner.commitTransaction();
-      return this.mapToUserDomain(updatedUser);
+      return UserMapper.toDomainEntity(updatedUser);
     } catch (error) {
       await queryRunner.rollbackTransaction();
-      throw new Error(`Error updating user: `+ error);
+      throw new Error(`Error updating user: ${error}`);
     } finally {
       await queryRunner.release();
     }
@@ -215,9 +203,9 @@ export class TypeOrmUserRepository implements UserRepositoryInterface {
         throw new Error('User not found after patch update');
       }
 
-      return this.mapToUserDomain(updatedUser);
+      return UserMapper.toDomainEntity(updatedUser);
     } catch (error) {
-      throw new Error(`Error patching user: `+ error);
+      throw new Error(`Error patching user: ${error}`);
     }
   }
 
@@ -234,11 +222,9 @@ export class TypeOrmUserRepository implements UserRepositoryInterface {
       await queryRunner.commitTransaction();
     } catch (error) {
       await queryRunner.rollbackTransaction();
-      throw new Error(`Error deleting user `+ error);
+      throw new Error(`Error deleting user: ${error}`);
     } finally {
       await queryRunner.release();
     }
   }
 }
-
-export const typeUserOrmRepository = new TypeOrmUserRepository();

@@ -1,8 +1,7 @@
 import express, { Express, Request, Response } from "express";
 import cors from 'cors';
 import helmet from 'helmet';
-import userRouter  from '../src/routes/user.route';
-import authRouter from '../src/routes/auth.route';
+import userRouter  from "./routes/user.route";
 
 
 const app: Express = express();
@@ -20,9 +19,7 @@ app.use(
     crossOriginResourcePolicy: false,
   })
 );
-app.use(authRouter);
-app.use(userRouter);
 
-
+app.use(userRouter)
 
 export default app;

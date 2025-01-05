@@ -11,7 +11,7 @@ export const AppDataSource = () => {
 				type: "sqlite",
 				database: ":memory:",
 				synchronize: true,
-				entities: [join(__dirname,"../../../", "infrastructure", "database", "entities", "*.ts")],
+				entities: [join(__dirname,"../../../", "infrastructure", "database", "orm-entity", "*.ts")],
 				migrations: [join(__dirname, "..", "migrations", "*.{ts,js}")],
 				logging: true
 			});

@@ -1,96 +1,97 @@
-import { Router } from 'express';
+import express from 'express';
 import { UserController } from '../controllers/user.controller';
-import { UserService } from '../services/user.service';
-import { TypeOrmUserRepository } from '../repositories/user.repository';
 
-const router = Router();
+const userRouter = express.Router();
+const userController = new UserController();
 
-// Initialize dependencies
-const userRepository = new TypeOrmUserRepository();
-const userService = new UserService(userRepository);
-const userController = new UserController(userService);
-
-// Create routes
-router.post('/users', async (req , res) => {
+userRouter.post('/users', async (req, res) => {
   try {
     const result = await userController.create(req, res);
     res.status(201).json(result);
   } catch (error) {
-    res.status(500).json({ error});
+    res.status(500).json({ error: error});
   }
 });
 
-router.get('/users', async (req, res) => {
+userRouter.put('/users/:id', async (req, res) => {
   try {
-    const users = await userController.findAll(req, res);
-    res.status(200).json(users);
+    const result = await userController.update(req, res);
+    res.status(200).json(result);
   } catch (error) {
-    res.status(500).json({ error});
+    res.status(500).json({ error: error});
   }
 });
 
-router.get('/users/:id', async (req, res) => {
-    try {
-      const users = await userController.findAll(req, res);
-      res.status(200).json(users);
-    } catch (error) {
-      res.status(500).json({ error});
-    }
-})
-
-router.get('/users/email/:email', async (req, res) => {
-    try {
-      const users = await userController.findAll(req, res);
-      res.status(200).json(users);
-    } catch (error) {
-      res.status(500).json({ error});
-    }
+userRouter.patch('/users/:id', async (req, res) => {
+  try {
+    const result = await userController.updatePatch(req, res);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ error: error});
+  }
 });
 
-router.get('/users/name/:name', async (req, res) => {
-    try {
-      const users = await userController.findAll(req, res);
-      res.status(200).json(users);
-    } catch (error) {
-      res.status(500).json({ error});
-    } 
+userRouter.delete('/users/:id', async (req, res) => {
+  try {
+    const result = await userController.delete(req, res);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ error: error});
+  }
 });
 
-router.get('/users/role/:role', async (req, res) => {
-    try {
-      const users = await userController.findAll(req, res);
-      res.status(200).json(users);
-    } catch (error) {
-      res.status(500).json({ error});
-    }
+userRouter.get('/users', async (req, res) => {
+  try {
+    const result = await userController.findAll(req, res);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ error: error});
+  }
 });
 
-router.put('/users/:id', async (req, res) => {
-    try {
-      const users = await userController.findAll(req, res);
-      res.status(200).json(users);
-    } catch (error) {
-      res.status(500).json({ error});
-    }
+userRouter.get('/users/filter', async (req, res) => {
+  try {
+    const result = await userController.findAllFilters(req, res);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ error: error});
+  }
 });
 
-router.patch('/users/:id',async (req, res) => {
-    try {
-      const users = await userController.findAll(req, res);
-      res.status(200).json(users);
-    } catch (error) {
-      res.status(500).json({ error});
-    }
+userRouter.get('/users/:id', async (req, res) => {
+  try {
+    const result = await userController.findById(req, res);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ error: error});
+  }
 });
 
-// Delete user
-router.delete('/users/:id', async (req, res) => {
-    try {
-      const users = await userController.findAll(req, res);
-      res.status(200).json(users);
-    } catch (error) {
-      res.status(500).json({ error});
-    }
+userRouter.get('/users/email/:email', async (req, res) => {
+  try {
+    const result = await userController.findByEmail(req, res);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ error: error});
+  }
 });
 
-export default router;
+userRouter.get('/users/name/:name', async (req, res) => {
+  try {
+    const result = await userController.findByName(req, res);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ error: error});
+  }
+});
+
+userRouter.get('/users/role/:role', async (req, res) => {
+  try {
+    const result = await userController.findByRole(req, res);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ error: error});
+  }
+});
+
+export default userRouter;
