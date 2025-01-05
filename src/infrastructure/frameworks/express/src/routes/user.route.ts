@@ -48,17 +48,6 @@ userRouter.delete('/users/:id', async (req, res) => {
   }
 });
 
-userRouter.get('/users', async (req, res) => {
-  try {
-    const result = await userController.findAll();
-    res.status(200).json(result);
-  } catch (error) {
-    res.status(500).json({
-      message: error instanceof Error ? error.message : 'Failed to fetch users',
-    });
-  }
-});
-
 userRouter.get('/users/:id', async (req, res) => {
   try {
     const result = await userController.findById(req);
@@ -70,40 +59,7 @@ userRouter.get('/users/:id', async (req, res) => {
   }
 });
 
-userRouter.get('/users/email/:email', async (req, res) => {
-  try {
-    const result = await userController.findByEmail(req);
-    res.status(200).json(result);
-  } catch (error) {
-    res.status(404).json({
-      message: error instanceof Error ? error.message : 'User not found',
-    });
-  }
-});
-
-userRouter.get('/users/name/:name', async (req, res) => {
-  try {
-    const result = await userController.findByName(req);
-    res.status(200).json(result);
-  } catch (error) {
-    res.status(404).json({
-      message: error instanceof Error ? error.message : 'User not found',
-    });
-  }
-});
-
-userRouter.get('/users/role/:role', async (req, res) => {
-  try {
-    const result = await userController.findByRole(req);
-    res.status(200).json(result);
-  } catch (error) {
-    res.status(400).json({
-      message: error instanceof Error ? error.message : 'Failed to fetch users',
-    });
-  }
-});
-
-userRouter.get('/users/filter', async (req, res) => {
+userRouter.get('/users', async (req, res) => {
   try {
     const result = await userController.findAllFilters(req);
     res.status(200).json(result);

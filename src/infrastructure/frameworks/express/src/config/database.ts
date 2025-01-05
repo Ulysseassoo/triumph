@@ -23,7 +23,6 @@ export const initializeDatabases = async () => {
   try {
     console.log("Initializing databases...");
     await AppDataSource.initialize();
-    console.log("chargement",AppDataSource)
     console.log("AppDataSource initialized successfully!");
   } catch (error) {
     console.error("Error initializing databases:", error);

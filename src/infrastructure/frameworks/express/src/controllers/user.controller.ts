@@ -27,12 +27,10 @@ export class UserController {
   async update(req: Request): Promise<User | null> {
     const { id } = req.params;
     const userData: Partial<User> = req.body;
-
     const updatedUser = await this.userService.update(id, userData);
     if (!updatedUser) {
       throw new Error('User not found');
     }
-
     return updatedUser;
   }
 
@@ -53,10 +51,6 @@ export class UserController {
     await this.userService.delete(id);
   }
 
-  async findAll(): Promise<User[]> {
-    return await this.userService.findAll();
-  }
-
   async findById(req: Request): Promise<User | null> {
     const { id } = req.params;
     const user = await this.userService.findById(id);
@@ -67,34 +61,18 @@ export class UserController {
     return user;
   }
 
-  async findByEmail(req: Request): Promise<User | null> {
-    const { email } = req.params;
-    const user = await this.userService.findByEmail(email);
-    if (!user) {
-      throw new Error('User not found');
-    }
-
-    return user;
-  }
-
-  async findByName(req: Request): Promise<User | null> {
-    const { name } = req.params;
-    const user = await this.userService.findByName(name);
-    if (!user) {
-      throw new Error('User not found');
-    }
-
-    return user;
-  }
-
-  async findByRole(req: Request): Promise<User[]> {
-    const { role } = req.params;
-    return await this.userService.findByRole(role);
-  }
-
   async findAllFilters(req: Request): Promise<User[]> {
-    const filters = req.query.filters as any;
-    const pagination = req.query.pagination as any;
+    const filters: {
+      name?: string;
+      email?: string;
+      role?: string[];
+      isVerified?: boolean;
+    } = req.query as any;
+
+    const pagination = {
+      offset: parseInt(req.query.offset as string) || 0,
+      limit: parseInt(req.query.limit as string) || 10,
+    };
 
     return await this.userService.findAllFilters({
       filters,
