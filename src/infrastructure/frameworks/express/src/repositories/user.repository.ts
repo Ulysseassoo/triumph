@@ -59,8 +59,52 @@ export class TypeOrmUserRepository implements UserRepositoryInterface {
     }
   }
 
+  async findByEmail(email: string): Promise<User | null> {
+    try {
+      const user = await this.userRepository.findOneBy({ email });
+      return user ? UserMapper.toDomainEntity(user) : null;
+    } catch (error) {
+      throw new Error(`Error finding user by email: ${error}`);
+    }
+  }
+
+  async findByName(name: string): Promise<User | null> {
+    try {
+      const user = await this.userRepository.findOneBy({ name });
+      return user ? UserMapper.toDomainEntity(user) : null;
+    } catch (error) {
+      throw new Error(`Error finding user by name: ${error}`);
+    }
+  }
+
+  async findAll(): Promise<User[]> {
+    try {
+      const users = await this.userRepository.find();
+      return users.map(user => UserMapper.toDomainEntity(user));
+    } catch (error) {
+      throw new Error(`Error finding all users: ${error}`);
+    }
+  }
+
+  async findByRole(role: string): Promise<User[]> {
+    try {
+      const users = await this.userRepository
+        .createQueryBuilder('user')
+        .where('user.role = :role', { role })
+        .getMany();
+
+      return users.map(user => UserMapper.toDomainEntity(user));
+    } catch (error) {
+      throw new Error(`Error finding users by role: ${error}`);
+    }
+  }
+
   async findAllFilters(criteria: {
-    filters?: Record<string, string | string[]>;
+    filters?: {
+      name?: string;
+      email?: string;
+      role?: string;
+    };
     pagination?: {
       offset?: number;
       limit?: number;
@@ -68,17 +112,28 @@ export class TypeOrmUserRepository implements UserRepositoryInterface {
   }): Promise<User[]> {
     try {
       const { filters = {}, pagination = {} } = criteria;
+      const { name, email, role } = filters;
       const { offset = 0, limit = 10 } = pagination;
+
       let queryBuilder = this.userRepository.createQueryBuilder('user');
-      Object.entries(filters).forEach(([key, value]) => {
-        if (Array.isArray(value)) {
-          queryBuilder = queryBuilder.andWhere(`user.${key} IN (:...${key})`, { [key]: value });
-        } else {
-          queryBuilder = queryBuilder.andWhere(`user.${key} = :${key}`, { [key]: value });
-        }
-      });
-  
-      const users = await queryBuilder.skip(offset).take(limit).getMany();
+
+      if (name) {
+        queryBuilder = queryBuilder.andWhere('user.name LIKE :name', { name: `%${name}%` });
+      }
+
+      if (email) {
+        queryBuilder = queryBuilder.andWhere('user.email LIKE :email', { email: `%${email}%` });
+      }
+
+      if (role) {
+        queryBuilder = queryBuilder.andWhere('user.role = :role', { role });
+      }
+
+      const users = await queryBuilder
+        .skip(offset)
+        .take(limit)
+        .getMany();
+
       return users.map(user => UserMapper.toDomainEntity(user));
     } catch (error) {
       throw new Error(`Error finding filtered users: ${error}`);
@@ -170,6 +225,33 @@ export class TypeOrmUserRepository implements UserRepositoryInterface {
       throw new Error(`Error deleting user: ${error}`);
     } finally {
       await queryRunner.release();
+    }
+  }
+  async isEmailUnique(email: string): Promise<boolean> {
+    try {
+      
+      const sqlUser = await this.userRepository.findOneBy({ email });
+
+      return !sqlUser;
+    } catch (error) {
+      throw new Error('Error checking email uniqueness');
+    }
+  }
+  
+
+  async getUserValidate(email: string, password: string): Promise<User | null> {
+    try {
+      const user = await this.findByEmail(email);
+      if (!user) {
+        throw new Error ('User not found');
+
+      };
+
+      const isPasswordValid = await argon2.verify(user.password, password);
+      return isPasswordValid ? user : null;
+    } catch (error) {
+      console.error('User validation error:', error);
+      throw new Error ('User validation error');
     }
   }
 }
