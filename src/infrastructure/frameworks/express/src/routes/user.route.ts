@@ -59,15 +59,5 @@ userRouter.get('/users/:id', async (req, res) => {
   }
 });
 
-userRouter.get('/users', async (req, res) => {
-  try {
-    const result = await userController.findAllFilters(req);
-    res.status(200).json(result);
-  } catch (error) {
-    res.status(500).json({
-      message: error instanceof Error ? error.message : 'Failed to fetch users',
-    });
-  }
-});
 
 export default userRouter;
