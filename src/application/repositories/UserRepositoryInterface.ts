@@ -5,6 +5,7 @@
     findById(id: string): Promise<User | null>;
     findByEmail(email: string): Promise<User | null>;
     findAllFilters(criteria: object): Promise<User[]>;
+    findAll(): Promise<User[]>;
     updatePatch(id: string, pieceData: Partial<User>): Promise<User>;
     update(id: string, userData: Partial<User>): Promise<User>;
     delete(id: string): Promise<void>;

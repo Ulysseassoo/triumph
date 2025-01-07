@@ -49,6 +49,7 @@ export class TypeOrmUserRepository implements UserRepositoryInterface {
       await queryRunner.release();
     }
   }
+  
 
   async findById(id: string): Promise<User | null> {
     try {

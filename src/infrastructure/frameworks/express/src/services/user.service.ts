@@ -59,7 +59,9 @@ export class UserService {
   async findById(id: string): Promise<User | null> {
     return await this.userRepository.findById(id);
   }
-
+  async findAll(): Promise<User[]> {
+    return await this.userRepository.findAll();
+  }
   async findAllFilters(criteria: {
     filters?: {
       name?: string;
