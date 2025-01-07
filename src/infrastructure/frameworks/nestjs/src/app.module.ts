@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PieceModule } from './modules/piece.module';
 import { OrderModule } from './modules/order.module';
+import { AuthModule } from './modules/auth.module';
 
 
 @Module({
@@ -22,8 +23,8 @@ import { OrderModule } from './modules/order.module';
       },
     }),
     PieceModule,
-    OrderModule
-    
+    OrderModule,
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],
