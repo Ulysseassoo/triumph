@@ -1,6 +1,5 @@
 import express, { Express, Request, Response } from "express";
 import cors from 'cors';
-import helmet from 'helmet';
 import userRouter  from "./routes/user.route";
 
 
@@ -14,11 +13,7 @@ const corsOptions = {
 app.set('trust proxy', 1);
 app.use(express.json());
 app.use(cors(corsOptions));
-app.use(
-  helmet({
-    crossOriginResourcePolicy: false,
-  })
-);
+
 
 app.use(userRouter)
 
