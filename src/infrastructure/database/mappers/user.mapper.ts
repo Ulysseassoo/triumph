@@ -1,20 +1,28 @@
-import { User } from "../../../domain/entities/user.entity";
-import { UserOrmEntity } from "../entities/user.orm-entity";
+import { UserOrmEntity } from './../entities/user.orm-entity';
+import { User } from '../../../domain/entities/user.entity';
 
 export class UserMapper {
-  static toDomain(ormEntity: UserOrmEntity): User {
-    return new User(ormEntity.id, ormEntity.name, ormEntity.email, ormEntity.password, ormEntity.passwordValidUntil, ormEntity.isVerified, ormEntity.role);
+  static toOrmEntity(user: User): UserOrmEntity {
+    const ormUser = new UserOrmEntity();
+    ormUser.id = user.id;
+    ormUser.name = user.name;
+    ormUser.email = user.email;
+    ormUser.password = user.password;
+    ormUser.passwordValidUntil = user.passwordValidUntil;
+    ormUser.role = user.role;
+    ormUser.isVerified = user.isVerified || false;
+    return ormUser;
   }
 
-  static toOrmEntity(domainEntity: User): UserOrmEntity {
-    const ormEntity = new UserOrmEntity();
-    ormEntity.id = domainEntity.id;
-    ormEntity.name = domainEntity.name;
-    ormEntity.email = domainEntity.email;
-    ormEntity.password = domainEntity.password;
-    ormEntity.passwordValidUntil = domainEntity.passwordValidUntil;
-    ormEntity.isVerified = !!domainEntity.isVerified;
-    ormEntity.role = domainEntity.role
-    return ormEntity;
+  static toDomainEntity(ormUser: UserOrmEntity): User {
+    return new User(
+      ormUser.id,
+      ormUser.name,
+      ormUser.email,
+      ormUser.password,
+      ormUser.passwordValidUntil,
+      ormUser.isVerified,
+      ormUser.role,
+    );
   }
 }

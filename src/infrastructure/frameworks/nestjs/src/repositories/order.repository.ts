@@ -73,7 +73,7 @@ export class OrderRepository implements OrderRepositoryInterface {
 
       const orderToSave = OrderMapper.toOrmEntity(order);
       orderToSave.totalAmount = totalAmount;
-       // Save previous quantities of pieces
+     
        orderToSave.previousQuantity = order.pieces.map(piece => ({
         id: piece.id,
         quantity: piece.quantity

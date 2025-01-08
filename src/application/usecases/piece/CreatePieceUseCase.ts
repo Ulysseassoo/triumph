@@ -13,7 +13,7 @@ interface Props {
 export class CreatePieceUseCase {
   constructor(private readonly pieceRepository: PieceRepositoryInterface) {}
 
-  async execute({ name, type, cost, quantity, alertLimit , previousQuantity}: Props): Promise<Piece | null> {
+  async execute({ name, type, cost, quantity, alertLimit}: Props): Promise<Piece | null> {
 
     const piece = new Piece(
         v4(),
