@@ -93,9 +93,9 @@ const checkRole = (allowedRoles: UserRole[] = ['staff']) => {
         throw new AuthenticationError('User not authenticated', 403);
       }
 
-      // if (!authReq.user.isVerified) {
-      //   throw new AuthenticationError('User not verified', 403);
-      // }
+      if (!authReq.user.isVerified) {
+        throw new AuthenticationError('User not verified', 403);
+      }
 
       const userRoles = authReq.user.role || [];
       const hasAllowedRole = allowedRoles.some(role => userRoles.includes(role));

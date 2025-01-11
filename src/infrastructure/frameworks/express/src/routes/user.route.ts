@@ -7,7 +7,6 @@ const userRouter = express.Router();
 const userController = new UserController();
 
 
-// Public route - Create user
 userRouter.post('/users', (async (req: Request, res: Response) => {
   try {
     const result = await userController.create(req);
@@ -19,7 +18,7 @@ userRouter.post('/users', (async (req: Request, res: Response) => {
   }
 }));
 
-// Protected routes - Require authentication and specific roles
+
 userRouter.put('/users/:id',
   checkAuth(authConfig.accessTokenSecret),
   (async (req: AuthRequest, res: Response) => {
