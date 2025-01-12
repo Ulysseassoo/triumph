@@ -85,7 +85,7 @@ const checkAuth = (secret: Uint8Array | string) => {
 };
 
 
-const checkRole = (allowedRoles: UserRole[] = ['staff']) => {
+const checkRole = (allowedRoles: UserRole[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
       const authReq = req as AuthRequest;
@@ -98,10 +98,16 @@ const checkRole = (allowedRoles: UserRole[] = ['staff']) => {
       }
 
       const userRoles = authReq.user.role || [];
-      const hasAllowedRole = allowedRoles.some(role => userRoles.includes(role));
 
-      if (!hasAllowedRole) {
-        throw new AuthenticationError('Insufficient permissions', 403);
+      const hasAnyAllowedRole = allowedRoles.some(allowedRole => 
+        userRoles.some(userRole => userRole.toLowerCase() === allowedRole.toLowerCase())
+      );
+
+      if (!hasAnyAllowedRole) {
+        throw new AuthenticationError(
+          `Insufficient permissions. Required one of roles: ${allowedRoles.join(', ')}`, 
+          403
+        );
       }
 
       next();

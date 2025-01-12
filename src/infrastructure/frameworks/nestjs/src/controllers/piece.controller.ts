@@ -21,6 +21,8 @@ import { Roles } from '../role.decorator';
 export class PieceController {
   constructor(private readonly pieceService: PieceService) {}
 
+  @UseGuards(JwtAuthGuard)
+  @Roles('staff')
   @Post()
   async create(@Body() createPieceDto: {
     name: string;
@@ -80,6 +82,8 @@ export class PieceController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Roles('staff')
   @Get(':id')
   async findById(@Param('id') id: string): Promise<Piece> {
     try {
@@ -99,6 +103,8 @@ export class PieceController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Roles('staff')
   @Patch(':id')
   async updatePatch(
     @Param('id') id: string,
@@ -121,6 +127,8 @@ export class PieceController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Roles('staff')
   @Put(':id')
   async update(
     @Param('id') id: string,
@@ -143,6 +151,8 @@ export class PieceController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Roles('staff')
   @Delete(':id')
   async delete(@Param('id') id: string): Promise<void> {
     try {

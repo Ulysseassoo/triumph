@@ -7,7 +7,10 @@ const userRouter = express.Router();
 const userController = new UserController();
 
 
-userRouter.post('/users', (async (req: Request, res: Response) => {
+userRouter.post('/users',
+  checkAuth(authConfig.accessTokenSecret),
+  checkRole(['staff']),
+ (async (req: Request, res: Response) => {
   try {
     const result = await userController.create(req);
     res.status(201).json(result);
@@ -35,7 +38,7 @@ userRouter.put('/users/:id',
 
 userRouter.patch('/users/:id',
   checkAuth(authConfig.accessTokenSecret),
- 
+  checkRole(['staff']),
   (async (req: AuthRequest, res: Response) => {
     try {
       const result = await userController.updatePatch(req);
@@ -50,7 +53,7 @@ userRouter.patch('/users/:id',
 
 userRouter.delete('/users/:id',
   checkAuth(authConfig.accessTokenSecret),
-
+  checkRole(['staff']),
   (async (req: AuthRequest, res: Response) => {
     try {
       await userController.delete(req);
@@ -65,7 +68,7 @@ userRouter.delete('/users/:id',
 
 userRouter.get('/users/:id',
   checkAuth(authConfig.accessTokenSecret),
- 
+  checkRole(['staff','client']),
   (async (req: AuthRequest, res: Response) => {
     try {
       const result = await userController.findById(req);

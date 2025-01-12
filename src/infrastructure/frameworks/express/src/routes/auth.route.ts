@@ -1,5 +1,6 @@
 import express from 'express';
 import { AuthController } from '../controllers/auth.controller';
+import { checkRole } from '../middlewares/auth.middlewares';
 
 const authRouter = express.Router();
 const authController = new AuthController();
@@ -26,7 +27,9 @@ authRouter.post('/auth/login', async (req, res) => {
   }
 });
 
-authRouter.post('/auth/refresh-token', async (req, res) => {
+authRouter.post('/auth/refresh-token',
+  checkRole(['staff','client']),
+  async (req, res) => {
   try {
     const result = await authController.refreshToken(req);
     res.status(200).json(result);
