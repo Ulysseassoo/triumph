@@ -8,17 +8,12 @@ export const AppDataSource = () => {
 		const isTestEnvironment = process.env.ENVIRONMENT === "test";
 		if (isTestEnvironment) {
 			dataSource =  new DataSource({
-				type: "postgres",
-				host: "localhost",
-				port: 5432,
-				username: "postgres",
-				password: "postgres",
-				database: "postgres",
+				type: "sqlite",
+				database: ":memory:",
 				synchronize: true,
-				logging: false,
-				entities: [join(__dirname, '../../../../database/entities/*.orm-entity.ts')],
-				migrations: [join(__dirname, '..', 'migrations', '*.{ts,js}')],
-				subscribers: [],
+				entities: [join(__dirname,"../../../", "infrastructure", "database", "entities", "*.ts")],
+				migrations: [join(__dirname, "..", "migrations", "*.{ts,js}")],
+				logging: true
 			});
 		} else {
 			dataSource =  new DataSource({
