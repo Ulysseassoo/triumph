@@ -56,12 +56,12 @@ export class AuthController {
       throw new Error('Invalid credentials');
     }
 
-
+    if (!user.isVerified) {
+      throw new Error('Email not verified');
+    }
 
     const accessToken = this.generateAccessToken(user);
     const refreshToken = this.generateRefreshToken(user);
-
-  
 
     return {
       accessToken,
@@ -79,6 +79,10 @@ export class AuthController {
       throw new Error('Invalid token');
     }
 
+    if (!user.isVerified) {
+      throw new Error('Email not verified');
+    }
+
     const newAccessToken = this.generateAccessToken(user);
     return {
       accessToken: newAccessToken
@@ -90,7 +94,8 @@ export class AuthController {
       {
         id: user.id,
         email: user.email,
-        role: user.role
+        role: user.role,
+        isVerified: user.isVerified 
       },
       this.accessTokenSecret,
       { expiresIn: '15m' }
@@ -102,7 +107,8 @@ export class AuthController {
       {
         id: user.id,
         email: user.email,
-        role: user.role
+        role: user.role,
+        isVerified: user.isVerified
       },
       this.refreshTokenSecret,
       { expiresIn: '7d' }

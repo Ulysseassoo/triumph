@@ -26,7 +26,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
     try {
       const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
-      
+
       if (!accessTokenSecret) {
         throw new Error('ACCESS_TOKEN_SECRET is not configured');
       }
@@ -34,26 +34,37 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       const decoded = jwt.verify(token, accessTokenSecret) as jwt.JwtPayload & {
         id: string;
         email: string;
-        role?: string[]
+        role?: string[];
+        isVerified?: boolean;
       };
 
-      const userRoles = Array.isArray(decoded.role) ? decoded.role : typeof decoded.role === 'string' ? [decoded.role] : [];
+      console.log('Decoded token:', decoded);
 
+      
+      if (!decoded.isVerified) {
+        throw new UnauthorizedException('Email not verified');
+      }
+
+      const userRoles = Array.isArray(decoded.role) ? decoded.role : 
+                       typeof decoded.role === 'string' ? [decoded.role] : 
+                       [];
+
+      console.log('User roles:', userRoles);
 
       request.user = {
         id: decoded.id,
         email: decoded.email,
         role: userRoles,
-        isVerified: true
+        isVerified: decoded.isVerified
       };
-
+      
       const requiredRoles = this.reflector.get<string[]>('roles', context.getHandler());
-
+      console.log('Required roles:', requiredRoles);
 
       if (requiredRoles && requiredRoles.length > 0) {
         const hasRole = this.matchRoles(requiredRoles, userRoles);
+        console.log('Has required role:', hasRole);
 
-        
         if (!hasRole) {
           throw new UnauthorizedException(
             `Insufficient permissions. Required roles: ${requiredRoles.join(', ')}, User roles: ${userRoles.join(', ')}`
@@ -64,7 +75,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       return true;
     } catch (error) {
       console.error('Auth error:', error);
-      
+
       if (error instanceof jwt.JsonWebTokenError) {
         throw new UnauthorizedException('Invalid token');
       }
