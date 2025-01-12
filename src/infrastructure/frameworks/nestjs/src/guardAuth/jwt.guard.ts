@@ -38,7 +38,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         isVerified?: boolean;
       };
 
-      console.log('Decoded token:', decoded);
+  
 
       
       if (!decoded.isVerified) {
@@ -49,7 +49,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
                        typeof decoded.role === 'string' ? [decoded.role] : 
                        [];
 
-      console.log('User roles:', userRoles);
 
       request.user = {
         id: decoded.id,
@@ -57,13 +56,13 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         role: userRoles,
         isVerified: decoded.isVerified
       };
-      
+
       const requiredRoles = this.reflector.get<string[]>('roles', context.getHandler());
-      console.log('Required roles:', requiredRoles);
+    
 
       if (requiredRoles && requiredRoles.length > 0) {
         const hasRole = this.matchRoles(requiredRoles, userRoles);
-        console.log('Has required role:', hasRole);
+
 
         if (!hasRole) {
           throw new UnauthorizedException(
