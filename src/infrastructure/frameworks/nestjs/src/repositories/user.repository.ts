@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UserRepositoryInterface } from '../../../../../application/Repositories/UserRepositoryInterface';
+import { UserRepositoryInterface } from '../../../../../application/repositories/UserRepositoryInterface';
 import { User } from '../../../../../domain/entities/user.entity';
 import { UserOrmEntity } from '../../../../database/entities/user.orm-entity';
 import { UserMapper } from '../../../../database/mappers/user.mapper';

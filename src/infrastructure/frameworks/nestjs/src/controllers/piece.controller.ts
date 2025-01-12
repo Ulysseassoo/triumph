@@ -9,10 +9,13 @@ import {
   Param, 
   Query,
   HttpStatus,
-  HttpException
+  HttpException,
+  UseGuards
 } from '@nestjs/common';
 import { PieceService } from '../services/piece.service';
 import { Piece } from '../../../../../domain/entities/piece.entity';
+import { JwtAuthGuard } from '../guardAuth/jwt.guard';
+import { Roles } from '../role.decorator';
 
 @Controller('pieces')
 export class PieceController {
@@ -41,7 +44,8 @@ export class PieceController {
       );
     }
   }
-
+  @UseGuards(JwtAuthGuard)
+  @Roles('staff')
   @Get()
   async findAll(
     @Query('name') name?: string,

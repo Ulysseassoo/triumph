@@ -38,7 +38,6 @@ export class AuthController {
     );
 
     const savedUser = await this.userRepository.create(user);
-    
     return {
       user: {
         id: savedUser.id,
@@ -57,8 +56,12 @@ export class AuthController {
       throw new Error('Invalid credentials');
     }
 
+
+
     const accessToken = this.generateAccessToken(user);
     const refreshToken = this.generateRefreshToken(user);
+
+  
 
     return {
       accessToken,
@@ -68,16 +71,15 @@ export class AuthController {
 
   async refreshToken(req: Request): Promise<AuthResponse> {
     const { refreshToken } = req.body;
-    
+
     const decoded = jwt.verify(refreshToken, this.refreshTokenSecret) as jwt.JwtPayload;
     const user = await this.userRepository.findById(decoded.id);
-
+    
     if (!user) {
       throw new Error('Invalid token');
     }
 
     const newAccessToken = this.generateAccessToken(user);
-
     return {
       accessToken: newAccessToken
     };
@@ -85,7 +87,11 @@ export class AuthController {
 
   private generateAccessToken(user: User): string {
     return jwt.sign(
-      { id: user.id, email: user.email },
+      {
+        id: user.id,
+        email: user.email,
+        role: user.role
+      },
       this.accessTokenSecret,
       { expiresIn: '15m' }
     );
@@ -93,7 +99,11 @@ export class AuthController {
 
   private generateRefreshToken(user: User): string {
     return jwt.sign(
-      { id: user.id, email: user.email },
+      {
+        id: user.id,
+        email: user.email,
+        role: user.role
+      },
       this.refreshTokenSecret,
       { expiresIn: '7d' }
     );
