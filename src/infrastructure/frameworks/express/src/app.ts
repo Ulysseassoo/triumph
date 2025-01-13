@@ -1,7 +1,7 @@
 import express, { Express, Request, Response } from "express";
 import cors from 'cors';
 import userRouter  from "./routes/user.route";
-
+import authRouter  from "./routes/auth.route";
 
 const app: Express = express();
 
@@ -16,5 +16,5 @@ app.use(cors(corsOptions));
 
 
 app.use(userRouter)
-
+app.use(authRouter)
 export default app;

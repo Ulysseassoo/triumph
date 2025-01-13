@@ -61,22 +61,28 @@ export class UserController {
     return user;
   }
 
-  async findAllFilters(req: Request): Promise<User[]> {
+async findAllFilters(req: Request): Promise<User[]> {
+ 
+    if (Object.keys(req.query).length === 0) {
+        return await this.userService.findAll();
+    }
+
+    
     const filters: {
-      name?: string;
-      email?: string;
-      role?: string[];
-      isVerified?: boolean;
+        name?: string;
+        email?: string;
+        role?: string[];
+        isVerified?: boolean;
     } = req.query as any;
 
     const pagination = {
-      offset: parseInt(req.query.offset as string) || 0,
-      limit: parseInt(req.query.limit as string) || 10,
+        offset: parseInt(req.query.offset as string) || 0,
+        limit: parseInt(req.query.limit as string) || 10,
     };
 
     return await this.userService.findAllFilters({
-      filters,
-      pagination,
+        filters,
+        pagination,
     });
   }
 }

@@ -9,15 +9,20 @@ import {
   Param,
   Query,
   HttpStatus,
-  HttpException
+  HttpException,
+  UseGuards
 } from '@nestjs/common';
 import { OrderService } from '../services/order.service';
 import { Order } from '../../../../../domain/entities/order.entity';
+import { JwtAuthGuard } from '../guardAuth/jwt.guard';
+import { Roles } from '../role.decorator';
 
 @Controller('orders')
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
+  @UseGuards(JwtAuthGuard)
+  @Roles('staff')
   @Post()
   async create(@Body() createOrderDto: {
     pieces: { id: string; quantity: number }[];
@@ -42,6 +47,8 @@ export class OrderController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Roles('staff')
   @Get()
   async findAll(
     @Query('status') status?: string,
@@ -77,6 +84,8 @@ export class OrderController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Roles('staff')
   @Get(':id')
   async findById(@Param('id') id: string): Promise<Order> {
     try {
@@ -96,6 +105,8 @@ export class OrderController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Roles('staff')
   @Patch(':id')
   async updatePatch(
     @Param('id') id: string,
@@ -118,6 +129,8 @@ export class OrderController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Roles('staff')
   @Put(':id')
   async update(
     @Param('id') id: string,
@@ -140,6 +153,8 @@ export class OrderController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Roles('staff')
   @Delete(':id')
   async delete(@Param('id') id: string): Promise<void> {
     try {
