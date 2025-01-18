@@ -4,6 +4,7 @@ interface NavLinkProps {
   to: string;
   label: string;
   className?: string;
+  onClick?: MouseEvent;
 }
 
 function NavLink({ to, label, className }: NavLinkProps) {

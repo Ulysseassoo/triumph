@@ -1,6 +1,7 @@
 import express from 'express';
 import { AuthController } from '../controllers/auth.controller';
-import { checkRole } from '../middlewares/auth.middlewares';
+import { checkAuth, checkRole } from '../middlewares/auth.middlewares';
+import { authConfig } from 'src/config/auth.config';
 
 const authRouter = express.Router();
 const authController = new AuthController();
@@ -38,6 +39,19 @@ authRouter.post('/auth/refresh-token',
       message: error instanceof Error ? error.message : 'Failed to refresh token',
     });
   }
+});
+
+authRouter.post('/auth/logout',
+  checkAuth(authConfig.accessTokenSecret),
+  checkRole(['staff','client']),
+  async (req, res) => {
+    try {
+      res.status(200).json(true);
+    } catch (error) {
+      res.status(401).json({
+        message: error instanceof Error ? error.message : 'Failed to logout',
+      });
+    }
 });
 
 export default authRouter;
