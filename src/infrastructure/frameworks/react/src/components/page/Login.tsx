@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import  LoginForm from './LoginForm';
-import { Card, CardHeader, CardTitle, CardContent } from './Card';
+import  LoginForm from '../composable/LoginForm';
+import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
 
 
-function LoginPage () {
+function Login () {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -61,4 +61,4 @@ function LoginPage () {
   );
 };
 
-export default LoginPage;
+export default Login;

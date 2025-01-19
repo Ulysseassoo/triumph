@@ -1,10 +1,10 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import MyHeader from "./components/MyHeader";
-import MyHomePage from "./components/MyHomePage";
-import PagePiece from "./components/PagePiece"
-import MyFooter from "./components/MyFooter";
-import LoginPage from "./components/LoginPage";
-import RegisterPage from "./components/RegisterPage";
+import Header from "./components/Header";
+import Home from "./components/page/Home";
+import Piece from "./components/page/Piece"
+import Footer from "./components/Footer";
+import Login from "./components/page/Login";
+import Register from "./components/page/Register";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -12,9 +12,9 @@ interface LayoutProps {
 function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen bg-white flex flex-col">
-      <MyHeader className="w-full px-4 py-3 shadow-md" />
+      <Header className="w-full px-4 py-3 shadow-md" />
       <main className="flex-grow">{children}</main>
-      <MyFooter />
+      <Footer />
     </div>
   );
 }
@@ -24,10 +24,10 @@ function App() {
     <BrowserRouter>
       <Layout>
         <Routes>
-          <Route path="/" element={<MyHomePage />} />
-          <Route path="/pieces" element={<PagePiece />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/Register" element={<RegisterPage />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/pieces" element={<Piece />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/Register" element={<Register />} />
         </Routes>
       </Layout>
     

@@ -1,14 +1,15 @@
 
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import  RegisterForm  from './RegisterForm';
-import { Card, CardHeader, CardTitle, CardContent } from './Card';
+import  RegisterForm  from '../composable/RegisterForm';
+import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
 
-function RegisterPage () {
+function Register () {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleRegister = async (formData: {
+    name: string;
     email: string;
     password: string;
     confirmPassword: string;
@@ -21,12 +22,13 @@ function RegisterPage () {
 
     try {
       setIsLoading(true);
-      const response = await fetch('/auth/register', {
+      const response = await fetch('http://localhost:5001/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          "name" : formData.name,
           email: formData.email,
           password: formData.password,
         }),
@@ -64,4 +66,4 @@ function RegisterPage () {
     </div>
   );
 };
-export default RegisterPage ;
+export default Register ;

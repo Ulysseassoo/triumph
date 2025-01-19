@@ -1,6 +1,6 @@
 import React from "react";
 import { ChevronRight, Star, Users, Shield } from "lucide-react";
-import Button from "./Button";
+import Button from "../ui/Button";
 
 interface Feature {
   title: string;
@@ -14,7 +14,7 @@ interface TestimonialType {
   content: string;
 }
 
-function MyHomePage() {
+function Home() {
   const features: Feature[] = [
     {
       title: "Qualité Premium",
@@ -145,4 +145,4 @@ function MyHomePage() {
   );
 }
 
-export default MyHomePage;
+export default Home;

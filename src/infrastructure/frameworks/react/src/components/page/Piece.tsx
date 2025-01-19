@@ -6,8 +6,8 @@ import {
   CardDescription,
   CardContent,
   CardFooter,
-} from "./Card";
-import Button from "./Button";
+} from "../ui/Card";
+import Button from "../ui/Button";
 
 interface AutoPart {
   id: number;
@@ -19,7 +19,7 @@ interface AutoPart {
   reference: string;
 }
 
-function PagePiece() {
+function Piece() {
   const autoParts: AutoPart[] = [
     {
       id: 1,
@@ -97,4 +97,4 @@ function PagePiece() {
   );
 };
 
-export default PagePiece;
+export default Piece;
