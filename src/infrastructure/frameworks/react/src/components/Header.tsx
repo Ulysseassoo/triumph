@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png'
 import { useState } from 'react';
-import Button from './Button';
+import Button from './ui/Button';
 
 interface HeaderProps {
   className?: string,
