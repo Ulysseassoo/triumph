@@ -13,7 +13,7 @@ interface RegisterFormProps {
   isLoading?: boolean;
 }
 
-const RegisterForm: React.FC<RegisterFormProps> = ({ onSubmit, isLoading = false }) => {
+function RegisterForm  ({ onSubmit, isLoading = false }:RegisterFormProps)  {
   const [formData, setFormData] = useState({
     name: '',
     email: '',

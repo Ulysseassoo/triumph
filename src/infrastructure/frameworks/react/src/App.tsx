@@ -5,6 +5,7 @@ import Piece from "./components/page/Piece"
 import Footer from "./components/Footer";
 import Login from "./components/page/Login";
 import Register from "./components/page/Register";
+import CreatePiece from "./components/page/CreatEPiece";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -28,6 +29,7 @@ function App() {
           <Route path="/pieces" element={<Piece />} />
           <Route path="/login" element={<Login />} />
           <Route path="/Register" element={<Register />} />
+          <Route path="/create/piece" element={<CreatePiece />} />
         </Routes>
       </Layout>
     

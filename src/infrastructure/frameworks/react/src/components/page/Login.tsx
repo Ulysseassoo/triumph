@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import  LoginForm from '../composable/LoginForm';
+import  LoginForm from '../composant/LoginForm';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
 
 
@@ -25,7 +25,6 @@ function Login () {
       }
 
       const data = await response.json();
-      console.log("error data" , data)
       localStorage.setItem('token', data.accessToken);
       navigate('/');
     } catch (error) {

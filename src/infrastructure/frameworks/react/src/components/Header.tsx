@@ -11,24 +11,10 @@ function MyHeader({className}: HeaderProps) {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    try {
-      const response = await fetch('http://localhost:5001/auth/logout', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json',
-        },
-      });
-      if (!response.ok) {
-        throw new Error('Échec de la connexion');
-      }
+    
       localStorage.removeItem('token');
       navigate('/login');
-    } catch (error) {
-      console.error('Logout error:', error);
-      localStorage.removeItem('token');
-      navigate('/login');
-    }
+    
   };
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);

@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import  RegisterForm  from '../composable/RegisterForm';
+import RegisterForm from '../composant/RegisterForm';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
 
 function Register () {
@@ -28,7 +28,7 @@ function Register () {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          "name" : formData.name,
+          name : formData.name,
           email: formData.email,
           password: formData.password,
         }),
