@@ -41,9 +41,9 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   
 
       
-      if (!decoded.isVerified) {
-        throw new UnauthorizedException('Email not verified');
-      }
+      // if (!decoded.isVerified) {
+      //   throw new UnauthorizedException('Email not verified');
+      // }
 
       const userRoles = Array.isArray(decoded.role) ? decoded.role : 
                        typeof decoded.role === 'string' ? [decoded.role] : 
