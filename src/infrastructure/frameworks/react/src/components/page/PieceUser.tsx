@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Card,
   CardHeader,
@@ -8,6 +8,7 @@ import {
   CardFooter,
 } from "../ui/Card";
 import Button from "../ui/Button";
+import { useNavigate } from "react-router-dom";
 
 interface AutoPart {
   id: number;
@@ -19,7 +20,15 @@ interface AutoPart {
   reference: string;
 }
 
-function Piece() {
+function PieceUser() {
+  const navigate = useNavigate();
+  useEffect(() => {
+
+    const accessToken = localStorage.getItem('token');
+    if (!accessToken) {
+        navigate('/login');
+    }
+}, [navigate]);
   const autoParts: AutoPart[] = [
     {
       id: 1,
@@ -97,4 +106,4 @@ function Piece() {
   );
 };
 
-export default Piece;
+export default PieceUser;
