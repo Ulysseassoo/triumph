@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ChevronRight, Star, Users, Shield } from "lucide-react";
 import Button from "../ui/Button";
-
+import { useNavigate } from 'react-router-dom';
 interface Feature {
   title: string;
   description: string;
@@ -15,6 +15,15 @@ interface TestimonialType {
 }
 
 function Home() {
+  const navigate = useNavigate();
+  useEffect(() => {
+
+    const accessToken = localStorage.getItem('token');
+    if (!accessToken) {
+        navigate('/login');
+    }
+}, [navigate]);
+
   const features: Feature[] = [
     {
       title: "Qualité Premium",
