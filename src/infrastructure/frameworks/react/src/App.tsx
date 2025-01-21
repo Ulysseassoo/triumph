@@ -5,7 +5,7 @@ import PieceUser from "./components/page/PieceUser"
 import Footer from "./components/Footer";
 import Login from "./components/page/Login";
 import Register from "./components/page/Register";
-import CreatePiece from "./components/page/CreatEPiece";
+import CreatePiece from "./components/page/CreatePiece";
 import PieceStaff from "./components/page/PieceStaff";
 
 interface LayoutProps {

@@ -7,7 +7,7 @@ interface HeaderProps {
   className?: string,
 }
 
-function MyHeader({className}: HeaderProps) {
+function Header({className}: HeaderProps) {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -148,4 +148,4 @@ function MyHeader({className}: HeaderProps) {
   );
 }
 
-export default MyHeader;
+export default Header;
