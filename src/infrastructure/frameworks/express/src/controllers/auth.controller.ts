@@ -56,9 +56,9 @@ export class AuthController {
       throw new Error('Invalid credentials');
     }
 
-    // if (!user.isVerified) {
-    //   throw new Error('Email not verified');
-    // }
+    if (!user.isVerified) {
+      throw new Error('Email not verified');
+    }
 
     const accessToken = this.generateAccessToken(user);
     const refreshToken = this.generateRefreshToken(user);
