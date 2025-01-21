@@ -53,7 +53,7 @@ function CreatePiece() {
                 throw new Error(data.message || 'Échec de la création de la pièce');
             }
 
-            navigate('/pieces');
+            navigate('/pieces/staff');
         } catch (error) {
             console.error('Erreur de création:', error);
             setError(error instanceof Error ? error.message : 'Une erreur est survenue');
