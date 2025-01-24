@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/Card";
-import PieceForm from '../composant/PieceForm';
+import { Card, CardContent, CardHeader, CardTitle } from "../../ui/Card";
+import PieceForm from '../../composant/PieceForm';
 
 function CreatePiece() {
     const navigate = useNavigate();

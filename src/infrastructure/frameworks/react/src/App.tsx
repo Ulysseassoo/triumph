@@ -1,12 +1,16 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
 import Home from "./components/page/Home";
-import PieceUser from "./components/page/PieceUser"
+import PieceUser from "./components/page/piece/PieceUser"
 import Footer from "./components/Footer";
-import Login from "./components/page/Login";
-import Register from "./components/page/Register";
-import CreatePiece from "./components/page/CreatePiece";
-import PieceStaff from "./components/page/PieceStaff";
+import Login from "./components/page/auth/Login";
+import Register from "./components/page/auth/Register";
+import CreatePiece from "./components/page/piece/CreatePiece";
+import PieceStaff from "./components/page/piece/PieceStaff";
+import PieceEdit from "./components/page/piece/pieceEdit";
+import OrderStaff from "./components/page/order/OrderStaff";
+import CreateOrder from "./components/page/order/CreateOrder";
+import OrderEdit from "./components/page/order/OrderEdit";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -32,6 +36,10 @@ function App() {
           <Route path="/Register" element={<Register />} />
           <Route path="/create/piece" element={<CreatePiece />} />
           <Route path="/pieces/staff" element={<PieceStaff />} />
+          <Route path="/pieces/edit/:id" element={<PieceEdit />} />
+          <Route path="/create/order" element={<CreateOrder />} />
+          <Route path="/orders/staff" element={<OrderStaff />} />
+          <Route path="/orders/edit/:id" element={<OrderEdit />} />
         </Routes>
       </Layout>
     

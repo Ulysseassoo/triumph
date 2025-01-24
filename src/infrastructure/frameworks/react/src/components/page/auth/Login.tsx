@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import  LoginForm from '../composant/LoginForm';
-import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
+import  LoginForm from '../../composant/LoginForm';
+import { Card, CardHeader, CardTitle, CardContent } from '../../ui/Card';
 
 
 function Login () {

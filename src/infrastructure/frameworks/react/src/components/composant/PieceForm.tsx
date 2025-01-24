@@ -98,7 +98,6 @@ function PieceForm ({onSubmit,isLoading}: PieceFormProps) {
               required
             />
           </div>
-         
             <Button
                 type="submit"
                 disabled={isLoading}

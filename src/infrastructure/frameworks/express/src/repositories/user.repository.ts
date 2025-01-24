@@ -244,7 +244,7 @@ export class TypeOrmUserRepository implements UserRepositoryInterface {
       };
 
       const isPasswordValid = await argon2.verify(user.password, password);
-      console.log(isPasswordValid)
+     
       return isPasswordValid ? user : null;
     } catch (error) {
       console.error('User validation error:', error);
