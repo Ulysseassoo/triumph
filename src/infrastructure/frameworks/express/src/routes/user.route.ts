@@ -82,8 +82,8 @@ userRouter.get('/users/:id',
 );
 
 userRouter.get('/users',
-  checkAuth(authConfig.accessTokenSecret),
-  checkRole(['staff']),
+  // checkAuth(authConfig.accessTokenSecret),
+  // checkRole(['staff']),
   (async (req: AuthRequest, res: Response) => {
     try {
       const result = await userController.findAllFilters(req);

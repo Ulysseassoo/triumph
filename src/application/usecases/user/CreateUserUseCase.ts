@@ -5,7 +5,6 @@ interface Props {
   name:string,
   email:string,
   password:string,
-  passwordValidUntil:Date,
   isVerified:boolean,
   role:string[],
 }
@@ -13,14 +12,13 @@ interface Props {
 export class CreateUserUseCase {
   constructor(private readonly userRepository: UserRepositoryInterface) {}
 
-  async execute({ name, email, password, passwordValidUntil, isVerified, role}: Props): Promise<User | null> {
+  async execute({ name, email, password ,isVerified, role}: Props): Promise<User | null> {
 
     const user = new User(
         v4(),
         name,
         email,
         password,
-        passwordValidUntil,
         isVerified,
         role
     )

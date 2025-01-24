@@ -41,7 +41,6 @@ function PieceStaff() {
             const data = await response.json();
             setPieces(data);
         } catch (error) {
-            setError('Erreur lors du chargement des pièces');
             console.error('Erreur:', error);
         } finally {
             setIsLoading(false);

@@ -41,17 +41,5 @@ authRouter.post('/auth/refresh-token',
   }
 });
 
-authRouter.post('/auth/logout',
-  checkAuth(authConfig.accessTokenSecret),
-  checkRole(['staff','client']),
-  async (req, res) => {
-    try {
-      res.status(200).json(true);
-    } catch (error) {
-      res.status(401).json({
-        message: error instanceof Error ? error.message : 'Failed to logout',
-      });
-    }
-});
 
 export default authRouter;

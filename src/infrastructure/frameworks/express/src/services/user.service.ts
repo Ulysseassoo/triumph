@@ -13,7 +13,6 @@ export class UserService {
     name: string,
     email: string,
     password: string,
-    passwordValidUntil?: Date,
     isVerified?: boolean,
     role?: string[]
   ): Promise<User | null> {
@@ -23,7 +22,6 @@ export class UserService {
       name,
       email,
       password,
-      passwordValidUntil: passwordValidUntil ?? new Date(),
       isVerified: isVerified ?? false,
       role: role ?? []
     });

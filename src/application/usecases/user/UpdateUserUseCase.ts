@@ -6,7 +6,6 @@ interface UpdateUserProps {
   name?: string;
   email?: string;
   password?: string;
-  passwordValidUntil?: Date;
   isVerified?: boolean;
   role?: string[];
 }
