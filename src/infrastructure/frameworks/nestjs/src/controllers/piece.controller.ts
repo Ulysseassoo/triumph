@@ -22,7 +22,6 @@ export class PieceController {
   constructor(private readonly pieceService: PieceService) {}
 
   @UseGuards(JwtAuthGuard)
-  @Roles('staff')
   @Post()
   async create(@Body() createPieceDto: {
     name: string;
@@ -47,7 +46,7 @@ export class PieceController {
     }
   }
   @UseGuards(JwtAuthGuard)
-  @Roles('staff')
+    
   @Get()
   async findAll(
     @Query('name') name?: string,

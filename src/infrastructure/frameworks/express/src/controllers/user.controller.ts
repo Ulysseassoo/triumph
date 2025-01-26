@@ -12,13 +12,12 @@ export class UserController {
   }
 
   async create(req: Request): Promise<User | null > {
-    const { name, email, password, passwordValidUntil, isVerified, role } = req.body;
+    const { name, email, password,  isVerified, role } = req.body;
 
     return await this.userService.create(
       name,
       email,
       password,
-      passwordValidUntil,
       isVerified,
       role
     );

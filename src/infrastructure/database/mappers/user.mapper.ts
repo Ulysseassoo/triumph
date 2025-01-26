@@ -8,7 +8,6 @@ export class UserMapper {
     ormUser.name = user.name;
     ormUser.email = user.email;
     ormUser.password = user.password;
-    ormUser.passwordValidUntil = user.passwordValidUntil;
     ormUser.role = user.role;
     ormUser.isVerified = user.isVerified || false;
     return ormUser;
@@ -20,7 +19,6 @@ export class UserMapper {
       ormUser.name,
       ormUser.email,
       ormUser.password,
-      ormUser.passwordValidUntil,
       ormUser.isVerified,
       ormUser.role,
     );

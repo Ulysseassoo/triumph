@@ -27,7 +27,6 @@ export class TypeOrmUserRepository implements UserRepositoryInterface {
         user.name,
         user.email,
         hashedPassword,
-        user.passwordValidUntil,
         user.isVerified,
         user.role
       );
@@ -155,9 +154,7 @@ export class TypeOrmUserRepository implements UserRepositoryInterface {
       const updateData = {
         ...userData,
         ...(hashedPassword && { password: hashedPassword }),
-        ...(userData.passwordValidUntil && { 
-          passwordValidUntil: new Date(userData.passwordValidUntil) 
-        })
+
       };
 
       await this.userRepository.update(id, updateData);
@@ -192,9 +189,7 @@ export class TypeOrmUserRepository implements UserRepositoryInterface {
       const updateData = {
         ...userData,
         ...(hashedPassword && { password: hashedPassword }),
-        ...(userData.passwordValidUntil && { 
-          passwordValidUntil: new Date(userData.passwordValidUntil) 
-        })
+
       };
 
       await this.userRepository.update(id, updateData);
@@ -249,6 +244,7 @@ export class TypeOrmUserRepository implements UserRepositoryInterface {
       };
 
       const isPasswordValid = await argon2.verify(user.password, password);
+     
       return isPasswordValid ? user : null;
     } catch (error) {
       console.error('User validation error:', error);

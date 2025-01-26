@@ -1,6 +1,7 @@
 import express from 'express';
 import { AuthController } from '../controllers/auth.controller';
-import { checkRole } from '../middlewares/auth.middlewares';
+import { checkAuth, checkRole } from '../middlewares/auth.middlewares';
+import { authConfig } from 'src/config/auth.config';
 
 const authRouter = express.Router();
 const authController = new AuthController();
@@ -39,5 +40,6 @@ authRouter.post('/auth/refresh-token',
     });
   }
 });
+
 
 export default authRouter;

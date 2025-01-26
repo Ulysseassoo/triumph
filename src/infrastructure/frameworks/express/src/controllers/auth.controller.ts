@@ -23,7 +23,7 @@ export class AuthController {
   }
 
   async register(req: Request): Promise<AuthResponse> {
-    const { name, email, password } = req.body;
+    const { name, email, password,isVerified,role } = req.body;
     
     const isEmailUnique = await this.userRepository.isEmailUnique(email);
     if (!isEmailUnique) {
@@ -34,7 +34,9 @@ export class AuthController {
       uuidv4(),
       name,
       email,
-      password
+      password,
+      isVerified,
+      role
     );
 
     const savedUser = await this.userRepository.create(user);
