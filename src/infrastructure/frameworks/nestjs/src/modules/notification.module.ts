@@ -5,11 +5,12 @@ import { NotificationOrmEntity } from '../../../../database/entities/notificatio
 import { NotificationController } from 'src/controllers/notification.controller';
 import { NotificationService } from 'src/services/notification.service';
 import { NotificationRepository } from 'src/repositories/notification.repository';
+import { UserOrmEntity } from '../../../../database/entities/user.orm-entity';
 
 @Module({
   imports: [
     ConfigModule,
-    TypeOrmModule.forFeature([NotificationOrmEntity]),
+    TypeOrmModule.forFeature([NotificationOrmEntity, UserOrmEntity]),
   ],
   controllers: [NotificationController],
   providers: [

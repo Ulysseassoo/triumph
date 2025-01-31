@@ -1,7 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'typeorm';
 import { NotificationOrmEntity } from './notification.orm-entity';
+import { PartnerOrmEntity } from './partner.orm-entity';
 
-@Entity('users')
+@Entity("user")
 export class UserOrmEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -26,4 +27,7 @@ export class UserOrmEntity {
 
   @OneToMany(() => NotificationOrmEntity, (notification) => notification.user)
   notifications: NotificationOrmEntity[];
+
+  @ManyToOne(() => PartnerOrmEntity, (partner) => partner.users)
+  partner: PartnerOrmEntity;
 }

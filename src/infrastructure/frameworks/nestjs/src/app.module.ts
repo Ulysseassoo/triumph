@@ -8,6 +8,7 @@ import { MaintenanceModule } from './modules/maintenance.module';
 import { PieceModule } from './modules/piece.module';
 import { NotificationModule } from './modules/notification.module';
 import { MotoModule } from './modules/moto.module';
+import { PartnerModule } from './modules/partner.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { MotoModule } from './modules/moto.module';
     PieceModule,
     MotoModule,
     NotificationModule,
+    PartnerModule,
   ],
   controllers: [AppController],
   providers: [AppService],

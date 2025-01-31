@@ -6,7 +6,8 @@ export class User {
       public readonly password: string,
       public readonly passwordValidUntil?: Date,
       public readonly isVerified?: boolean,
-      public readonly role?: string[]
+      public readonly role?: string[],
+      public readonly clientPartnerId?: string,
     ) {}
   }
   

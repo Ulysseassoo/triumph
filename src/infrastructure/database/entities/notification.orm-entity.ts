@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { UserOrmEntity } from './user.orm-entity';
 
-@Entity()
+@Entity("notification")
 export class NotificationOrmEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;

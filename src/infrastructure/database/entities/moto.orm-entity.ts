@@ -1,6 +1,7 @@
 import { MotoStatus } from "../../../domain/entities/moto.entity";
 import { MaintenanceOrmEntity } from './maintenance.orm-entity';
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
+import { PartnerOrmEntity } from "./partner.orm-entity";
 
 @Entity('moto')
 export class MotoOrmEntity {
@@ -9,9 +10,6 @@ export class MotoOrmEntity {
 
   @Column({ type: 'varchar', length: 100 })
   model: string;
-
-  @Column({ type: 'uuid' })
-  clientId: string;
 
   @Column({ type: 'int' })
   currentMileage: number;
@@ -24,4 +22,8 @@ export class MotoOrmEntity {
 
   @OneToMany(() => MaintenanceOrmEntity, maintenance => maintenance.moto, { cascade: true })
   maintenances: MaintenanceOrmEntity[];
+
+  @ManyToOne(() => PartnerOrmEntity, (partner) => partner.motos)
+  @JoinColumn({ name: 'clientPartnerId' })
+  partner: PartnerOrmEntity;
 }

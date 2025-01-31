@@ -10,7 +10,7 @@ export class Moto {
 	constructor(
 		public readonly id: string,
 		public readonly model: string,
-		public readonly clientId: string,
+		public readonly clientPartnerId: string,
 		public currentMileage: number,
 		public price: number,
 		public status: MotoStatus,
