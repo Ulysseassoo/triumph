@@ -8,6 +8,8 @@ import { PieceModule } from './modules/piece.module';
 import { NotificationModule } from './modules/notification.module';
 import { MotoModule } from './modules/moto.module';
 import { PartnerModule } from './modules/partner.module';
+import { OrderModule } from './modules/order.module';
+import { MaintenanceModule } from './modules/maintenance.module';
 
 @Module({
   imports: [
@@ -22,6 +24,7 @@ import { PartnerModule } from './modules/partner.module';
         };
       },
     }),
+    MaintenanceModule,
     PieceModule,
     MotoModule,
     NotificationModule,

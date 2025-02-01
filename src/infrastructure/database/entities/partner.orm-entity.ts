@@ -5,7 +5,7 @@ import { MotoOrmEntity } from "./moto.orm-entity";
 @Entity('partner')
 export class PartnerOrmEntity {
   @PrimaryGeneratedColumn('uuid')
-  id: number;
+  id: string;
 
   @Column({ name: 'nom', type: 'varchar', length: 100 })
   nom: string;

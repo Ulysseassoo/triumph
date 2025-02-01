@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'typeorm';
 import { OrderOrmEntity } from './order.orm-entity';
+import { MaintenanceOrmEntity } from "./maintenance.orm-entity";
 
 @Entity('piece')
 export class PieceOrmEntity {
@@ -23,4 +24,7 @@ export class PieceOrmEntity {
 
   @OneToMany(() => OrderOrmEntity, order => order.pieces, { cascade: false})
   orders: OrderOrmEntity[];
+
+  @ManyToOne(() => MaintenanceOrmEntity, maintenance => maintenance.pieces)
+  maintenance: MaintenanceOrmEntity;
 }

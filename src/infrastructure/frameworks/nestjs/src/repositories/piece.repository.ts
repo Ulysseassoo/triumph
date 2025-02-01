@@ -28,6 +28,24 @@ export class PieceRepository implements PieceRepositoryInterface {
     @InjectRepository(PieceOrmEntity)
     private readonly pieceRepository: Repository<PieceOrmEntity>
   ) {}
+  findByName(name: string): Promise<Piece> {
+    throw new Error('Method not implemented.');
+  }
+  findByType(type: string): Promise<Piece> {
+    throw new Error('Method not implemented.');
+  }
+  findByQuantity(quantity: number): Promise<Piece> {
+    throw new Error('Method not implemented.');
+  }
+  findByCost(cost: number): Promise<Piece> {
+    throw new Error('Method not implemented.');
+  }
+  findByAlertLimit(alertLimit: number): Promise<Piece> {
+    throw new Error('Method not implemented.');
+  }
+  updatePatch(id: string, pieceData: Partial<Piece>): Promise<Piece> {
+    throw new Error('Method not implemented.');
+  }
 
   async findAllFilters(criteria: FilterCriteria): Promise<Piece[]> {
     const { filters = {}, pagination = {} } = criteria;
