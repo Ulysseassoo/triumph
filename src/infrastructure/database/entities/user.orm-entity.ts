@@ -8,7 +8,7 @@ import {
 import { NotificationOrmEntity } from "./notification.orm-entity";
 import { PartnerOrmEntity } from "./partner.orm-entity";
 
-@Entity("users")
+@Entity("user")
 export class UserOrmEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;

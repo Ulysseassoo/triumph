@@ -5,7 +5,8 @@ import { AppService } from './services/app.service';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PieceModule } from './modules/piece.module';
-import { OrderModule } from './modules/order.module';
+import { NotificationModule } from './modules/notification.module';
+import { MotoModule } from './modules/moto.module';
 import { PartnerModule } from './modules/partner.module';
 
 @Module({
@@ -22,8 +23,10 @@ import { PartnerModule } from './modules/partner.module';
       },
     }),
     PieceModule,
-    OrderModule,
+    MotoModule,
+    NotificationModule,
     PartnerModule,
+    OrderModule,
   ],
   controllers: [AppController],
   providers: [AppService],
