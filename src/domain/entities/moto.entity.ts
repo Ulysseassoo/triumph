@@ -1,4 +1,5 @@
 import { Maintenance } from "./maintenance.entity"
+import { Partner } from "./partner.entity"
 
 export enum MotoStatus {
 	InService = "En service",
@@ -10,7 +11,7 @@ export class Moto {
 	constructor(
 		public readonly id: string,
 		public readonly model: string,
-		public readonly clientPartnerId: string,
+		public readonly partner: Partner,
 		public currentMileage: number,
 		public price: number,
 		public status: MotoStatus,

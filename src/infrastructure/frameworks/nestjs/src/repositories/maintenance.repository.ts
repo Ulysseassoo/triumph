@@ -12,30 +12,29 @@ export class MaintenanceRepository implements MaintenanceRepositoryInterface {
     @InjectRepository(MaintenanceOrmEntity)
     private readonly repository: Repository<MaintenanceOrmEntity>,
   ) {}
-  create(maintenance: Maintenance): Promise<Maintenance> {
-    throw new Error('Method not implemented.');
+  async findById(id: string): Promise<Maintenance | null> {
+    const maintenance = await this.repository.findOneBy({ id });
+    return maintenance ? MaintenanceMapper.toDomainEntity(maintenance) : null;
   }
-  findById(id: string): Promise<Maintenance | null> {
-    throw new Error('Method not implemented.');
+  async create(maintenance: Maintenance): Promise<Maintenance> {
+    const maintenanceOrmEntity = MaintenanceMapper.toOrmEntity(maintenance);
+    const maintenanceCreated = await this.repository.save(maintenanceOrmEntity);
+    return MaintenanceMapper.toDomainEntity(maintenanceCreated);
   }
-  findByMotoId(motoId: string): Promise<Maintenance[]> {
-    throw new Error('Method not implemented.');
+  async update(id: string, maintenance: Partial<Maintenance>): Promise<void> {
+    await this.repository.update(id, maintenance);
   }
-  save(entretien: Maintenance): Promise<void> {
-    throw new Error('Method not implemented.');
+  async delete(id: string): Promise<void> {
+    await this.repository.delete(id);
   }
-  delete(id: string): Promise<void> {
-    throw new Error('Method not implemented.');
-  }
-  findAllDue(date: Date, mileage: number): Promise<Maintenance[]> {
-    throw new Error('Method not implemented.');
-  }
-  updateMileage(id: number, mileage: number): Promise<void> {
-    throw new Error('Method not implemented.');
+  async save(maintenance: Maintenance): Promise<Maintenance> {
+    return await this.repository.save(maintenance);
   }
 
   async findAll(): Promise<Maintenance[]> {
     const maintenances = await this.repository.find();
-    return maintenances.map((maintenance) => MaintenanceMapper.toDomainEntity(maintenance));
+    return maintenances.map((maintenance) =>
+      MaintenanceMapper.toDomainEntity(maintenance),
+    );
   }
 }

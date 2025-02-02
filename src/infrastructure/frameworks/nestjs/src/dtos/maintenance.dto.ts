@@ -13,3 +13,14 @@ export class CreateMaintenanceDto {
   @IsString()
   recommandations: string;
 }
+
+export class UpdateMaintenanceDto {
+  @IsString()
+  recommandations: string;
+
+  @IsNumber()
+  kilometrageInterval: number;
+
+  @IsNumber()
+  tempsInterval: number;
+}

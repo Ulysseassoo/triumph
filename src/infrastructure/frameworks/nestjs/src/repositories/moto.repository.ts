@@ -18,8 +18,13 @@ export class MotoRepository implements MotoRepositoryInterface {
     const motoCreated = await this.repository.save(motoOrmEntity);
     return MotoMapper.toDomainEntity(motoCreated);
   }
-  findById(id: string): Promise<Moto | null> {
-    throw new Error('Method not implemented.');
+  async findById(id: string): Promise<Moto | null> {
+    const moto = await this.repository.findOne({
+      where: { id },
+      relations: ['partner', 'maintenances'],
+    });
+    if (!moto) return null;
+    return moto ? MotoMapper.toDomainEntity(moto) : null;
   }
   save(moto: Moto): Promise<void> {
     throw new Error('Method not implemented.');

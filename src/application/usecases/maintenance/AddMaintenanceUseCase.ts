@@ -6,6 +6,8 @@ import {
   MaintenanceType,
 } from "./../../../domain/entities/maintenance.entity";
 import { MotoRepositoryInterface } from "../../repositories/MotoRepositoryInterface";
+import { NotFoundException } from "../../exceptions/NotFoundException";
+import { BadRequestException } from "../../exceptions/BadRequestException";
 
 interface Props {
   motoId: string;
@@ -29,11 +31,11 @@ export class AddMaintenanceUseCase {
   }: Props): Promise<Maintenance | null> {
     const moto = await this.motoRepository.findById(motoId);
     if (!moto) {
-      throw new Error("Moto introuvable");
+      throw new NotFoundException("Moto introuvable");
     }
 
     if (!moto.isEligibleForMaintenance(kilometrageInterval, tempsInterval)) {
-      throw new Error("La moto n’est pas encore éligible pour un entretien");
+      throw new BadRequestException("La moto n’est pas encore éligible pour un entretien");
     }
     const maintenance = new Maintenance(
       v4(),
@@ -51,7 +53,7 @@ export class AddMaintenanceUseCase {
 
     // Envoyer une notification au client
     await this.sendNotificationUseCase.execute({
-      clientPartnerId: moto.clientPartnerId,
+      clientPartnerId: moto.partner.id,
       message: `Un entretien a été planifié pour votre moto (${moto.model})`,
     });
 

@@ -39,4 +39,16 @@ export class MaintenanceService {
   async findAll(): Promise<Maintenance[]> {
     return await this.maintenanceRepository.findAll();
   }
+
+  async findById(id: string): Promise<Maintenance | null> {
+    return await this.maintenanceRepository.findById(id);
+  }
+
+  async delete(id: string): Promise<void> {
+    await this.maintenanceRepository.delete(id);
+  }
+
+  async update (maintenance: Maintenance): Promise<Maintenance> {
+    return await this.maintenanceRepository.save(maintenance);
+  }
 }

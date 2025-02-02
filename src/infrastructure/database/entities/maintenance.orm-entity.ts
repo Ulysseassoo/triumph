@@ -35,6 +35,6 @@ export class MaintenanceOrmEntity {
   @ManyToOne(() => MotoOrmEntity, moto => moto.maintenances)
   moto: MotoOrmEntity;
 
-  @OneToMany(() => PieceOrmEntity, piece => piece.maintenance, { cascade: true })
+  @OneToMany(() => PieceOrmEntity, piece => piece.maintenance, { cascade: true, eager: true })
   pieces: PieceOrmEntity[];
 }

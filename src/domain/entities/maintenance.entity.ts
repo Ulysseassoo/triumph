@@ -23,4 +23,14 @@ export class Maintenance {
 		public cost: number | null = null,
 		public pieces: Piece[] = [],
 	) {}
+
+	calculateNextMaintenanceDate(currentMileage: number): Date {
+		const nextMileage = this.mileage + this.maintenanceInterval.mileage;
+		if (currentMileage >= nextMileage) {
+		  const nextDate = new Date(this.plannedDate);
+		  nextDate.setMonth(nextDate.getMonth() + this.maintenanceInterval.timeInMonths);
+		  return nextDate;
+		}
+		return this.plannedDate;
+	  }
 }
