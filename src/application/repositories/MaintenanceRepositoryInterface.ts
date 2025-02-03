@@ -7,4 +7,5 @@ export interface MaintenanceRepositoryInterface {
   update(id: string, maintenance: Partial<Maintenance>): Promise<void>;
   delete(id: string): Promise<void>;
   save: (maintenance: Maintenance) => Promise<Maintenance>;
+  findByMotoId(motoId: string): Promise<Maintenance[]>;
 }

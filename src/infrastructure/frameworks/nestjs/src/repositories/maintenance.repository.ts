@@ -31,6 +31,11 @@ export class MaintenanceRepository implements MaintenanceRepositoryInterface {
     return await this.repository.save(maintenance);
   }
 
+  async findByMotoId(motoId: string): Promise<Maintenance[]> {
+    const maintenances = await this.repository.find({ where: { motoId } });
+    return maintenances.map((maintenance) => MaintenanceMapper.toDomainEntity(maintenance));
+  }
+
   async findAll(): Promise<Maintenance[]> {
     const maintenances = await this.repository.find();
     return maintenances.map((maintenance) =>

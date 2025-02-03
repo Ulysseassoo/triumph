@@ -15,6 +15,7 @@ import {
 import { Maintenance } from '../../../../../domain/entities/maintenance.entity';
 import { MaintenanceService } from 'src/services/maintenance.service';
 import {
+  AchieveMaintenanceDto,
   CreateMaintenanceDto,
   UpdateMaintenanceDto,
 } from 'src/dtos/maintenance.dto';
@@ -104,5 +105,29 @@ export class MaintenanceController {
         );
       }
     }
+  }
+
+  @Post(':id/achieved')
+  async markAsAchieved(
+    @Param('id') id: string,
+    @Body() achieveMaintenanceDto: AchieveMaintenanceDto,
+  ) {
+    const { achievedDate, cost, pieces, recommandations } =
+      achieveMaintenanceDto;
+    await this.maintenanceService.markAsAchieved(
+      id,
+      achievedDate,
+      cost,
+      pieces,
+      recommandations,
+    );
+    return {
+      message: 'Entretien marqué comme réalisé et prochain entretien planifié.',
+    };
+  }
+
+  @Get('/motos/:motoId/history')
+  async getHistory(@Param('motoId') motoId: string) {
+    return await this.maintenanceService.findByMotoId(motoId);
   }
 }
