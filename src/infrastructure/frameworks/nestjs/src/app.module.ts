@@ -10,6 +10,10 @@ import { MotoModule } from './modules/moto.module';
 import { PartnerModule } from './modules/partner.module';
 import { OrderModule } from './modules/order.module';
 import { MaintenanceModule } from './modules/maintenance.module';
+import { BreakdownModule } from './modules/breakdown.module';
+import { CorrectiveActionModule } from './modules/corrective-action.module';
+import { ReparationModule } from './modules/reparation.module';
+import { WarrantyModule } from './modules/warranty.module';
 
 @Module({
   imports: [
@@ -30,6 +34,10 @@ import { MaintenanceModule } from './modules/maintenance.module';
     NotificationModule,
     PartnerModule,
     OrderModule,
+    BreakdownModule,
+    CorrectiveActionModule,
+    ReparationModule,
+    WarrantyModule
   ],
   controllers: [AppController],
   providers: [AppService],
