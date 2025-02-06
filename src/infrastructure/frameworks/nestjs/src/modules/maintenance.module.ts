@@ -1,5 +1,5 @@
 import { MaintenanceOrmEntity } from './../../../../database/entities/maintenance.orm-entity';
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { MaintenanceController } from '../controllers/maintenance.controller';
@@ -19,7 +19,7 @@ import { PartnerRepository } from 'src/repositories/partner.repository';
     ConfigModule,
     TypeOrmModule.forFeature([MaintenanceOrmEntity]),
     MotoModule,
-    NotificationModule,
+    forwardRef(() => NotificationModule),
     PartnerModule,
   ],
   controllers: [MaintenanceController],

@@ -29,4 +29,14 @@ export class MotoService {
       status,
     });
   }
+
+  async updateMileage(motoId: string, mileage: number) {
+    const moto = await this.motoRepository.findById(motoId);
+    if (!moto) {
+      throw new Error('Moto non trouvée');
+    }
+
+    moto.currentMileage = mileage;
+    return await this.motoRepository.save(moto);
+  }
 }

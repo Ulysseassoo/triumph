@@ -14,11 +14,25 @@ import { BreakdownModule } from './modules/breakdown.module';
 import { CorrectiveActionModule } from './modules/corrective-action.module';
 import { ReparationModule } from './modules/reparation.module';
 import { WarrantyModule } from './modules/warranty.module';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+    }),
+    ScheduleModule.forRoot(),
+    MailerModule.forRoot({
+      transport: {
+        host: 'localhost',
+        port: 1025,
+        ignoreTLS: true,
+        secure: false,
+      },
+      defaults: {
+        from: '"Triumph Motorcycles" <no-reply@triumph.com>',
+      },
     }),
     TypeOrmModule.forRootAsync({
       useFactory: () => {
@@ -37,7 +51,7 @@ import { WarrantyModule } from './modules/warranty.module';
     BreakdownModule,
     CorrectiveActionModule,
     ReparationModule,
-    WarrantyModule
+    WarrantyModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Param, Post } from '@nestjs/common';
 import { validate } from 'class-validator';
 import { CreateMotoDto } from 'src/dtos/moto.dto';
 import { MotoService } from 'src/services/moto.service';
@@ -21,5 +21,14 @@ export class MotoController {
       createMotoDto.price,
       createMotoDto.status
     );
+  }
+
+  @Post(':id/update-mileage')
+  async updateMileage(
+    @Param('id') motoId: string,
+    @Body('mileage') mileage: number,
+  ) {
+    const moto = this.motoService.updateMileage(motoId, mileage);
+    return { message: 'Kilométrage mis à jour avec succès.', data: moto };
   }
 }
