@@ -1,5 +1,6 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, HttpException, HttpStatus } from '@nestjs/common';
 import { ReparationService } from '../services/reparation.service';
+
 @Controller('reparations')
 export class ReparationController {
   constructor(private readonly reparationService: ReparationService) {}
@@ -10,11 +11,29 @@ export class ReparationController {
     @Body('description') description: string,
     @Body('cost') cost: number,
   ) {
-    return await this.reparationService.createReparation(breakdownId, description, cost);
+    try {
+      const reparation = await this.reparationService.createReparation(breakdownId, description, cost);
+      return {
+        message: 'Reparation created successfully',
+        reparation,
+      };
+    } catch (error) {
+      throw new HttpException(
+        error.message || 'Failed to create reparation',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   @Get('breakdown/:breakdownId')
   async findByBreakdownId(@Param('breakdownId') breakdownId: string) {
-    return await this.reparationService.findByBreakdownId(breakdownId);
+    try {
+      return await this.reparationService.findByBreakdownId(breakdownId);
+    } catch (error) {
+      throw new HttpException(
+        error.message || 'Failed to fetch reparations',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }
