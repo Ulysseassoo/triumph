@@ -1,7 +1,7 @@
-import { MotoOrmEntity } from './../entities/moto.orm-entity';
-import { Moto } from '../../../domain/entities/moto.entity';
-import { MaintenanceMapper } from './maintenance.mapper';
-import { PartnerMapper } from './partner.mapper';
+import { MotoOrmEntity } from "./../entities/moto.orm-entity";
+import { Moto } from "../../../domain/entities/moto.entity";
+import { MaintenanceMapper } from "./maintenance.mapper";
+import { PartnerMapper } from "./partner.mapper";
 
 export class MotoMapper {
   static toOrmEntity(moto: Moto): MotoOrmEntity {
