@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
 import { BreakdownOrmEntity } from "./breakdown.orm-entity";
 
-@Entity()
+@Entity("warranty")
 export class WarrantyOrmEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;

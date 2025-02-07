@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PieceSelect from './PieceSelect';
-import Button from '../ui/Button';
+import { Button } from '../ui/Button';
 
 interface OrderFormProps {
  onSubmit: (formData: {

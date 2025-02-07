@@ -60,6 +60,15 @@ export class UserController {
     return user;
   }
 
+  async findConnectedUser(id: string): Promise<User | null> {
+    const user = await this.userService.findById(id);
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    return user;
+  }
+
 async findAllFilters(req: Request): Promise<User[]> {
  
     if (Object.keys(req.query).length === 0) {

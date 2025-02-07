@@ -1,14 +1,11 @@
-
 import dotenv from "dotenv";
-import { initializeDatabases } from "./src/config/database";
 import app from "./src/app";
+import { initializeDatabase } from "../../../infrastructure/orm/typeorm/typeorm-init";
 dotenv.config();
-
 
 const PORT = process.env.PORT || 3000;
 
-
-initializeDatabases().then(() => {
+initializeDatabase().then(async () => {
   app.listen(PORT, () => {
     console.log(`[server]: Server is running at http://localhost:${PORT}`);
   });

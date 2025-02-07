@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Button from "../../ui/Button";
 import { Edit, Trash2, Plus, AlertCircle } from 'lucide-react';
+import { Button } from '@/components/ui/Button';
 
 interface Piece {
     id: string;

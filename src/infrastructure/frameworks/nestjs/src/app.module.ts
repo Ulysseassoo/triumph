@@ -16,6 +16,7 @@ import { ReparationModule } from './modules/reparation.module';
 import { WarrantyModule } from './modules/warranty.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { ScheduleModule } from '@nestjs/schedule';
+import { FixturesModule } from './modules/fixtures.module';
 import { DriverModule } from './modules/driver.module';
 import { AttemptModule } from './modules/attempt.module';
 import { DriverExperienceModule } from './modules/driverExperience.module';
@@ -55,7 +56,7 @@ import { DriverExperienceModule } from './modules/driverExperience.module';
     CorrectiveActionModule,
     ReparationModule,
     WarrantyModule,
-    OrderModule,
+    FixturesModule,
     DriverModule,
     AttemptModule,
     DriverExperienceModule,
