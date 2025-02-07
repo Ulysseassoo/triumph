@@ -10,7 +10,7 @@ import { UserMapper } from '../../../../database/mappers/user.mapper';
 export class UserRepository implements UserRepositoryInterface {
   constructor(
     @InjectRepository(UserOrmEntity)
-    private readonly userRepository: Repository<UserOrmEntity>
+    private readonly userRepository: Repository<UserOrmEntity>,
   ) {}
   async findAllFilters(criteria: object): Promise<User[]> {
     try {
@@ -54,14 +54,11 @@ export class UserRepository implements UserRepositoryInterface {
 
   async getUserValidate(email: string, password: string): Promise<User | null> {
     try {
-      
-      
       const ormUser = await this.userRepository.findOne({
         where: {
           email: email,
-          password: password 
-          
-        }
+          password: password,
+        },
       });
 
       if (!ormUser) {
