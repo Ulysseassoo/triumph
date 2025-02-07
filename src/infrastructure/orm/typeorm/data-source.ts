@@ -1,6 +1,12 @@
 import { DataSource } from "typeorm"
 import { join } from "path"
 
+if (process.env.LOAD_DOTENV !== 'false') {
+	const dotenv = require('dotenv');
+	dotenv.config();
+}
+  
+
 let dataSource: DataSource;
 
 export const AppDataSource = () => {
@@ -30,5 +36,6 @@ export const AppDataSource = () => {
 			});
 		}
 	}
+	console.log(dataSource.options)
 	return dataSource;
 }

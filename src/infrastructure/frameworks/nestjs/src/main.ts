@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import { FixturesService } from './services/fixtures.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -11,6 +12,14 @@ async function bootstrap() {
     allowedHeaders: ['Content-Type', 'Authorization'],
   });
   app.useGlobalPipes(new ValidationPipe());
+
+  if (process.env.ENVIRONMENT === 'development') {
+    const fixturesService = app.get(FixturesService);
+    await fixturesService.clearDatabase();
+    await fixturesService.loadFixtures();
+  }
+
+  
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

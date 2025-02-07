@@ -21,6 +21,28 @@ userRouter.post('/users',
   }
 }));
 
+userRouter.get('/users/me',
+  checkAuth(authConfig.accessTokenSecret),
+  checkRole(['staff','client']),
+  (async (req: AuthRequest, res: Response) => {
+    try {
+      console.log(req.user)
+      if(req.user && req.user.id !== undefined) {
+        const result = await userController.findConnectedUser(req.user.id);
+        res.status(200).json(result);
+      } else {
+        res.status(404).json({
+          message: 'User not found',
+        });
+      }
+    } catch (error) {
+      res.status(404).json({
+        message: error instanceof Error ? error.message : 'User not found',
+      });
+    }
+  }) 
+);
+
 
 userRouter.put('/users/:id',
   checkAuth(authConfig.accessTokenSecret),
@@ -80,6 +102,7 @@ userRouter.get('/users/:id',
     }
   }) 
 );
+
 
 userRouter.get('/users',
   checkAuth(authConfig.accessTokenSecret),

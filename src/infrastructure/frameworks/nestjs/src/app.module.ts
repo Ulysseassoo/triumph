@@ -16,6 +16,7 @@ import { ReparationModule } from './modules/reparation.module';
 import { WarrantyModule } from './modules/warranty.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { ScheduleModule } from '@nestjs/schedule';
+import { FixturesModule } from './modules/fixtures.module';
 
 @Module({
   imports: [
@@ -52,6 +53,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     CorrectiveActionModule,
     ReparationModule,
     WarrantyModule,
+    FixturesModule
   ],
   controllers: [AppController],
   providers: [AppService],

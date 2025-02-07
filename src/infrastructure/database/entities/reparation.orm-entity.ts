@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from "ty
 import { BreakdownOrmEntity } from "./breakdown.orm-entity";
 import { CorrectiveActionOrmEntity } from "./corrective-action.orm-entity";
 
-@Entity()
+@Entity("reparation")
 export class ReparationOrmEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;

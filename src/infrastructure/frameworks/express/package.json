@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
     "start": "node dist/index.js",
-    "dev": "nodemon -r tsconfig-paths/register ./index.ts"
+    "dev": "nodemon -r tsconfig-paths/register ./index.ts",
+    "load-fixtures": "ts-node src/fixtures/index.ts"
   },
   "dependencies": {
     "@decorators/di": "^3.1.0",
@@ -21,7 +22,6 @@
     "pg": "^8.13.1",
     "reflect-metadata": "^0.2.2",
     "tsconfig-paths": "^4.2.0",
-    "typeorm": "^0.3.20",
     "zod": "^3.24.1"
   },
   "overrides": {

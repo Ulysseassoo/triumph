@@ -2,21 +2,21 @@ import { UserOrmEntity } from '../../../../database/entities/user.orm-entity';
 import { Repository } from 'typeorm';
 import { UserRepositoryInterface } from '../../../../../application/repositories/UserRepositoryInterface';
 import { User } from '../../../../../domain/entities/user.entity';
-import { AppDataSource } from '../config/database';
 import { QueryFailedError } from 'typeorm';
 import { authConfig } from '../config/auth.config';
 import argon2 from '@node-rs/argon2';
 import { UserMapper } from '../../../../database/mappers/user.mapper';
+import { AppDataSource } from '../../../../orm/typeorm/data-source';
 
 export class TypeOrmUserRepository implements UserRepositoryInterface {
   private userRepository: Repository<UserOrmEntity>;
 
   constructor() {
-    this.userRepository = AppDataSource.getRepository(UserOrmEntity);
+    this.userRepository = AppDataSource().getRepository(UserOrmEntity);
   }
 
   async create(user: User): Promise<User> {
-    const queryRunner = AppDataSource.createQueryRunner();
+    const queryRunner = AppDataSource().createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
 
@@ -141,7 +141,7 @@ export class TypeOrmUserRepository implements UserRepositoryInterface {
   }
 
   async update(id: string, userData: Partial<User>): Promise<User> {
-    const queryRunner = AppDataSource.createQueryRunner();
+    const queryRunner = AppDataSource().createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
 
@@ -206,7 +206,7 @@ export class TypeOrmUserRepository implements UserRepositoryInterface {
   }
 
   async delete(id: string): Promise<void> {
-    const queryRunner = AppDataSource.createQueryRunner();
+    const queryRunner = AppDataSource().createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
 
@@ -238,6 +238,7 @@ export class TypeOrmUserRepository implements UserRepositoryInterface {
   async getUserValidate(email: string, password: string): Promise<User | null> {
     try {
       const user = await this.findByEmail(email);
+      console.log("🚀 ~ TypeOrmUserRepository ~ getUserValidate ~ user:", user)
       if (!user) {
         throw new Error ('User not found');
 

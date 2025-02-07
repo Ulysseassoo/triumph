@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
 import { ReparationOrmEntity } from "./reparation.orm-entity";
 
-@Entity()
+@Entity("corrective-action")
 export class CorrectiveActionOrmEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;

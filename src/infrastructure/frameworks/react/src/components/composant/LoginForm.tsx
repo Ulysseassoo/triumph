@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { z } from "zod";
-import Button from "../ui/Button";
+import { Button } from "../ui/Button";
 
 const loginSchema = z.object({
   email: z
