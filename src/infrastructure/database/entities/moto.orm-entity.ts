@@ -9,6 +9,7 @@ import {
   JoinColumn,
 } from "typeorm";
 import { PartnerOrmEntity } from "./partner.orm-entity";
+import { CrashOrmEntity } from "./crash.orm-entity";
 
 @Entity("moto")
 export class MotoOrmEntity {
@@ -35,4 +36,7 @@ export class MotoOrmEntity {
   @ManyToOne(() => PartnerOrmEntity, (partner) => partner.motos)
   @JoinColumn({ name: "clientPartnerId" })
   partner: PartnerOrmEntity;
+
+  @ManyToOne(() => CrashOrmEntity, (crash) => crash.moto)
+  crash: CrashOrmEntity;
 }
