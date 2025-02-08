@@ -99,6 +99,8 @@ export interface Driver {
   lastname: string;
   birthdate: Date;
   addresse: string;
+  experiences: DriverExperience[];
+  licenses: DriverLicense[];
 }
 
 export interface Attempt {
@@ -119,6 +121,24 @@ export interface Crash {
   responsability: string;
   consequence: string;
   status: string;
+}
+
+export interface DriverExperience {
+  id: string;
+  duration: number;
+  type: string;
+  rented: boolean;
+  professional: boolean;
+  feedback: string;
+}
+
+export interface DriverLicense {
+  id: string;
+  licenseNumber: string;
+  category: string;
+  expiryDate: Date;
+  obtainDate: Date;
+  country: string;
 }
 
 export const getMaintenances = async () => {
@@ -190,6 +210,16 @@ export const addDriver = async (data: {
   addresse: string;
 }) => {
   const response = await apiEntities.post<Driver>("/drivers", data);
+  return response.data;
+};
+
+export const getDriverById = async (id: string) => {
+  const response = await apiEntities.get<Driver>(`/drivers/${id}`);
+  return response.data;
+};
+
+export const updateDriver = async (data: Driver) => {
+  const response = await apiEntities.put<Driver>(`/drivers/${data.id}`, data);
   return response.data;
 };
 
