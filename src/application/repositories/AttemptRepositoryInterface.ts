@@ -1,4 +1,4 @@
-import { Attempt } from "../../domain/entities/Attempt.entity";
+import { Attempt } from "../../domain/entities/attempt.entity";
 
 export type AttemptFiltersType = {
   startDate: string;
