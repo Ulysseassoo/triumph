@@ -19,7 +19,6 @@ async function bootstrap() {
     await fixturesService.loadFixtures();
   }
 
-  
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(process.env.PORT ?? 5002);
 }
 bootstrap();

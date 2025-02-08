@@ -33,13 +33,13 @@ function CreatePiece() {
                 navigate('/login');
                 return;
             }
-            const response = await fetch('http://localhost:5000/pieces', {
+            const response = await fetch('http://localhost:5002/pieces', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${accessToken}`
                 },
-                credentials: 'include', 
+                credentials: 'include',
                 body: JSON.stringify(formData),
             });
 

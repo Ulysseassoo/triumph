@@ -1,6 +1,6 @@
 import { v4 } from "uuid";
 import { DriverExperience } from "../../../domain/entities/driverExperience.entity";
-import { DriverExperienceRepositoryInterface } from "../../repositories/driverExperienceRepositoryInterface";
+import { DriverExperienceRepositoryInterface } from "../../repositories/DriverExperienceRepositoryInterface";
 
 export type DriverExperienceWithoutId = Omit<DriverExperience, "id">;
 

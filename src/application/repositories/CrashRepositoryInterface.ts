@@ -1,4 +1,4 @@
-import { Crash } from "../../domain/entities/Crash.entity";
+import { Crash } from "../../domain/entities/crash.entity";
 
 export type CrashFiltersType = {
   type: string;

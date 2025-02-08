@@ -51,6 +51,7 @@ export const BreakdownForm = ({ onSuccess }: BreakdownFormProps) => {
         title: "Erreur",
         description: "Impossible de signaler la panne. Veuillez réessayer.",
       });
+      console.error(error)
     } finally {
       setIsSubmitting(false);
     }
@@ -59,7 +60,7 @@ export const BreakdownForm = ({ onSuccess }: BreakdownFormProps) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-      <FormField
+        <FormField
           control={form.control}
           name="motoId"
           render={({ field }) => (

@@ -26,7 +26,7 @@ function PieceStaff() {
                 return;
             }
 
-            const response = await fetch('http://localhost:5000/pieces', {
+            const response = await fetch('http://localhost:5002/pieces', {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
                 }
@@ -63,7 +63,7 @@ function PieceStaff() {
                 return;
             }
 
-            const response = await fetch(`http://localhost:5000/pieces/${id}`, {
+            const response = await fetch(`http://localhost:5002/pieces/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
@@ -125,7 +125,7 @@ function PieceStaff() {
                                 </thead>
                                 <tbody className="divide-y divide-gray-200">
                                     {pieces.map((piece) => (
-                                        <tr 
+                                        <tr
                                             key={piece.id}
                                             className="hover:bg-gray-50"
                                         >
