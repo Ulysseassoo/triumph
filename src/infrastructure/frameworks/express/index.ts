@@ -3,7 +3,7 @@ import app from "./src/app";
 import { initializeDatabase } from "../../../infrastructure/orm/typeorm/typeorm-init";
 dotenv.config();
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5001;
 
 initializeDatabase().then(async () => {
   app.listen(PORT, () => {

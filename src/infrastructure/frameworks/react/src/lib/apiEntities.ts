@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const apiEntities = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: "http://localhost:5002",
   headers: {
     "Content-Type": "application/json",
   },
@@ -93,6 +93,34 @@ export interface Breakdown {
   createdAt: string;
 }
 
+export interface Driver {
+  id: string;
+  firstname: string;
+  lastname: string;
+  birthdate: Date;
+  addresse: string;
+}
+
+export interface Attempt {
+  id: string;
+  startDate: Date;
+  endDate: Date;
+  startKilometer: number;
+  endKilometer: number;
+  status: string;
+}
+
+export interface Crash {
+  id: string;
+  type: string;
+  date: Date;
+  description: string;
+  location: string;
+  responsability: string;
+  consequence: string;
+  status: string;
+}
+
 export const getMaintenances = async () => {
   const response = await apiEntities.get<Maintenance[]>("/maintenances");
   return response.data;
@@ -145,6 +173,61 @@ export const addWarranty = async (data: {
   endDate: string;
 }) => {
   const response = await apiEntities.post<Warranty>("/warranties", data);
+  return response.data;
+};
+
+// drivers
+
+export const getDrivers = async () => {
+  const response = await apiEntities.get<Driver[]>("/drivers");
+  return response.data;
+};
+
+export const addDriver = async (data: {
+  firstname: string;
+  lastname: string;
+  birthdate: Date;
+  addresse: string;
+}) => {
+  const response = await apiEntities.post<Driver>("/drivers", data);
+  return response.data;
+};
+
+// attempt
+
+export const getAttempts = async () => {
+  const response = await apiEntities.get<Attempt[]>("/attempts");
+  return response.data;
+};
+
+export const addAttempt = async (data: {
+  startDate: Date;
+  endDate: Date;
+  startKilometer: number;
+  endKilometer: number;
+  status: string;
+}) => {
+  const response = await apiEntities.post<Attempt>("/attempts", data);
+  return response.data;
+};
+
+// crash
+
+export const getCrashes = async () => {
+  const response = await apiEntities.get<Crash[]>("/crashes");
+  return response.data;
+};
+
+export const addCrash = async (data: {
+  type: string;
+  date: Date;
+  description: string;
+  location: string;
+  responsability: string;
+  consequence: string;
+  status: string;
+}) => {
+  const response = await apiEntities.post<Crash>("/crashes", data);
   return response.data;
 };
 

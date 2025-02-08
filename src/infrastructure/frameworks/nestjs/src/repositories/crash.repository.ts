@@ -17,23 +17,20 @@ export class CrashRepository implements CrashRepositoryInterface {
   ) {}
 
   async findAll(filters?: CrashFiltersType): Promise<Crash[]> {
-    const { type, date, location, responsability, consequence, status } =
-      filters;
-    const { offset = 0, limit = 10 } = filters.pagination;
-
     try {
       const query: Record<string, unknown> = {};
-      if (type) query.type = type;
-      if (date) query.date = date;
-      if (location) query.location = location;
-      if (responsability) query.responsability = responsability;
-      if (consequence) query.consequence = consequence;
-      if (status) query.status = status;
+      if (filters?.type) query.type = filters.type;
+      if (filters?.date) query.date = filters.date;
+      if (filters?.location) query.location = filters.location;
+      if (filters?.responsability)
+        query.responsability = filters.responsability;
+      if (filters?.consequence) query.consequence = filters.consequence;
+      if (filters?.status) query.status = filters.status;
 
       const crashes = await this.crashRepository.find({
         where: query,
-        skip: offset,
-        take: limit,
+        skip: filters?.pagination?.offset ?? 0,
+        take: filters?.pagination?.limit ?? 10,
       });
 
       return crashes.map((crash) => CrashMapper.toDomainEntity(crash));

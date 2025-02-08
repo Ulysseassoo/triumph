@@ -37,7 +37,7 @@ function PieceEdit() {
                     return;
                 }
 
-                const response = await fetch(`http://localhost:5000/pieces/${id}`, {
+                const response = await fetch(`http://localhost:5002/pieces/${id}`, {
                     headers: {
                         'Authorization': `Bearer ${accessToken}`
                     }
@@ -66,8 +66,8 @@ function PieceEdit() {
         const { name, value } = e.target;
         setPiece(prev => ({
             ...prev,
-            [name]: name === 'cost' || name === 'quantity' || name === 'alertLimit' 
-                ? Number(value) 
+            [name]: name === 'cost' || name === 'quantity' || name === 'alertLimit'
+                ? Number(value)
                 : value
         }));
     };
@@ -83,7 +83,7 @@ function PieceEdit() {
                 return;
             }
 
-            const response = await fetch(`http://localhost:5000/pieces/${id}`, {
+            const response = await fetch(`http://localhost:5002/pieces/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -118,8 +118,8 @@ function PieceEdit() {
         <div className="p-6">
             <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                 <div className="flex justify-between items-center mb-6">
-                    <Button 
-                        variant="default" 
+                    <Button
+                        variant="default"
                         onClick={() => navigate('/pieces')}
                         className="flex items-center gap-2"
                     >
@@ -216,8 +216,8 @@ function PieceEdit() {
                     </div>
 
                     <div className="flex justify-end mt-6">
-                        <Button 
-                            type="submit" 
+                        <Button
+                            type="submit"
                             className="flex items-center gap-2"
                         >
                             <Save size={20} />

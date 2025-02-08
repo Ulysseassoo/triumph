@@ -46,13 +46,13 @@ function OrderEdit() {
                     return;
                 }
 
-                
-                const orderResponse = await fetch(`http://localhost:5000/orders/${id}`, {
+
+                const orderResponse = await fetch(`http://localhost:5002/orders/${id}`, {
                     headers: { 'Authorization': `Bearer ${accessToken}` }
                 });
 
-                
-                const piecesResponse = await fetch('http://localhost:5000/pieces', {
+
+                const piecesResponse = await fetch('http://localhost:5002/pieces', {
                     headers: { 'Authorization': `Bearer ${accessToken}` }
                 });
 
@@ -125,7 +125,7 @@ function OrderEdit() {
         e.preventDefault();
         setError(null);
 
-        
+
         const invalidPieces = Object.entries(order.pieces).some(([pieceId]) => !pieceId);
         if (invalidPieces) {
             setError('Veuillez sélectionner des pièces valides');
@@ -139,13 +139,13 @@ function OrderEdit() {
                 return;
             }
 
-      
+
             const updatedOrder = {
                 ...order,
                 totalAmount: calculateTotalAmount()
             };
 
-            const response = await fetch(`http://localhost:5000/orders/${id}`, {
+            const response = await fetch(`http://localhost:5002/orders/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -180,7 +180,7 @@ function OrderEdit() {
         <div className="p-6">
             <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                 <div className="flex justify-between items-center mb-6">
-                    <Button 
+                    <Button
                         variant="default"
                         onClick={() => navigate('/orders/staff')}
                         className="flex items-center gap-2"
@@ -308,8 +308,8 @@ function OrderEdit() {
                     </div>
 
                     <div className="flex justify-end mt-6">
-                        <Button 
-                            type="submit" 
+                        <Button
+                            type="submit"
                             className="flex items-center gap-2"
                         >
                             <Save size={20} />
