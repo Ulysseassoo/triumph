@@ -9,10 +9,14 @@ import {
 import { Driver } from "@/lib/apiEntities";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
+import { useNavigate } from "react-router-dom";
 interface DriverTableProps {
   drivers: Driver[];
 }
 export const DriverTable = ({ drivers }: DriverTableProps) => {
+
+  const navigate = useNavigate();
+
   return (
     <div className="rounded-md border bg-white/80 backdrop-blur-sm">
       <Table>
@@ -27,7 +31,7 @@ export const DriverTable = ({ drivers }: DriverTableProps) => {
         </TableHeader>
         <TableBody>
           {drivers.map((driver) => (
-            <TableRow key={driver.id}>
+            <TableRow style={{ cursor: "pointer" }} key={driver.id} onClick={() => navigate(`/conducteur/${driver.id}`)}>
               <TableCell>{driver.id}</TableCell>
               <TableCell>{driver.firstname}</TableCell>
               <TableCell>{driver.lastname}</TableCell>
