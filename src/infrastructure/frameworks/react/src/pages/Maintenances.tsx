@@ -19,15 +19,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
-import { getMaintenances } from "@/lib/apiEntities";
+import { getMaintenances, Maintenance } from "@/lib/apiEntities";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
-
-interface Maintenance {
-  id: string;
-  motoId: string;
-  plannedDate: string;
-  status: "DUE" | "COMPLETED" | "CANCELLED";
-}
 
 const Maintenances = () => {
   const { toast } = useToast();
@@ -84,9 +77,9 @@ const Maintenances = () => {
     },
   });
 
-  const handleSubmit = (values: Omit<Maintenance, "id">) => {
+  const handleSubmit = (values: Maintenance) => {
     if (selectedMaintenance) {
-      updateMaintenance.mutate({ ...values, id: selectedMaintenance.id });
+      updateMaintenance.mutate({ ...values });
     } else {
       createMaintenance.mutate(values);
     }
