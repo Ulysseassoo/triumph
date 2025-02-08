@@ -1,6 +1,7 @@
 import { BreakdownOrmEntity } from './../entities/breakdown.orm-entity';
 import { Breakdown } from '../../../domain/entities/breakdown.entity';
 import { ReparationMapper } from './reparation.mapper';
+import { WarrantyMapper } from './warranty.mapper';
 
 export class BreakdownMapper {
   static toOrmEntity(breakdown: Breakdown): BreakdownOrmEntity {

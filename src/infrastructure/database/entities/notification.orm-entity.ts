@@ -1,9 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import { UserOrmEntity } from './user.orm-entity';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import { UserOrmEntity } from "./user.orm-entity";
 
 @Entity("notification")
 export class NotificationOrmEntity {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn("uuid")
   id: string;
 
   @Column()
@@ -15,6 +15,6 @@ export class NotificationOrmEntity {
   @Column()
   date: Date;
 
-  @ManyToOne(() => UserOrmEntity, (user) => user.notifications)
+  @ManyToOne(() => UserOrmEntity, (user) => user.notifications, { eager: true })
   user: UserOrmEntity;
 }

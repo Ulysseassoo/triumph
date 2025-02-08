@@ -50,6 +50,9 @@ export class FixturesService {
     const motos = await this.createMotos(partners);
     
     await this.createMaintenances(motos);
+    await this.createNotifications();
+    await this.createWarranties(motos);
+    await this.createBreakdowns(motos);
 
     console.log('Fixtures loaded successfully!');
   }
@@ -85,4 +88,59 @@ export class FixturesService {
     return this.maintenanceRepo.save(maintenances);
   }
 
+  private async createNotifications() {
+    const users = await this.userRepo.find();
+    const notifications: NotificationOrmEntity[] = [];
+
+    for (const user of users) {
+      for (let i = 0; i < 2; i++) {
+        const notification = new NotificationOrmEntity();
+        notification.id = v4();
+        notification.user = user;
+        notification.date = new Date();
+        notification.message = `Notification message ${i + 1} for user ${user.id}`;
+        notification.isRead = false;
+
+        notifications.push(notification);
+      }
+    }
+
+    await this.notificationRepo.save(notifications);
+  }
+
+  private async createWarranties(motos: MotoOrmEntity[]) {
+    const warranties: WarrantyOrmEntity[] = [];
+
+    for (const moto of motos) {
+      const warranty = new WarrantyOrmEntity();
+      warranty.id = v4();
+      warranty.motoId = moto.id;
+      warranty.startDate = new Date();
+      warranty.endDate = new Date(new Date().setFullYear(new Date().getFullYear() + 2));
+      warranty.breakdowns = [];
+
+      warranties.push(warranty);
+    }
+
+    await this.warrantyRepo.save(warranties);
+  }
+
+  private async createBreakdowns(motos: MotoOrmEntity[]) {
+    const breakdowns: BreakdownOrmEntity[] = [];
+
+    for (const moto of motos) {
+      const numberOfBreakdowns = Math.floor(Math.random() * 2) + 2;
+      for (let i = 0; i < numberOfBreakdowns; i++) {
+        const breakdown = new BreakdownOrmEntity();
+        breakdown.id = v4();
+        breakdown.motoId = moto.id;
+        breakdown.date = new Date();
+        breakdown.description = `Breakdown description ${i + 1} for moto ${moto.id}`;
+
+        breakdowns.push(breakdown);
+      }
+    }
+
+    await this.breakdownRepo.save(breakdowns);
+  }
 }

@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Param, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { WarrantyService } from '../services/warranty.service';
 import { Warranty } from '../../../../../domain/entities/warranty.entity';
 
@@ -9,7 +17,8 @@ export class WarrantyController {
   @Post()
   async createWarranty(@Body() warranty: Warranty) {
     try {
-      const createdWarranty = await this.warrantyService.createWarranty(warranty);
+      const createdWarranty =
+        await this.warrantyService.createWarranty(warranty);
       return {
         message: 'Warranty created successfully',
         warranty: createdWarranty,
@@ -20,6 +29,11 @@ export class WarrantyController {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+  }
+
+  @Get()
+  async findAll(): Promise<Warranty[]> {
+    return await this.warrantyService.findAll();
   }
 
   @Get(':id')

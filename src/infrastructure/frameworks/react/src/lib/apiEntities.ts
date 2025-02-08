@@ -90,7 +90,15 @@ export interface Breakdown {
   description: string;
   warrantyId?: string;
   status: "PENDING" | "DIAGNOSED" | "RESOLVED";
-  createdAt: string;
+  date: string;
+}
+
+export interface Notification {
+  id: string;
+  userId: string;
+  date: Date;
+  message: string;
+  isRead: boolean;
 }
 
 export const getMaintenances = async () => {
@@ -137,6 +145,11 @@ export const getBreakdowns = async () => {
 };
 export const getWarranties = async () => {
   const response = await apiEntities.get<Warranty[]>("/warranties");
+  return response.data;
+};
+
+export const getUserNotifications = async (userId?: string) => {
+  const response = await apiEntities.get<Notification[]>("/notifications/user/" + userId);
   return response.data;
 };
 export const addWarranty = async (data: {

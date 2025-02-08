@@ -5,7 +5,6 @@ import { CreateBreakdownUseCase } from './../../../../../application/usecases/br
 import { AssociateWarrantyUseCase } from './../../../../../application/usecases/warranty/AssociateWarrantyUseCase';
 import { WarrantyRepositoryInterface } from '../../../../../application/repositories/WarrantyRepositoryInterface';
 
-
 @Injectable()
 export class BreakdownService {
   constructor(
@@ -15,18 +14,33 @@ export class BreakdownService {
     private readonly warrantyRepository: WarrantyRepositoryInterface,
   ) {}
 
-  async createBreakdown(motoId: string, description: string): Promise<Breakdown> {
-    const createBreakdownUseCase = new CreateBreakdownUseCase(this.breakdownRepository);
+  async createBreakdown(
+    motoId: string,
+    description: string,
+  ): Promise<Breakdown> {
+    const createBreakdownUseCase = new CreateBreakdownUseCase(
+      this.breakdownRepository,
+    );
     return await createBreakdownUseCase.execute(motoId, description);
   }
 
-  async associateWarranty(breakdownId: string, warrantyId: string): Promise<void> {
+  async associateWarranty(
+    breakdownId: string,
+    warrantyId: string,
+  ): Promise<void> {
     const breakdown = await this.breakdownRepository.findById(breakdownId);
     if (!breakdown) {
       throw new Error('Breakdown not found');
     }
-    const associateWarrantyUseCase = new AssociateWarrantyUseCase(this.breakdownRepository, this.warrantyRepository);
+    const associateWarrantyUseCase = new AssociateWarrantyUseCase(
+      this.breakdownRepository,
+      this.warrantyRepository,
+    );
     await associateWarrantyUseCase.execute(breakdownId, warrantyId);
+  }
+
+  async findAll(): Promise<Breakdown[]> {
+    return await this.breakdownRepository.findAll();
   }
 
   async findById(id: string): Promise<Breakdown | null> {

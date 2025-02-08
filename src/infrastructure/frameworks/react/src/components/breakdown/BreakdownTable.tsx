@@ -30,7 +30,7 @@ export const BreakdownTable = ({ breakdowns }: BreakdownTableProps) => {
           {breakdowns.map((breakdown) => (
             <TableRow key={breakdown.id}>
               <TableCell>
-                {format(new Date(breakdown.createdAt), "d MMMM yyyy", {
+                {format(new Date(breakdown.date), "d MMMM yyyy", {
                   locale: fr,
                 })}
               </TableCell>

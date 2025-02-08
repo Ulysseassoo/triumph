@@ -17,6 +17,8 @@ import NotFound from "./pages/NotFound";
 import MotoDetails from "./pages/MotoDetails";
 import Breakdowns from "./pages/Breakdowns";
 import Warranties from "./pages/Warranties";
+import Motos from "./pages/Motos";
+import Maintenances from "./pages/Maintenances";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +42,8 @@ function App() {
               <Route path="/create/order" element={<CreateOrder />} />
               <Route path="/orders/staff" element={<OrderStaff />} />
               <Route path="/orders/edit/:id" element={<OrderEdit />} />
+              <Route path="/motos" element={<Motos />} />
+              <Route path="/maintenances" element={<Maintenances />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <Toaster />

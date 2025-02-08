@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Body, Param, Put, HttpException, HttpStatus } from '@nestjs/common';
 import { BreakdownService } from '../services/breakdown.service';
+import { Breakdown } from '../../../../../domain/entities/breakdown.entity';
 
 @Controller('breakdowns')
 export class BreakdownController {
@@ -33,6 +34,11 @@ export class BreakdownController {
       );
     }
   }
+
+    @Get()
+    async findAll(): Promise<Breakdown[]> {
+      return await this.breakdownService.findAll();
+    }
 
   @Get(':id')
   async findById(@Param('id') id: string) {

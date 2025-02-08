@@ -19,6 +19,6 @@ export class BreakdownOrmEntity {
   @ManyToOne(() => WarrantyOrmEntity, (warranty) => warranty.breakdowns)
   warranty: WarrantyOrmEntity;
 
-  @OneToMany(() => ReparationOrmEntity, (reparation) => reparation.breakdown)
+  @OneToMany(() => ReparationOrmEntity, (reparation) => reparation.breakdown, { eager: true })
   reparations: ReparationOrmEntity[];
 }

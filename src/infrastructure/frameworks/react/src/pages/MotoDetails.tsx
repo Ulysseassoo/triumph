@@ -1,16 +1,24 @@
-
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { MaintenanceTimeline } from "@/components/maintenance/MaintenanceTimeline";
-import { getMaintenanceHistory, Maintenance } from "@/lib/apiEntities";
+import { getMaintenanceHistory, Maintenance, Moto } from "@/lib/apiEntities";
 import { useToast } from "@/hooks/use-toast";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/Card";
 
 const MotoDetails = () => {
   const { id } = useParams();
   const { toast } = useToast();
   const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { data: moto, isLoading } = useQuery({
+    queryKey: ["moto", id],
+    queryFn: async () => {
+      const response = await axios.get<Moto>(`/api/motos/${id}`);
+      return response.data;
+    },
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,8 +33,6 @@ const MotoDetails = () => {
           title: "Erreur",
           description: "Impossible de charger l'historique des entretiens",
         });
-      } finally {
-        setIsLoading(false);
       }
     };
 
@@ -37,13 +43,28 @@ const MotoDetails = () => {
     return <div>Chargement...</div>;
   }
 
+  if (!moto) {
+    return <div>Moto non trouvée</div>;
+  }
+
   return (
     <DashboardLayout>
       <div className="space-y-8 animate-fade-in">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">
-            Détails de la moto
-          </h1>
+          <Card>
+            <CardHeader>
+              <CardTitle>{moto.model}</CardTitle>
+              <CardDescription>ID: {moto.id}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm font-medium">Kilométrage actuel</p>
+                  <p className="text-2xl font-bold">{moto.currentMileage} km</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
           <p className="text-muted-foreground mt-2">
             Historique complet des entretiens
           </p>

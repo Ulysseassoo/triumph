@@ -27,8 +27,9 @@ export class NotificationRepository implements NotificationRepositoryInterface {
     throw new Error('Method not implemented.');
   }
   async findByUserId(userId: string): Promise<Notification[]> {
-    const user = await this.userRepository.findOne({ where: { id: userId } });
-    const ormEntities = await this.repository.find({ where: { user } });
+    const ormEntities = await this.repository.find({ where: { user: {
+      id: userId
+    } } });
     return ormEntities.map(NotificationMapper.toDomainEntity);
   }
 }

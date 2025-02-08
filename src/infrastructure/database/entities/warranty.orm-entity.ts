@@ -15,6 +15,6 @@ export class WarrantyOrmEntity {
   @Column()
   endDate: Date;
 
-  @OneToMany(() => BreakdownOrmEntity, (breakdown) => breakdown.warranty)
+  @OneToMany(() => BreakdownOrmEntity, (breakdown) => breakdown.warranty, { eager: true })
   breakdowns: BreakdownOrmEntity[];
 }

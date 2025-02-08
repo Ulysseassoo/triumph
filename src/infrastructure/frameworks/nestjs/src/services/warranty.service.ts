@@ -14,6 +14,10 @@ export class WarrantyService {
     return warranty;
   }
 
+  async findAll(): Promise<Warranty[]> {
+    return await this.warrantyRepository.findAll();
+  }
+
   async findById(id: string): Promise<Warranty | null> {
     return await this.warrantyRepository.findById(id);
   }

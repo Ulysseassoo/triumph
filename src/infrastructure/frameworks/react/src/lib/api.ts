@@ -25,7 +25,7 @@ export interface User {
   email: string;
   password: string;
   isVerified?: boolean;
-  role?: string[];
+  role?: string[] | string;
   clientPartnerId?: string;
 }
 
