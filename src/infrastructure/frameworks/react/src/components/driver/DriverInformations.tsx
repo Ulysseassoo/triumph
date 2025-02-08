@@ -9,25 +9,25 @@ import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/Form";
 import { useToast } from "@/components/ui/use-toast";
 
-const formSchema = z.object({
+export const formSchema = z.object({
     firstname: z.string().min(1, "Prénom requis"),
     lastname: z.string().min(1, "Nom de famille requis"),
     birthdate: z.string().min(1, "Date de naissance requise"),
     addresse: z.string().min(1, "Adresse requise"),
 });
 
-type FormValues = {
+export type DriverFormValues = {
     firstname: string;
     lastname: string;
     birthdate: string;
     addresse: string;
 };
 
-const DriverForm = ({ driver, onUpdate }: { driver: Driver; onUpdate: (data: FormValues) => void }) => {
+const DriverForm = ({ driver, onUpdate }: { driver: Driver; onUpdate: (data: DriverFormValues) => void }) => {
     const { toast } = useToast();
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const form = useForm<FormValues>({
+    const form = useForm<DriverFormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             firstname: driver.firstname,
@@ -37,7 +37,7 @@ const DriverForm = ({ driver, onUpdate }: { driver: Driver; onUpdate: (data: For
         },
     });
 
-    const onSubmit = async (values: FormValues) => {
+    const onSubmit = async (values: DriverFormValues) => {
         try {
             setIsSubmitting(true);
             onUpdate(values);

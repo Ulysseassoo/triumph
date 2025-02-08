@@ -20,59 +20,70 @@ import {
 } from "../ui/Form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { addDriverExperience, Driver, DriverExperience } from "@/lib/apiEntities";
+import { addDriverLicense, Driver, DriverLicense } from "@/lib/apiEntities";
 import { Button } from "../ui/Button";
 
 const formSchema = z.object({
-  duration: z.string().min(1, "Prénom requis"),
-  type: z.string().min(1, "Nom de famille requis"),
-  rented: z.boolean(),
-  professional: z.boolean(),
-  feedback: z.string().min(1, "Adresse requise"),
+  licenseNumber: z.string().min(1, "Numéro requis"),
+  category: z.string().min(1, "Catégorie requis"),
+  expiryDate: z.string().min(1, "Date d'expiration requise"),
+  obtainDate: z.string().min(1, "Date d'obtention requise"),
+  country: z.string().min(1, "Pays requis"),
+  status: z.string().min(1, "Statut requis"),
 });
-interface AddDriverExperienceDialogProps {
+
+interface AddDriverLicenseDialogProps {
   children: React.ReactNode;
-  onDriverExperienceAdded: (driverExperience: DriverExperience) => void;
+  onDriverLicenseAdded: (driverLicense: DriverLicense) => void;
   driver: Driver
 }
 
 type FormValues = {
-  duration: string;
-  type: string;
-  rented: boolean;
-  professional: boolean
-  feedback: string
+  licenseNumber: string,
+  category: string,
+  expiryDate: string,
+  obtainDate: string,
+  country: string,
+  status: string,
 };
 
-export const AddDriverExperienceDialog = ({ children, onDriverExperienceAdded, driver }: AddDriverExperienceDialogProps) => {
+export const AddDriverLicenseDialog = ({
+  children,
+  onDriverLicenseAdded,
+  driver
+}: AddDriverLicenseDialogProps) => {
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      duration: "",
-      type: "",
-      rented: false,
-      professional: false,
-      feedback: ""
+      licenseNumber: "",
+      category: "",
+      expiryDate: new Date().toISOString().split("T")[0],
+      obtainDate: new Date().toISOString().split("T")[0],
+      country: "",
+      status: "",
     },
   });
+
   const onSubmit = async (values: FormValues) => {
     try {
       setIsSubmitting(true);
-      const driverExperience = await addDriverExperience({
-        duration: values.duration,
-        type: values.type,
-        rented: values.rented,
-        professional: values.professional,
-        feedback: values.feedback,
+      const driverLicense = await addDriverLicense({
+        licenseNumber: values.licenseNumber,
+        category: values.category,
+        expiryDate: new Date(values.expiryDate),
+        obtainDate: new Date(values.obtainDate),
+        country: values.country,
+        status: values.status,
         driver
       });
-      onDriverExperienceAdded(driverExperience);
+      onDriverLicenseAdded(driverLicense);
       toast({
-        title: "Expérience ajoutée",
-        description: "L'expérience a été ajoutée avec succès.",
+        title: "Permis de conduire ajouté",
+        description: "Le permis de conduire a été ajouté avec succès.",
       });
       setOpen(false);
       form.reset();
@@ -80,33 +91,34 @@ export const AddDriverExperienceDialog = ({ children, onDriverExperienceAdded, d
       toast({
         variant: "destructive",
         title: "Erreur",
-        description: "Impossible d'ajouter l'expérience. Veuillez réessayer.",
+        description: "Impossible d'ajouter le permis de conduire. Veuillez réessayer.",
       });
-      console.error(error)
+      console.error(error);
     } finally {
       setIsSubmitting(false);
     }
   };
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Ajouter une expérience</DialogTitle>
+          <DialogTitle>Ajouter un permis de conduire</DialogTitle>
           <DialogDescription>
-            Ajoutez une nouvelle expérience pour une moto
+            Ajoutez un nouveau permis de conduire
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField
               control={form.control}
-              name="duration"
+              name="licenseNumber"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Durée</FormLabel>
+                  <FormLabel>Numéro de permis</FormLabel>
                   <FormControl>
-                    <Input placeholder="Ex: 5 mois" {...field} />
+                    <Input placeholder="Ex: 54020 4 0240234 204 024 0423" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -114,12 +126,12 @@ export const AddDriverExperienceDialog = ({ children, onDriverExperienceAdded, d
             />
             <FormField
               control={form.control}
-              name="type"
+              name="category"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Type</FormLabel>
+                  <FormLabel>category</FormLabel>
                   <FormControl>
-                    <Input placeholder="Ex: Nairi" {...field} />
+                    <Input placeholder="Ex: A" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -127,12 +139,12 @@ export const AddDriverExperienceDialog = ({ children, onDriverExperienceAdded, d
             />
             <FormField
               control={form.control}
-              name="rented"
+              name="expiryDate"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Loué ?</FormLabel>
+                  <FormLabel>Date d'expiration</FormLabel>
                   <FormControl>
-                    <Input type="checkbox" checked={field.value} onChange={field.onChange} />
+                    <Input type="date" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -140,12 +152,12 @@ export const AddDriverExperienceDialog = ({ children, onDriverExperienceAdded, d
             />
             <FormField
               control={form.control}
-              name="professional"
+              name="obtainDate"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Professionnel ?</FormLabel>
+                  <FormLabel>Date d'obtention</FormLabel>
                   <FormControl>
-                    <Input type="checkbox" checked={field.value} onChange={field.onChange} />
+                    <Input type="date" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -153,19 +165,32 @@ export const AddDriverExperienceDialog = ({ children, onDriverExperienceAdded, d
             />
             <FormField
               control={form.control}
-              name="feedback"
+              name="country"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Retour</FormLabel>
+                  <FormLabel>Pays</FormLabel>
                   <FormControl>
-                    <Input placeholder="Ex: Nairi" {...field} />
+                    <Input placeholder="Ex: France" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="status"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Statut</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Ex: En cours de validitité" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <Button type="submit" disabled={isSubmitting}>
-              Ajouter l'expérience
+              Ajouter le permis de conduire
             </Button>
           </form>
         </Form>

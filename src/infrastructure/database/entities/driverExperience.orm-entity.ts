@@ -7,7 +7,7 @@ export class DriverExperienceOrmEntity {
   id: string;
 
   @Column()
-  duration: number;
+  duration: string;
 
   @Column()
   type: string;
