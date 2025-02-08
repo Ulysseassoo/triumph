@@ -1,4 +1,4 @@
-import { MotoStatus } from '../../../../../domain/entities/moto.entity';
+import { Moto, MotoStatus } from '../../../../../domain/entities/moto.entity';
 import { MotoRepositoryInterface } from './../../../../../application/repositories/MotoRepositoryInterface';
 import { PartnerRepositoryInterface } from './../../../../../application/repositories/PartnerRepositoryInterface';
 import { Injectable, Inject } from '@nestjs/common';
@@ -38,5 +38,9 @@ export class MotoService {
 
     moto.currentMileage = mileage;
     return await this.motoRepository.save(moto);
+  }
+
+  async findAll(): Promise<Moto[]> {
+    return await this.motoRepository.findAll();
   }
 }

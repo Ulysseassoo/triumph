@@ -16,8 +16,10 @@ import {
   Bike,
   Wrench,
   LogOut,
+  AlertTriangle,
+  Shield,
 } from "lucide-react";
-import { getMaintenances } from "@/lib/api";
+import { getMaintenances } from "@/lib/apiEntities";
 import { Badge } from "../ui/Badge";
 
 export function AppSidebar() {
@@ -58,6 +60,16 @@ export function AppSidebar() {
       icon: Wrench,
       badge: overdueCount > 0 ? overdueCount : undefined,
     },
+    {
+      title: "Pannes",
+      path: "/pannes",
+      icon: AlertTriangle,
+    },
+    {
+      title: "Garanties",
+      path: "/garanties",
+      icon: Shield,
+    },
   ];
 
   return (
@@ -65,7 +77,7 @@ export function AppSidebar() {
       <SidebarContent>
         <div className="p-6">
           <img
-            src="/triumph-logo.png"
+            src="/logo-moto.png"
             alt="Triumph"
             className="h-8 w-auto"
           />

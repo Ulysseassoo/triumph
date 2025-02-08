@@ -1,7 +1,8 @@
-import { BadRequestException, Body, Controller, Param, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { validate } from 'class-validator';
 import { CreateMotoDto } from 'src/dtos/moto.dto';
 import { MotoService } from 'src/services/moto.service';
+import { Moto } from '../../../../../domain/entities/moto.entity';
 
 @Controller('motos')
 export class MotoController {
@@ -30,5 +31,10 @@ export class MotoController {
   ) {
     const moto = this.motoService.updateMileage(motoId, mileage);
     return { message: 'Kilométrage mis à jour avec succès.', data: moto };
+  }
+
+  @Get()
+  async findAll(): Promise<Moto[]> {
+    return await this.motoService.findAll();
   }
 }

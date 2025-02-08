@@ -30,10 +30,11 @@ export class MotoOrmEntity {
 
   @OneToMany(() => MaintenanceOrmEntity, (maintenance) => maintenance.moto, {
     cascade: true,
+    eager: true
   })
   maintenances: MaintenanceOrmEntity[];
 
-  @ManyToOne(() => PartnerOrmEntity, (partner) => partner.motos)
+  @ManyToOne(() => PartnerOrmEntity, (partner) => partner.motos, { eager: true })
   @JoinColumn({ name: "clientPartnerId" })
   partner: PartnerOrmEntity;
 

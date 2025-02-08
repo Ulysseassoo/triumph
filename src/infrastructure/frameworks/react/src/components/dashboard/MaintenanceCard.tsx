@@ -1,4 +1,4 @@
-import { Maintenance } from "@/lib/api";
+import { Maintenance } from "@/lib/apiEntities";
 import { Card, CardHeader, CardTitle, CardContent } from "../ui/Card";
 import { Badge } from "../ui/Badge";
 
@@ -21,7 +21,7 @@ export const MaintenanceCard = ({ maintenance }: MaintenanceCardProps) => {
   };
 
   return (
-    <Card className="bg-white/80 backdrop-blur-sm hover:bg-white/90 transition-all duration-200">
+    <Card className="bg-white/80 backdrop-blur-sm hover:bg-white/90 transition-all duration-200 w-full">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">
           Maintenance #{maintenance.id}
