@@ -17,20 +17,17 @@ export class DriverRepository implements DriverRepositoryInterface {
   ) {}
 
   async findAll(filters?: filtersType): Promise<Driver[]> {
-    const { firstname, lastname, birthdate, addresse } = filters;
-    const { offset = 0, limit = 10 } = filters.pagination;
-
     try {
       const query: Record<string, unknown> = {};
-      if (firstname) query.firstname = firstname;
-      if (lastname) query.lastname = lastname;
-      if (birthdate) query.birthdate = birthdate;
-      if (addresse) query.addresse = addresse;
+      if (filters?.firstname) query.firstname = filters.firstname;
+      if (filters?.lastname) query.lastname = filters.lastname;
+      if (filters?.birthdate) query.birthdate = filters.birthdate;
+      if (filters?.addresse) query.addresse = filters.addresse;
 
       const drivers = await this.driverRepository.find({
         where: query,
-        skip: offset,
-        take: limit,
+        skip: filters?.pagination?.offset ?? 0,
+        take: filters?.pagination?.limit ?? 10,
       });
 
       return drivers.map((driver) => DriverMapper.toDomainEntity(driver));

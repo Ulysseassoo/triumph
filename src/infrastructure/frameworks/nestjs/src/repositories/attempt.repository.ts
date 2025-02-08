@@ -17,22 +17,19 @@ export class AttemptRepository implements AttemptRepositoryInterface {
   ) {}
 
   async findAll(filters?: AttemptFiltersType): Promise<Attempt[]> {
-    const { startDate, endDate, startKilometer, endKilometer, status } =
-      filters;
-    const { offset = 0, limit = 10 } = filters.pagination;
-
     try {
       const query: Record<string, unknown> = {};
-      if (startDate) query.startDate = startDate;
-      if (endDate) query.endDate = endDate;
-      if (startKilometer) query.startKilometer = startKilometer;
-      if (endKilometer) query.endKilometer = endKilometer;
-      if (status) query.status = status;
+      if (filters?.startDate) query.startDate = filters.startDate;
+      if (filters?.endDate) query.endDate = filters?.endDate;
+      if (filters?.startKilometer)
+        query.startKilometer = filters?.startKilometer;
+      if (filters?.endKilometer) query.endKilometer = filters?.endKilometer;
+      if (filters?.status) query.status = filters?.status;
 
       const attempts = await this.attemptRepository.find({
         where: query,
-        skip: offset,
-        take: limit,
+        skip: filters?.pagination?.offset ?? 0,
+        take: filters?.pagination?.limit ?? 10,
       });
 
       return attempts.map((attempt) => AttemptMapper.toDomainEntity(attempt));

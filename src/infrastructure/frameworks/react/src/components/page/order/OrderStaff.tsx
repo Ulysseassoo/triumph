@@ -27,7 +27,7 @@ function OrderStaff() {
                 return;
             }
 
-            const response = await fetch('http://localhost:5000/orders', {
+            const response = await fetch('http://localhost:5002/orders', {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
                 }
@@ -64,7 +64,7 @@ function OrderStaff() {
                 return;
             }
 
-            const response = await fetch(`http://localhost:5000/orders/${id}`, {
+            const response = await fetch(`http://localhost:5002/orders/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
@@ -125,7 +125,7 @@ function OrderStaff() {
                                 </thead>
                                 <tbody className="divide-y divide-gray-200">
                                     {orders.map((order) => (
-                                        <tr 
+                                        <tr
                                             key={order.id}
                                             className="hover:bg-gray-50"
                                         >

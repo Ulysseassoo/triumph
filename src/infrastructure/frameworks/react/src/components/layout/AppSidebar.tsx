@@ -18,6 +18,9 @@ import {
   LogOut,
   AlertTriangle,
   Shield,
+  Users,
+  Hospital,
+  Notebook
 } from "lucide-react";
 import { getMaintenances } from "@/lib/apiEntities";
 import { Badge } from "../ui/Badge";
@@ -69,6 +72,21 @@ export function AppSidebar() {
       title: "Garanties",
       path: "/garanties",
       icon: Shield,
+    },
+    {
+      title: "Conducteurs",
+      path: "/conducteurs",
+      icon: Users,
+    },
+    {
+      title: "Essais",
+      path: "/essais",
+      icon: Notebook,
+    },
+    {
+      title: "Accidents",
+      path: "/accidents",
+      icon: Hospital,
     },
   ];
 

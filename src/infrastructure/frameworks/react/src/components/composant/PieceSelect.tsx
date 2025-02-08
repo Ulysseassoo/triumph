@@ -9,7 +9,7 @@ interface PieceSelectProps {
   onPieceSelect: (pieceId: string) => void;
 }
 
-function PieceSelect ({ onPieceSelect }: PieceSelectProps)  {
+function PieceSelect({ onPieceSelect }: PieceSelectProps) {
   const [pieces, setPieces] = useState<Piece[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -19,12 +19,12 @@ function PieceSelect ({ onPieceSelect }: PieceSelectProps)  {
       try {
         setIsLoading(true);
         const accessToken = localStorage.getItem('token');
-        
+
         if (!accessToken) {
           throw new Error('No access token');
         }
 
-        const response = await fetch('http://localhost:5000/pieces', {
+        const response = await fetch('http://localhost:5002/pieces', {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${accessToken}`,
@@ -56,8 +56,8 @@ function PieceSelect ({ onPieceSelect }: PieceSelectProps)  {
   if (error) return <div className="text-red-500">{error}</div>;
 
   return (
-    <select 
-      onChange={handlePieceSelect} 
+    <select
+      onChange={handlePieceSelect}
       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
     >
       <option value="">Select a piece</option>

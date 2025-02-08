@@ -17,6 +17,9 @@ import NotFound from "./pages/NotFound";
 import MotoDetails from "./pages/MotoDetails";
 import Breakdowns from "./pages/Breakdowns";
 import Warranties from "./pages/Warranties";
+import Drivers from "./pages/Drivers";
+import Attempts from "./pages/Attempts";
+import Crashes from "./pages/Crashes";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +43,10 @@ function App() {
               <Route path="/create/order" element={<CreateOrder />} />
               <Route path="/orders/staff" element={<OrderStaff />} />
               <Route path="/orders/edit/:id" element={<OrderEdit />} />
+
+              <Route path="/conducteurs" element={<Drivers />} />
+              <Route path="/essais" element={<Attempts />} />
+              <Route path="/accidents" element={<Crashes />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <Toaster />
