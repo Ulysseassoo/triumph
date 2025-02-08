@@ -16,7 +16,7 @@ import { JwtAuthGuard } from '../guardAuth/jwt.guard';
 import { Roles } from '../role.decorator';
 import { DriverExperienceService } from 'src/services/driverExperience.service';
 
-@Controller('driverExperiences')
+@Controller('driver-experiences')
 export class DriverExperienceController {
   constructor(
     private readonly driverExperienceService: DriverExperienceService,

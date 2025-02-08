@@ -2,9 +2,9 @@
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { Driver, getDriverById, updateDriver } from "@/lib/apiEntities";
+import { Driver, DriverExperience, DriverLicense, getDriverById, updateDriver } from "@/lib/apiEntities";
 import { useToast } from "@/hooks/use-toast";
-import DriverInformations from "@/components/driver/DriverInformations";
+import DriverInformations, { DriverFormValues } from "@/components/driver/DriverInformations";
 import DriverExperienceCard from "@/components/driver/DriverExperienceCard";
 import DriverLicenseCard from "@/components/driver/DriverLicenseCard";
 
@@ -36,9 +36,17 @@ const DriverDetails = () => {
     }, [id, toast]);
 
 
-    const handleUpdateUser = useCallback(async (data: Driver) => {
+    const handleUpdateUser = useCallback(async (data: DriverFormValues) => {
         try {
-            const newDriver = { ...driver, ...data }
+            if (!driver?.id) {
+                toast({
+                    variant: "destructive",
+                    title: "Erreur",
+                    description: "ID du conducteur manquant",
+                });
+                return;
+            }
+            const newDriver = { ...data, experiences: driver?.experiences, licenses: driver?.licenses, id: driver?.id }
             await updateDriver(newDriver)
             setDriver(newDriver);
         } catch (error) {
@@ -50,6 +58,18 @@ const DriverDetails = () => {
             });
         }
     }, [driver, id, toast])
+
+    const handleAddExperienceCard = useCallback((experience: DriverExperience) => {
+        if (driver) {
+            setDriver({ ...driver, experiences: [...driver.experiences, experience] })
+        }
+    }, [driver])
+
+    const handleAddLicenseCard = useCallback((license: DriverLicense) => {
+        if (driver) {
+            setDriver({ ...driver, licenses: [...driver.licenses, license] })
+        }
+    }, [driver])
 
     if (isLoading) {
         return <div>Chargement...</div>;
@@ -73,8 +93,8 @@ const DriverDetails = () => {
                 </div>
                 <DriverInformations driver={driver} onUpdate={handleUpdateUser} />
                 <div className="grid gap-4 md:grid-cols-2">
-                    <DriverExperienceCard driver={driver} />
-                    <DriverLicenseCard driver={driver} />
+                    <DriverExperienceCard driver={driver} onAddExperience={handleAddExperienceCard} />
+                    <DriverLicenseCard driver={driver} onAddLicense={handleAddLicenseCard} />
                 </div>
             </div>
         </DashboardLayout>

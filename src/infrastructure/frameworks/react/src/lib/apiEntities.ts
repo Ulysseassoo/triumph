@@ -97,7 +97,7 @@ export interface Driver {
   id: string;
   firstname: string;
   lastname: string;
-  birthdate: Date;
+  birthdate: string;
   addresse: string;
   experiences: DriverExperience[];
   licenses: DriverLicense[];
@@ -125,7 +125,7 @@ export interface Crash {
 
 export interface DriverExperience {
   id: string;
-  duration: number;
+  duration: string;
   type: string;
   rented: boolean;
   professional: boolean;
@@ -258,6 +258,41 @@ export const addCrash = async (data: {
   status: string;
 }) => {
   const response = await apiEntities.post<Crash>("/crashes", data);
+  return response.data;
+};
+
+// experience
+
+export const addDriverExperience = async (data: {
+  duration: string;
+  type: string;
+  rented: boolean;
+  professional: boolean;
+  feedback: string;
+  driver: Driver;
+}) => {
+  const response = await apiEntities.post<DriverExperience>(
+    "/driver-experiences",
+    data
+  );
+  return response.data;
+};
+
+// driving license
+
+export const addDriverLicense = async (data: {
+  licenseNumber: string;
+  category: string;
+  expiryDate: Date;
+  obtainDate: Date;
+  country: string;
+  status: string;
+  driver: Driver;
+}) => {
+  const response = await apiEntities.post<DriverLicense>(
+    "/driver-licenses",
+    data
+  );
   return response.data;
 };
 

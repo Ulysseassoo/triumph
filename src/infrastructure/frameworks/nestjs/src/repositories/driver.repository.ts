@@ -39,7 +39,10 @@ export class DriverRepository implements DriverRepositoryInterface {
 
   async findById(id: string): Promise<Driver> {
     try {
-      const driver = await this.driverRepository.findOneBy({ id });
+      const driver = await this.driverRepository.findOne({
+        where: { id },
+        relations: ['experiences', 'licenses'],
+      });
       return driver ? DriverMapper.toDomainEntity(driver) : null;
     } catch (error) {
       throw error;

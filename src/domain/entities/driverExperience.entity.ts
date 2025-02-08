@@ -3,7 +3,7 @@ import { Driver } from "./driver.entity";
 export class DriverExperience {
   constructor(
     public readonly id: string,
-    public duration: number,
+    public duration: string,
     public type: string,
     public rented: boolean,
     public professional: boolean,

@@ -22,7 +22,8 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import { addDriver, Driver } from "@/lib/apiEntities";
 import { Button } from "../ui/Button";
-const formSchema = z.object({
+
+export const driverFormSchema = z.object({
   firstname: z.string().min(1, "Prénom requis"),
   lastname: z.string().min(1, "Nom de famille requis"),
   birthdate: z.string().min(1, "Date de naissance requise"),
@@ -45,7 +46,7 @@ export const AddDriverDialog = ({ children, onDriverAdded }: AddDriverDialogProp
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(driverFormSchema),
     defaultValues: {
       firstname: "",
       lastname: "",
