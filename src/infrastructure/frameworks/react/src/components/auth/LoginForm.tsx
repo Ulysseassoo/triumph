@@ -3,7 +3,6 @@ import { useAuth } from "@/context/AuthContext";
 import { Input } from "@/components/ui/input";
 import { Card } from "../ui/Card";
 import { Button } from "../ui/Button";
-import axios from "axios";
 
 export const LoginForm = () => {
   const [email, setEmail] = useState("");

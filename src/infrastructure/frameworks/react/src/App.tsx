@@ -14,6 +14,9 @@ import { AuthProvider } from "@/context/AuthContext";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
+import MotoDetails from "./pages/MotoDetails";
+import Breakdowns from "./pages/Breakdowns";
+import Warranties from "./pages/Warranties";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +30,9 @@ function App() {
               <Route path="/" element={<Dashboard />} />
               <Route path="/login" element={<Login />} />
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/motos/:id" element={<MotoDetails />} />
+              <Route path="/pannes" element={<Breakdowns />} />
+              <Route path="/garanties" element={<Warranties />} />
               <Route path="/pieces/user" element={<PieceUser />} />
               <Route path="/create/piece" element={<CreatePiece />} />
               <Route path="/pieces/staff" element={<PieceStaff />} />

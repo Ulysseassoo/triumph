@@ -18,7 +18,7 @@ const Login = () => {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <img
-            src="/triumph-logo.png"
+            src="/logo-moto.png"
             alt="Triumph"
             className="h-12 mx-auto mb-6"
           />

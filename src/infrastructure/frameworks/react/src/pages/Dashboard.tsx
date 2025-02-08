@@ -3,44 +3,51 @@ import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { MaintenanceCard } from "@/components/dashboard/MaintenanceCard";
 import { MotoTable } from "@/components/dashboard/MotoTable";
-import { getMaintenances, getMotos, type Maintenance, type Moto } from "@/lib/api";
+import {
+  getMaintenances,
+  getMotos,
+  type Maintenance,
+  type Moto,
+} from "@/lib/apiEntities";
 import { Bike, Wrench, AlertTriangle } from "lucide-react";
+import {
+  getOverdueMaintenances,
+  getPendingMaintenances,
+} from "@/utils/maintenanceUtils";
+import { BreakdownStepper } from "@/components/breakdown/BreakdownStepper";
 
 const Dashboard = () => {
   const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
   const [motos, setMotos] = useState<Moto[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  console.log(isLoading);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [maintenancesData, motosData] = await Promise.all([
+          getMaintenances(),
+          getMotos(),
+        ]);
+        setMaintenances(maintenancesData);
+        setMotos(motosData);
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const [maintenancesData, motosData] = await Promise.all([
-  //         getMaintenances(),
-  //         getMotos(),
-  //       ]);
-  //       setMaintenances(maintenancesData);
-  //       setMotos(motosData);
-  //     } catch (error) {
-  //       console.error("Error fetching dashboard data:", error);
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
+    fetchData();
+  }, []);
 
-  //   fetchData();
-  // }, []);
-
-  const overdueMaintenances = maintenances.filter(
-    (m) => m.status === "OVERDUE"
-  ).length;
+  const overdueMaintenances = getOverdueMaintenances(maintenances).length;
+  const pendingMaintenances = getPendingMaintenances(maintenances).length;
 
   return (
     <DashboardLayout>
       <div className="space-y-8 animate-fade-in">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">
-            Tableau de bord
-          </h1>
+          <h1 className="text-3xl font-bold tracking-tight">Tableau de bord</h1>
           <p className="text-muted-foreground mt-2">
             Bienvenue sur votre espace de gestion
           </p>
@@ -54,13 +61,15 @@ const Dashboard = () => {
           />
           <StatCard
             title="Entretiens en attente"
-            value={maintenances.filter((m) => m.status === "DUE").length}
+            value={pendingMaintenances}
             icon={<Wrench className="h-4 w-4" />}
           />
           <StatCard
             title="Entretiens en retard"
             value={overdueMaintenances}
             icon={<AlertTriangle className="h-4 w-4" />}
+            description={overdueMaintenances > 0 ? "Action requise" : undefined}
+            className={overdueMaintenances > 0 ? "border-red-500" : undefined}
           />
         </div>
 
@@ -68,14 +77,12 @@ const Dashboard = () => {
           <div className="space-y-4">
             <h2 className="text-xl font-semibold">Derniers entretiens</h2>
             <div className="grid gap-4">
-              {maintenances
-                .slice(0, 3)
-                .map((maintenance) => (
-                  <MaintenanceCard
-                    key={maintenance.id}
-                    maintenance={maintenance}
-                  />
-                ))}
+              {maintenances.slice(0, 3).map((maintenance) => (
+                <MaintenanceCard
+                  key={maintenance.id}
+                  maintenance={maintenance}
+                />
+              ))}
             </div>
           </div>
 
@@ -83,6 +90,10 @@ const Dashboard = () => {
             <h2 className="text-xl font-semibold">Motos</h2>
             <MotoTable motos={motos} />
           </div>
+        </div>
+
+        <div className="mt-8">
+          <BreakdownStepper />
         </div>
       </div>
     </DashboardLayout>
