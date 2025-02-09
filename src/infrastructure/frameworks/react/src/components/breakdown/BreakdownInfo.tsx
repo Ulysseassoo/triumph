@@ -1,8 +1,8 @@
 
 import { useQuery } from "@tanstack/react-query";
-import { getBreakdowns } from "@/lib/apiEntities";
 import { Badge } from "lucide-react";
 import { Card } from "../ui/Card";
+import { getBreakdowns } from "@/services/BreakdownServices";
 
 interface BreakdownInfoProps {
   breakdownId?: string;
@@ -11,7 +11,7 @@ interface BreakdownInfoProps {
 export const BreakdownInfo = ({ breakdownId }: BreakdownInfoProps) => {
   const { data: breakdown } = useQuery({
     queryKey: ["breakdowns", breakdownId],
-    queryFn: () => getBreakdowns().then(breakdowns => 
+    queryFn: () => getBreakdowns().then(breakdowns =>
       breakdowns.find(b => b.id === breakdownId)
     ),
     enabled: !!breakdownId,
@@ -45,7 +45,7 @@ export const BreakdownInfo = ({ breakdownId }: BreakdownInfoProps) => {
         </div>
         <div>
           <p className="text-sm font-medium text-muted-foreground">Statut</p>
-          <Badge 
+          <Badge
             className={`mt-1 ${breakdown ? getStatusColor(breakdown.status) : "bg-[#A0AEC0]"}`}
           >
             {breakdown?.status === "PENDING" && "En attente"}

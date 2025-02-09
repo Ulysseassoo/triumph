@@ -11,9 +11,9 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { getCorrectiveActions, createCorrectiveAction } from "@/lib/apiEntities";
 import { toast } from "sonner";
 import { Button } from "../ui/Button";
+import { getCorrectiveActions, createCorrectiveAction } from "@/services/CorrectiveServices";
 
 interface CorrectiveActionsProps {
   repairId: string;
@@ -30,7 +30,7 @@ export const CorrectiveActions = ({ repairId }: CorrectiveActionsProps) => {
 
   const createActionMutation = useMutation({
     mutationFn: (data: { description: string; date: string }) =>
-      createCorrectiveAction( {
+      createCorrectiveAction({
         description: data.description,
         reparationId: repairId
       }),

@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage, Form } from "../ui/Form";
 import { Button } from "../ui/Button";
-import { Maintenance } from "@/lib/apiEntities";
+import { Maintenance } from "@/interfaces/MaintenanceInterface";
 
 const formSchema = z.object({
   motoId: z.string().min(1, "Veuillez sélectionner une moto"),

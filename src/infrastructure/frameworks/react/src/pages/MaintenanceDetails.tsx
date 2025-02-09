@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/Card";
-import { getMaintenanceById } from "@/lib/apiEntities";
+import { getMaintenanceById } from "@/services/MaintenanceServices";
 
 const MaintenanceDetails = () => {
   const { id } = useParams();

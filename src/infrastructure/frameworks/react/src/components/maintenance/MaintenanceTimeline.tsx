@@ -5,7 +5,7 @@ import { Wrench, Calendar } from "lucide-react";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { Card } from "../ui/Card";
-import { Maintenance, MaintenanceType } from "@/lib/apiEntities";
+import { Maintenance, MaintenanceType } from "@/interfaces/MaintenanceInterface";
 
 interface MaintenanceTimelineProps {
   maintenances: Maintenance[];

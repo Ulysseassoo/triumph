@@ -22,8 +22,8 @@ import {
   Hospital,
   Notebook
 } from "lucide-react";
-import { getMaintenances } from "@/lib/apiEntities";
 import { Badge } from "../ui/Badge";
+import { getMaintenances } from "@/services/MaintenanceServices";
 
 export function AppSidebar() {
   const location = useLocation();

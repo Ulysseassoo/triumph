@@ -22,9 +22,9 @@ import { Plus, Trash, Edit } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/Button";
 import MotoForm from "@/components/moto/MotoForm";
-import { getMotos } from "@/lib/apiEntities";
 import { getLastPlannedMaintenanceDate } from "@/utils/maintenanceUtils";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
+import { getMotos } from "@/services/MotoServices";
 
 interface Motorcycle {
   id: string;
@@ -174,8 +174,8 @@ const Motorcycles = () => {
                       {" "}
                       {moto.maintenances && moto.maintenances.length > 0
                         ? getLastPlannedMaintenanceDate(
-                            moto.maintenances
-                          )?.toLocaleDateString() || "-"
+                          moto.maintenances
+                        )?.toLocaleDateString() || "-"
                         : "-"}
                     </TableCell>
                     <TableCell className="space-x-2">

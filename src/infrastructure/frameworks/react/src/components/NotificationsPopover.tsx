@@ -7,8 +7,8 @@ import { Bell } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { Button } from "./ui/Button";
-import { getUserNotifications } from "@/lib/apiEntities";
 import { useAuth } from "@/context/AuthContext";
+import { getUserNotifications } from "@/services/NotificationServices";
 
 const NotificationsPopover = () => {
   const { user } = useAuth();
@@ -47,9 +47,8 @@ const NotificationsPopover = () => {
               notifications?.map((notification) => (
                 <div
                   key={notification.id}
-                  className={`p-3 rounded-lg ${
-                    notification.isRead ? "bg-gray-50" : "bg-blue-50"
-                  }`}
+                  className={`p-3 rounded-lg ${notification.isRead ? "bg-gray-50" : "bg-blue-50"
+                    }`}
                 >
                   <p className="text-sm">{notification.message}</p>
                   <span className="text-xs text-muted-foreground">

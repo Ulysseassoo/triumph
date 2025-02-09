@@ -6,7 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Moto } from "@/lib/apiEntities";
+import { Moto } from "@/interfaces/MotoInterface";
 import { getLastPlannedMaintenanceDate } from "@/utils/maintenanceUtils";
 import { useNavigate } from "react-router-dom";
 
@@ -41,8 +41,8 @@ export const MotoTable = ({ motos }: MotoTableProps) => {
               <TableCell>
                 {moto.maintenances && moto.maintenances.length > 0
                   ? getLastPlannedMaintenanceDate(
-                      moto.maintenances
-                    )?.toLocaleDateString() || "-"
+                    moto.maintenances
+                  )?.toLocaleDateString() || "-"
                   : "-"}
               </TableCell>
             </TableRow>

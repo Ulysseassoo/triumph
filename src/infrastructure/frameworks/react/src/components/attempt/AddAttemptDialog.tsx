@@ -20,9 +20,12 @@ import {
 } from "../ui/Form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { addAttempt, Attempt, AttemptStatus, Driver, Moto } from "@/lib/apiEntities";
 import { Button } from "../ui/Button";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { Attempt, AttemptStatus } from "@/interfaces/AttemptInterface";
+import { Driver } from "@/interfaces/DriverInterface";
+import { Moto } from "@/interfaces/MotoInterface";
+import { addAttempt } from "@/services/AttemptServices";
 const formSchema = z.object({
   startDate: z.string().min(1, "Début d'essai requis"),
   endDate: z.string().min(1, "Fin d'essai requis"),

@@ -5,11 +5,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PlusCircle } from "lucide-react";
-import { getRepairs, createRepair } from "@/lib/apiEntities";
 import { CorrectiveActions } from "./CorrectiveActions";
 import { toast } from "sonner";
 import { Button } from "../ui/Button";
 import { Card } from "../ui/Card";
+import { createRepair, getRepairs } from "@/services/RepairServices";
 
 interface ReparationListProps {
   breakdownId?: string;
@@ -109,7 +109,7 @@ export const ReparationList = ({ breakdownId }: ReparationListProps) => {
                 </div>
               </div>
             </div>
-            
+
             <CorrectiveActions repairId={repair.id} />
           </div>
         </Card>

@@ -20,8 +20,10 @@ import {
 } from "../ui/Form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { addDriverExperience, Driver, DriverExperience } from "@/lib/apiEntities";
 import { Button } from "../ui/Button";
+import { DriverExperience } from "@/interfaces/DriverExperienceInterface";
+import { Driver } from "@/interfaces/DriverInterface";
+import { addDriverExperience } from "@/services/DriverExperienceServices";
 
 const formSchema = z.object({
   duration: z.string().min(1, "Prénom requis"),

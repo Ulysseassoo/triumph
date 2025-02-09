@@ -20,8 +20,9 @@ import {
 } from "../ui/Form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { addWarranty, Warranty } from "@/lib/apiEntities";
 import { Button } from "../ui/Button";
+import { Warranty } from "@/interfaces/WarrantyInterface";
+import { addWarranty } from "@/services/WarrantyServices";
 const formSchema = z.object({
   motoId: z.string().min(1, "L'identifiant de la moto est requis"),
   startDate: z.string().min(1, "La date de début est requise"),

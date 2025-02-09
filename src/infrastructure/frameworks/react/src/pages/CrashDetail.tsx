@@ -2,8 +2,13 @@ import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { useToast } from "@/hooks/use-toast";
-import { Crash, Driver, getCrashById, getDrivers, getMotos, Moto, updateCrash } from "@/lib/apiEntities";
 import CrashInformations, { CrashFormValues } from "@/components/crash/CrashInformations";
+import { Crash } from "@/interfaces/CrashInterface";
+import { Driver } from "@/interfaces/DriverInterface";
+import { Moto } from "@/interfaces/MotoInterface";
+import { getCrashById, updateCrash } from "@/services/CrashServices";
+import { getDrivers } from "@/services/DriverServices";
+import { getMotos } from "@/services/MotoServices";
 
 const CrashDetails = () => {
     const { id } = useParams();

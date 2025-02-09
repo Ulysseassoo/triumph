@@ -2,12 +2,12 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Driver } from "@/lib/apiEntities";
 import { Card } from "../ui/Card";
 import { Button } from "../ui/Button";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/Form";
 import { useToast } from "@/components/ui/use-toast";
+import { Driver } from "@/interfaces/DriverInterface";
 
 export const formSchema = z.object({
     firstname: z.string().min(1, "Prénom requis"),

@@ -18,14 +18,11 @@ import MaintenanceForm from "@/components/maintenance/MaintenanceForm";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
-import {
-  getMaintenances,
-  Maintenance,
-  createMaintenance,
-  updateMaintenance,
-} from "@/lib/apiEntities";
+
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Link } from "react-router-dom";
+import { Maintenance } from "@/interfaces/MaintenanceInterface";
+import { getMaintenances, createMaintenance, updateMaintenance } from "@/services/MaintenanceServices";
 
 const Maintenances = () => {
   const { toast } = useToast();

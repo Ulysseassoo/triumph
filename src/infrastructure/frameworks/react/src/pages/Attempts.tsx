@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { AddAttemptDialog } from "@/components/attempt/AddAttemptDialog";
-import { Attempt, getAttempts, Driver, getDrivers, getMotos, Moto } from "@/lib/apiEntities";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { AttemptTable } from "@/components/attempt/AttemptTable";
+import { Attempt } from "@/interfaces/AttemptInterface";
+import { Driver } from "@/interfaces/DriverInterface";
+import { Moto } from "@/interfaces/MotoInterface";
+import { getAttempts } from "@/services/AttemptServices";
+import { getDrivers } from "@/services/DriverServices";
+import { getMotos } from "@/services/MotoServices";
 
 const Attempts = () => {
     const [attempts, setAttempts] = useState<Attempt[]>([]);

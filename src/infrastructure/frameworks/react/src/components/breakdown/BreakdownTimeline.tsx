@@ -1,7 +1,8 @@
 
 import { useQuery } from "@tanstack/react-query";
-import { getBreakdownById, getRepairs } from "@/lib/apiEntities";
 import { Card } from "../ui/Card";
+import { getBreakdownById } from "@/services/BreakdownServices";
+import { getRepairs } from "@/services/RepairServices";
 
 interface BreakdownTimelineProps {
   breakdownId?: string;
@@ -25,8 +26,8 @@ export const BreakdownTimeline = ({ breakdownId }: BreakdownTimelineProps) => {
       <h3 className="text-lg font-medium mb-4">Historique de la panne</h3>
       <div className="relative space-y-0">
         {repairs?.map((repair) => (
-          <div 
-            key={repair.id} 
+          <div
+            key={repair.id}
             className="relative pl-6 pb-8 border-l-2 border-gray-200 last:border-l-0 last:pb-0"
           >
             <div className="absolute -left-[9px] w-4 h-4 rounded-full bg-[#F6AD55] ring-4 ring-white" />
