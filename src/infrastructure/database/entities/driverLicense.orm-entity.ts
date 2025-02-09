@@ -1,5 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { DriverOrmEntity } from "./driver.orm-entity";
+import { DriverLicenseStatus } from "../../../domain/entities/driverLicense.entity";
 
 @Entity("driverLicense")
 export class DriverLicenseOrmEntity {
@@ -21,8 +22,8 @@ export class DriverLicenseOrmEntity {
   @Column()
   country: string;
 
-  @Column()
-  status: string;
+  @Column({ type: "enum", enum: DriverLicenseStatus, nullable: true })
+  status: DriverLicenseStatus;
 
   @ManyToOne(() => DriverOrmEntity, (driver) => driver.licenses)
   driver: DriverOrmEntity;

@@ -20,7 +20,7 @@ import {
 } from "../ui/Form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { addAttempt, Attempt, Driver, Moto } from "@/lib/apiEntities";
+import { addAttempt, Attempt, AttemptStatus, Driver, Moto } from "@/lib/apiEntities";
 import { Button } from "../ui/Button";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 const formSchema = z.object({
@@ -44,7 +44,7 @@ type FormValues = {
   endDate: string,
   startKilometer: number,
   endKilometer: number,
-  status: string,
+  status: AttemptStatus,
   driver: string
   moto: string
 };
@@ -66,7 +66,7 @@ export const AddAttemptDialog = ({ children, onAttemptAdded, drivers, motos }: A
       endDate: new Date().toISOString().split("T")[0],
       startKilometer: 0,
       endKilometer: 0,
-      status: "En cours",
+      status: AttemptStatus.GOING,
       driver: "",
       moto: ""
     },
@@ -172,7 +172,20 @@ export const AddAttemptDialog = ({ children, onAttemptAdded, drivers, motos }: A
                 <FormItem>
                   <FormLabel>Statut</FormLabel>
                   <FormControl>
-                    <Input placeholder="Ex: En cours" {...field} />
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Choisir une moto" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          {Object.values(AttemptStatus).map((status) => (
+                            <SelectItem key={status} value={status}>
+                              {status}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>

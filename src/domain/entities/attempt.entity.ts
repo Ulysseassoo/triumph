@@ -1,3 +1,4 @@
+import { AttemptStatus } from "../../infrastructure/database/entities/attempt.orm-entity";
 import { Driver } from "./driver.entity";
 import { Moto } from "./moto.entity";
 
@@ -8,7 +9,7 @@ export class Attempt {
     public endDate: Date,
     public startKilometer: number,
     public endKilometer: number,
-    public status: string,
+    public status: AttemptStatus,
     public moto: Moto,
     public driver: Driver
   ) {}

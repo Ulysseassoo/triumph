@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Attempt, Driver, Moto } from "@/lib/apiEntities";
+import { Attempt, AttemptStatus, Driver, Moto } from "@/lib/apiEntities";
 import { Card } from "../ui/Card";
 import { Button } from "../ui/Button";
 import { Input } from "@/components/ui/input";
@@ -25,7 +25,7 @@ export type AttemptFormValues = {
     endDate: string,
     startKilometer: string,
     endKilometer: string,
-    status: string,
+    status: AttemptStatus,
     driver: string,
     moto: string
 };
@@ -40,7 +40,6 @@ const AttemptForm = ({ attempt, onUpdate, drivers, motos }: { attempt: Attempt; 
     const motoOptions = useMemo(() => {
         return motos.map((moto) => ({ id: moto.id, name: `${moto.id} ${moto.model}`, value: moto.id }))
     }, [motos])
-
     const form = useForm<AttemptFormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -138,7 +137,20 @@ const AttemptForm = ({ attempt, onUpdate, drivers, motos }: { attempt: Attempt; 
                             <FormItem>
                                 <FormLabel>Statut</FormLabel>
                                 <FormControl>
-                                    <Input {...field} />
+                                    <Select onValueChange={field.onChange} value={field.value}>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Choisir une moto" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectGroup>
+                                                {Object.values(AttemptStatus).map((status) => (
+                                                    <SelectItem key={status} value={status}>
+                                                        {status}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectGroup>
+                                        </SelectContent>
+                                    </Select>
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -175,7 +187,7 @@ const AttemptForm = ({ attempt, onUpdate, drivers, motos }: { attempt: Attempt; 
                         name="moto"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Conducteur</FormLabel>
+                                <FormLabel>Moto</FormLabel>
                                 <FormControl>
                                     <Select onValueChange={field.onChange} value={field.value}>
                                         <SelectTrigger>

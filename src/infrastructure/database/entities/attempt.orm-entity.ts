@@ -2,6 +2,11 @@ import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
 import { MotoOrmEntity } from "./moto.orm-entity";
 import { DriverOrmEntity } from "./driver.orm-entity";
 
+export enum AttemptStatus {
+  CANCEL = "Annulé",
+  FINISHED = "Terminé",
+  GOING = "En cours",
+}
 @Entity("attempt")
 export class AttemptOrmEntity {
   @PrimaryGeneratedColumn("uuid")
@@ -19,8 +24,8 @@ export class AttemptOrmEntity {
   @Column()
   endKilometer: number;
 
-  @Column()
-  status: string;
+  @Column({ type: "enum", enum: AttemptStatus, nullable: true })
+  status: AttemptStatus;
 
   @ManyToOne(() => MotoOrmEntity, (moto) => moto.attempts, {
     onDelete: "CASCADE",

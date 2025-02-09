@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const apiEntities = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: "http://localhost:5002",
   headers: {
     "Content-Type": "application/json",
   },
@@ -113,17 +113,26 @@ export interface Driver {
   attempts?: Attempt[];
 }
 
+export enum AttemptStatus {
+  CANCEL = "Annulé",
+  FINISHED = "Terminé",
+  GOING = "En cours",
+}
 export interface Attempt {
   id: string;
   startDate: string;
   endDate: string;
   startKilometer: string;
   endKilometer: string;
-  status: string;
+  status: AttemptStatus;
   driver: Driver;
   moto: Moto;
 }
 
+export enum CrashStatus {
+  GOING = "En cours",
+  RESOLVED = "Résolu",
+}
 export interface Crash {
   id: string;
   type: string;
@@ -132,7 +141,7 @@ export interface Crash {
   location: string;
   responsability: string;
   consequence: string;
-  status: string;
+  status: CrashStatus;
   driver: Driver;
   moto: Moto;
 }
@@ -146,6 +155,13 @@ export interface DriverExperience {
   feedback: string;
 }
 
+export enum DriverLicenseStatus {
+  VALID = "Valide",
+  SUSPENDED = "Suspendu",
+  REVOKED = "Révoqué",
+  EXPIRED = "Expiré",
+  PENDING = "En attente",
+}
 export interface DriverLicense {
   id: string;
   licenseNumber: string;
@@ -153,6 +169,7 @@ export interface DriverLicense {
   expiryDate: Date;
   obtainDate: Date;
   country: string;
+  status: DriverLicenseStatus;
 }
 
 export interface Repair {
@@ -316,7 +333,7 @@ export const addAttempt = async (data: {
   endDate: Date;
   startKilometer: number;
   endKilometer: number;
-  status: string;
+  status: AttemptStatus;
   driver: Driver;
   moto: Moto;
 }) => {
@@ -440,7 +457,7 @@ export const addDriverLicense = async (data: {
   expiryDate: Date;
   obtainDate: Date;
   country: string;
-  status: string;
+  status: DriverLicenseStatus;
   driver: Driver;
 }) => {
   const response = await apiEntities.post<DriverLicense>(
