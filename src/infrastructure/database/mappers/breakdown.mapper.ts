@@ -1,6 +1,7 @@
 import { BreakdownOrmEntity } from './../entities/breakdown.orm-entity';
 import { Breakdown } from '../../../domain/entities/breakdown.entity';
 import { ReparationMapper } from './reparation.mapper';
+import { WarrantyMapper } from './warranty.mapper';
 
 export class BreakdownMapper {
   static toOrmEntity(breakdown: Breakdown): BreakdownOrmEntity {
@@ -10,7 +11,7 @@ export class BreakdownMapper {
     ormBreakdown.description = breakdown.description;
     ormBreakdown.date = breakdown.date;
     ormBreakdown.warranty = breakdown.warranty ? WarrantyMapper.toOrmEntity(breakdown.warranty) : null;
-    ormBreakdown.reparations = breakdown.reparations.map(ReparationMapper.toOrmEntity);
+    ormBreakdown.reparations = breakdown.reparations ? breakdown.reparations.map(ReparationMapper.toOrmEntity) : [];
     return ormBreakdown;
   }
 

@@ -1,10 +1,19 @@
-import { Controller, Get, HttpException, HttpStatus, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpException,
+  HttpStatus,
+  Param,
+  UseGuards,
+} from '@nestjs/common';
+import { JwtAuthGuard } from 'src/guardAuth/jwt.guard';
 import { NotificationService } from 'src/services/notification.service';
 
 @Controller('notifications')
 export class NotificationController {
   constructor(private readonly notificationService: NotificationService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Get('user/:userId')
   async getNotificationsByUserId(@Param('userId') userId: string) {
     try {

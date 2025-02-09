@@ -36,7 +36,7 @@ export class NotificationService {
   }
 
   async findByUserId(userId: string): Promise<Notification[]> {
-    return (await this.notificationRepository.findByUserId(userId));
+    return await this.notificationRepository.findByUserId(userId);
   }
 
   @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)

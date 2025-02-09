@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const apiEntities = axios.create({
-  baseURL: "http://localhost:5002",
+  baseURL: "http://localhost:5000",
   headers: {
     "Content-Type": "application/json",
   },
@@ -91,7 +91,15 @@ export interface Breakdown {
   description: string;
   warrantyId?: string;
   status: "PENDING" | "DIAGNOSED" | "RESOLVED";
-  createdAt: string;
+  date: string;
+}
+
+export interface Notification {
+  id: string;
+  userId: string;
+  date: Date;
+  message: string;
+  isRead: boolean;
 }
 
 export interface Driver {
@@ -147,6 +155,21 @@ export interface DriverLicense {
   country: string;
 }
 
+export interface Repair {
+  id: string;
+  breakdownId: string;
+  description: string;
+  cost: number;
+  date: string;
+}
+
+export interface CorrectiveAction {
+  id: string;
+  repairId: string;
+  description: string;
+  date: string;
+}
+
 export const getMaintenances = async () => {
   const response = await apiEntities.get<Maintenance[]>("/maintenances");
   return response.data;
@@ -157,9 +180,45 @@ export const getMotos = async () => {
   return response.data;
 };
 
+export const getMotoById = async (motoId: string | undefined) => {
+  const response = await apiEntities.get<Moto>("/motos/" + motoId);
+  return response.data;
+};
+
 export const getMaintenanceHistory = async (motoId: string) => {
   const response = await apiEntities.get<Maintenance[]>(
-    `/maintenances/historique/${motoId}`
+    `/maintenances/motos/${motoId}/history`
+  );
+  return response.data;
+};
+
+export const getMaintenanceById = async (id: string | undefined) => {
+  const response = await apiEntities.get<Maintenance>("/maintenances/" + id);
+  return response.data;
+};
+
+export const createMaintenance = async (data: {
+  motoId: string;
+  kilometrageInterval: number;
+  recommandations: string;
+  tempsInterval: number;
+}) => {
+  const response = await apiEntities.post<Maintenance>("/maintenances", data);
+  return response.data;
+};
+
+export const updateMaintenance = async (
+  id: string,
+  data: {
+    motoId: string;
+    kilometrageInterval: number;
+    recommandations: string | undefined | null;
+    tempsInterval: number;
+  }
+) => {
+  const response = await apiEntities.put<Maintenance>(
+    "/maintenances/" + id,
+    data
   );
   return response.data;
 };
@@ -189,8 +248,19 @@ export const getBreakdowns = async () => {
   const response = await apiEntities.get<Breakdown[]>("/breakdowns");
   return response.data;
 };
+export const getBreakdownById = async (id: string | undefined) => {
+  const response = await apiEntities.get<Breakdown>("/breakdowns/" + id);
+  return response.data;
+};
 export const getWarranties = async () => {
   const response = await apiEntities.get<Warranty[]>("/warranties");
+  return response.data;
+};
+
+export const getUserNotifications = async (userId?: string) => {
+  const response = await apiEntities.get<Notification[]>(
+    "/notifications/user/" + userId
+  );
   return response.data;
 };
 export const addWarranty = async (data: {
@@ -292,6 +362,40 @@ export const addCrash = async (data: {
   moto: Moto;
 }) => {
   const response = await apiEntities.post<Crash>("/crashes", data);
+  return response.data;
+};
+
+export const getRepairs = async (breakdownId: string) => {
+  const response = await apiEntities.get<Repair[]>(
+    `/reparations/breakdowns/${breakdownId}`
+  );
+  return response.data;
+};
+
+export const createRepair = async (data: {
+  description: string;
+  cost: number;
+  breakdownId: string;
+}) => {
+  const response = await apiEntities.post<Repair>(`/reparations`, data);
+  return response.data;
+};
+
+export const getCorrectiveActions = async (repairId: string) => {
+  const response = await apiEntities.get<CorrectiveAction[]>(
+    `/corrective-actions/reparation/${repairId}`
+  );
+  return response.data;
+};
+
+export const createCorrectiveAction = async (data: {
+  description: string;
+  reparationId: string;
+}) => {
+  const response = await apiEntities.post<CorrectiveAction>(
+    `/corrective-actions`,
+    data
+  );
   return response.data;
 };
 

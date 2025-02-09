@@ -17,10 +17,14 @@ import NotFound from "./pages/NotFound";
 import MotoDetails from "./pages/MotoDetails";
 import Breakdowns from "./pages/Breakdowns";
 import Warranties from "./pages/Warranties";
+import Motos from "./pages/Motos";
+import Maintenances from "./pages/Maintenances";
 import Drivers from "./pages/Drivers";
 import Attempts from "./pages/Attempts";
 import Crashes from "./pages/Crashes";
 import DriverDetails from "./pages/DriverDetails";
+import BreakdownDetails from "./pages/BreakdownDetails";
+import MaintenanceDetails from "./pages/MaintenanceDetails";
 import AttemptDetails from "./pages/AttemptDetail";
 import CrashDetails from "./pages/CrashDetail";
 
@@ -38,6 +42,7 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/motos/:id" element={<MotoDetails />} />
               <Route path="/pannes" element={<Breakdowns />} />
+              <Route path="/pannes/:id" element={<BreakdownDetails />} />
               <Route path="/garanties" element={<Warranties />} />
               <Route path="/pieces/user" element={<PieceUser />} />
               <Route path="/create/piece" element={<CreatePiece />} />
@@ -46,10 +51,11 @@ function App() {
               <Route path="/create/order" element={<CreateOrder />} />
               <Route path="/orders/staff" element={<OrderStaff />} />
               <Route path="/orders/edit/:id" element={<OrderEdit />} />
-
+              <Route path="/motos" element={<Motos />} />
+              <Route path="/maintenances" element={<Maintenances />} />
+              <Route path="/maintenances/:id" element={<MaintenanceDetails />} />
               <Route path="/conducteurs" element={<Drivers />} />
               <Route path="/conducteur/:id" element={<DriverDetails />} />
-
               <Route path="/essais" element={<Attempts />} />
               <Route path="/essai/:id" element={<AttemptDetails />} />
 

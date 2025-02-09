@@ -14,13 +14,10 @@ import {
   getOverdueMaintenances,
   getPendingMaintenances,
 } from "@/utils/maintenanceUtils";
-import { BreakdownStepper } from "@/components/breakdown/BreakdownStepper";
 
 const Dashboard = () => {
   const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
   const [motos, setMotos] = useState<Moto[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  console.log(isLoading);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -32,9 +29,7 @@ const Dashboard = () => {
         setMotos(motosData);
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
-      } finally {
-        setIsLoading(false);
-      }
+      } 
     };
 
     fetchData();
@@ -90,10 +85,6 @@ const Dashboard = () => {
             <h2 className="text-xl font-semibold">Motos</h2>
             <MotoTable motos={motos} />
           </div>
-        </div>
-
-        <div className="mt-8">
-          <BreakdownStepper />
         </div>
       </div>
     </DashboardLayout>

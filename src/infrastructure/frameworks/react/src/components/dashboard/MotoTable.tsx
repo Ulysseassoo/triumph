@@ -6,7 +6,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Maintenance, Moto } from "@/lib/apiEntities";
+import { Moto } from "@/lib/apiEntities";
+import { getLastPlannedMaintenanceDate } from "@/utils/maintenanceUtils";
 import { useNavigate } from "react-router-dom";
 
 interface MotoTableProps {
@@ -14,24 +15,6 @@ interface MotoTableProps {
 }
 
 export const MotoTable = ({ motos }: MotoTableProps) => {
-  const getLastPlannedMaintenanceDate = (
-    maintenances: Maintenance[]
-  ): Date | null => {
-    if (!maintenances || maintenances.length === 0) {
-      return null;
-    }
-
-    const sortedMaintenances = maintenances
-      .filter((maintenance) => maintenance.plannedDate)
-      .sort(
-        (a, b) =>
-          new Date(b.plannedDate).getTime() - new Date(a.plannedDate).getTime()
-      );
-
-    return sortedMaintenances.length > 0
-      ? new Date(sortedMaintenances[0].plannedDate)
-      : null;
-  };
   const navigate = useNavigate();
 
   return (

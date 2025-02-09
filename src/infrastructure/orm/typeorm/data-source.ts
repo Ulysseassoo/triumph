@@ -19,7 +19,7 @@ export const AppDataSource = () => {
 				synchronize: true,
 				entities: [join(__dirname,"../../../", "infrastructure", "database", "entities", "*.ts")],
 				migrations: [join(__dirname, "..", "migrations", "*.{ts,js}")],
-				logging: true
+				logging: false
 			});
 		} else {
 			dataSource =  new DataSource({
@@ -32,7 +32,7 @@ export const AppDataSource = () => {
 				synchronize: process.env.NODE_ENV !== "production",
 				entities: [join(__dirname,"../../../", "infrastructure", "database", "entities", "*.ts")],
 				migrations: [join(__dirname, "..", "migrations", "*.{ts,js}")],
-				logging: true
+				logging: false
 			});
 		}
 	}

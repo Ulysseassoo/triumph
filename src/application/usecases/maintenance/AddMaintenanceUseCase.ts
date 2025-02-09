@@ -37,12 +37,24 @@ export class AddMaintenanceUseCase {
     if (!moto.isEligibleForMaintenance(kilometrageInterval, tempsInterval)) {
       throw new BadRequestException("La moto n’est pas encore éligible pour un entretien");
     }
+
+    // Calcul de la prochaine date et du prochain kilométrage
+    const lastMaintenance = await this.repository.findLatestByMotoId(motoId);
+
+    const plannedDate = new Date();
+    plannedDate.setMonth(
+      plannedDate.getMonth() + tempsInterval,
+      lastMaintenance?.plannedDate.getDate() || new Date().getDate()
+    );
+
+    const plannedMileage = (lastMaintenance?.mileage || moto.currentMileage) + kilometrageInterval;
+
     const maintenance = new Maintenance(
       v4(),
       motoId,
       MaintenanceType.PREVENTIF,
-      new Date(),
-      moto.currentMileage,
+      plannedDate,
+      plannedMileage,
       null,
       { mileage: kilometrageInterval, timeInMonths: tempsInterval },
       recommandations,
@@ -54,7 +66,7 @@ export class AddMaintenanceUseCase {
     // Envoyer une notification au client
     await this.sendNotificationUseCase.execute({
       clientPartnerId: moto.partner.id,
-      message: `Un entretien a été planifié pour votre moto (${moto.model})`,
+      message: `Un entretien a été planifié pour votre moto (${moto.model}) à ${plannedMileage}km`,
     });
 
     return newMaintenance;

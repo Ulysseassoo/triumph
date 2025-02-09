@@ -1,9 +1,10 @@
-import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { BreakdownRepositoryInterface } from '../../../../../application/repositories/BreakdownRepositoryInterface';
 import { BreakdownOrmEntity } from '../../../../database/entities/breakdown.orm-entity';
-import { Breakdown } from "../../../../../domain/entities/breakdown.entity";
+import { Breakdown } from '../../../../../domain/entities/breakdown.entity';
+import { BreakdownMapper } from '../../../../database/mappers/breakdown.mapper';
 
 @Injectable()
 export class BreakdownRepository implements BreakdownRepositoryInterface {
@@ -22,5 +23,10 @@ export class BreakdownRepository implements BreakdownRepositoryInterface {
 
   async findByMotoId(motoId: string): Promise<Breakdown[]> {
     return await this.repository.find({ where: { motoId } });
+  }
+
+  async findAll(): Promise<Breakdown[]> {
+    const warranties = await this.repository.find();
+    return warranties.map((breakdown) => BreakdownMapper.toOrmEntity(breakdown));
   }
 }

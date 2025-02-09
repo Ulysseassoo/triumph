@@ -100,7 +100,7 @@ export class AuthController {
         isVerified: user.isVerified 
       },
       this.accessTokenSecret,
-      { expiresIn: '15m' }
+      { expiresIn: '1d' }
     );
   }
 

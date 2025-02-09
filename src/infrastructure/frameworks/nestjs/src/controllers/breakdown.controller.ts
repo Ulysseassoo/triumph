@@ -1,14 +1,33 @@
-import { Controller, Get, Post, Body, Param, Put, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Put,
+  HttpException,
+  HttpStatus,
+  UseGuards,
+} from '@nestjs/common';
 import { BreakdownService } from '../services/breakdown.service';
+import { Breakdown } from '../../../../../domain/entities/breakdown.entity';
+import { JwtAuthGuard } from 'src/guardAuth/jwt.guard';
 
 @Controller('breakdowns')
 export class BreakdownController {
   constructor(private readonly breakdownService: BreakdownService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
-  async createBreakdown(@Body('motoId') motoId: string, @Body('description') description: string) {
+  async createBreakdown(
+    @Body('motoId') motoId: string,
+    @Body('description') description: string,
+  ) {
     try {
-      const breakdown = await this.breakdownService.createBreakdown(motoId, description);
+      const breakdown = await this.breakdownService.createBreakdown(
+        motoId,
+        description,
+      );
       return {
         message: 'Breakdown created successfully',
         breakdown,
@@ -21,8 +40,12 @@ export class BreakdownController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
   @Put(':breakdownId/associate-warranty')
-  async associateWarranty(@Param('breakdownId') breakdownId: string, @Body('warrantyId') warrantyId: string) {
+  async associateWarranty(
+    @Param('breakdownId') breakdownId: string,
+    @Body('warrantyId') warrantyId: string,
+  ) {
     try {
       await this.breakdownService.associateWarranty(breakdownId, warrantyId);
       return { message: 'Warranty associated successfully.' };
@@ -34,6 +57,13 @@ export class BreakdownController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Get()
+  async findAll(): Promise<Breakdown[]> {
+    return await this.breakdownService.findAll();
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   async findById(@Param('id') id: string) {
     try {
@@ -50,6 +80,7 @@ export class BreakdownController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('moto/:motoId')
   async findByMotoId(@Param('motoId') motoId: string) {
     try {

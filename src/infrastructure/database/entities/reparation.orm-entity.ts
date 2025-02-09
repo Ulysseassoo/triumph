@@ -22,6 +22,6 @@ export class ReparationOrmEntity {
   @ManyToOne(() => BreakdownOrmEntity, (breakdown) => breakdown.reparations)
   breakdown: BreakdownOrmEntity;
 
-  @OneToMany(() => CorrectiveActionOrmEntity, (correctiveAction) => correctiveAction.reparation)
+  @OneToMany(() => CorrectiveActionOrmEntity, (correctiveAction) => correctiveAction.reparation, { eager: true })
   correctiveActions: CorrectiveActionOrmEntity[];
 }
