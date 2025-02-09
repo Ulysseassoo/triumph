@@ -1,9 +1,9 @@
-import { Request } from 'express';
-import { TypeOrmUserRepository } from '../repositories/user.repository';
-import { User } from '../../../../../domain/entities/user.entity';
-import { authConfig } from '../config/auth.config';
-import jwt, { Secret } from 'jsonwebtoken';
-import { v4 as uuidv4 } from 'uuid';
+import { Request } from "express";
+import { TypeOrmUserRepository } from "../repositories/user.repository";
+import { User } from "../../../../../domain/entities/user.entity";
+import { authConfig } from "../config/auth.config";
+import jwt, { Secret } from "jsonwebtoken";
+import { v4 as uuidv4 } from "uuid";
 
 interface AuthResponse {
   user?: Partial<User>;
@@ -23,21 +23,14 @@ export class AuthController {
   }
 
   async register(req: Request): Promise<AuthResponse> {
-    const { name, email, password,isVerified,role } = req.body;
-    
+    const { name, email, password, isVerified, role } = req.body;
+
     const isEmailUnique = await this.userRepository.isEmailUnique(email);
     if (!isEmailUnique) {
-      throw new Error('Email already exists');
+      throw new Error("Email already exists");
     }
 
-    const user = new User(
-      uuidv4(),
-      name,
-      email,
-      password,
-      isVerified,
-      role
-    );
+    const user = new User(uuidv4(), name, email, password, isVerified, role);
 
     const savedUser = await this.userRepository.create(user);
     return {
@@ -45,8 +38,8 @@ export class AuthController {
         id: savedUser.id,
         name: savedUser.name,
         email: savedUser.email,
-        password: savedUser.password
-      }
+        password: savedUser.password,
+      },
     };
   }
 
@@ -55,11 +48,11 @@ export class AuthController {
 
     const user = await this.userRepository.getUserValidate(email, password);
     if (!user) {
-      throw new Error('Invalid credentials');
+      throw new Error("Invalid credentials");
     }
 
     if (!user.isVerified) {
-      throw new Error('Email not verified');
+      throw new Error("Email not verified");
     }
 
     const accessToken = this.generateAccessToken(user);
@@ -67,27 +60,30 @@ export class AuthController {
 
     return {
       accessToken,
-      refreshToken
+      refreshToken,
     };
   }
 
   async refreshToken(req: Request): Promise<AuthResponse> {
     const { refreshToken } = req.body;
 
-    const decoded = jwt.verify(refreshToken, this.refreshTokenSecret) as jwt.JwtPayload;
+    const decoded = jwt.verify(
+      refreshToken,
+      this.refreshTokenSecret
+    ) as jwt.JwtPayload;
     const user = await this.userRepository.findById(decoded.id);
-    
+
     if (!user) {
-      throw new Error('Invalid token');
+      throw new Error("Invalid token");
     }
 
     if (!user.isVerified) {
-      throw new Error('Email not verified');
+      throw new Error("Email not verified");
     }
 
     const newAccessToken = this.generateAccessToken(user);
     return {
-      accessToken: newAccessToken
+      accessToken: newAccessToken,
     };
   }
 
@@ -97,10 +93,10 @@ export class AuthController {
         id: user.id,
         email: user.email,
         role: user.role,
-        isVerified: user.isVerified 
+        isVerified: user.isVerified,
       },
       this.accessTokenSecret,
-      { expiresIn: '1d' }
+      { expiresIn: "1d" }
     );
   }
 
@@ -110,10 +106,10 @@ export class AuthController {
         id: user.id,
         email: user.email,
         role: user.role,
-        isVerified: user.isVerified
+        isVerified: user.isVerified,
       },
       this.refreshTokenSecret,
-      { expiresIn: '7d' }
+      { expiresIn: "7d" }
     );
   }
 }

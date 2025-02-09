@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Crash, Driver, Moto } from "@/lib/apiEntities";
+import { Crash, CrashStatus, Driver, Moto } from "@/lib/apiEntities";
 import { Card } from "../ui/Card";
 import { Button } from "../ui/Button";
 import { Input } from "@/components/ui/input";
@@ -28,7 +28,7 @@ export type CrashFormValues = {
     location: string;
     responsability: string;
     consequence: string;
-    status: string;
+    status: CrashStatus;
     driver: string;
     moto: string;
 };
@@ -167,13 +167,20 @@ const CrashForm = ({ crash, onUpdate, drivers, motos }: { crash: Crash; onUpdate
                         control={form.control}
                         name="status"
                         render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Statut</FormLabel>
-                                <FormControl>
-                                    <Input {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
+                            <Select onValueChange={field.onChange} value={field.value}>
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Choisir une moto" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                        {Object.values(CrashStatus).map((status) => (
+                                            <SelectItem key={status} value={status}>
+                                                {status}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
                         )}
                     />
                     <FormField

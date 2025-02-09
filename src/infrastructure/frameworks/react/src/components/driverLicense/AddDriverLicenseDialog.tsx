@@ -20,7 +20,8 @@ import {
 } from "../ui/Form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { addDriverLicense, Driver, DriverLicense } from "@/lib/apiEntities";
+import { addDriverLicense, Driver, DriverLicense, DriverLicenseStatus } from "@/lib/apiEntities";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Button } from "../ui/Button";
 
 const formSchema = z.object({
@@ -44,7 +45,7 @@ type FormValues = {
   expiryDate: string,
   obtainDate: string,
   country: string,
-  status: string,
+  status: DriverLicenseStatus,
 };
 
 export const AddDriverLicenseDialog = ({
@@ -64,7 +65,7 @@ export const AddDriverLicenseDialog = ({
       expiryDate: new Date().toISOString().split("T")[0],
       obtainDate: new Date().toISOString().split("T")[0],
       country: "",
-      status: "",
+      status: DriverLicenseStatus.VALID,
     },
   });
 
@@ -183,7 +184,20 @@ export const AddDriverLicenseDialog = ({
                 <FormItem>
                   <FormLabel>Statut</FormLabel>
                   <FormControl>
-                    <Input placeholder="Ex: En cours de validitité" {...field} />
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Choisir une moto" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          {Object.values(DriverLicenseStatus).map((status) => (
+                            <SelectItem key={status} value={status}>
+                              {status}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>

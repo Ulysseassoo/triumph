@@ -1,4 +1,8 @@
-import { Injectable, ExecutionContext, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  ExecutionContext,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Observable } from 'rxjs';
 import * as jwt from 'jsonwebtoken';
@@ -38,35 +42,34 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         isVerified?: boolean;
       };
 
-  
-
-      
       if (!decoded.isVerified) {
         throw new UnauthorizedException('Email not verified');
       }
 
-      const userRoles = Array.isArray(decoded.role) ? decoded.role : 
-                       typeof decoded.role === 'string' ? [decoded.role] : 
-                       [];
-
+      const userRoles = Array.isArray(decoded.role)
+        ? decoded.role
+        : typeof decoded.role === 'string'
+          ? [decoded.role]
+          : [];
 
       request.user = {
         id: decoded.id,
         email: decoded.email,
         role: userRoles,
-        isVerified: decoded.isVerified
+        isVerified: decoded.isVerified,
       };
 
-      const requiredRoles = this.reflector.get<string[]>('roles', context.getHandler());
-    
+      const requiredRoles = this.reflector.get<string[]>(
+        'roles',
+        context.getHandler(),
+      );
 
       if (requiredRoles && requiredRoles.length > 0) {
         const hasRole = this.matchRoles(requiredRoles, userRoles);
 
-
         if (!hasRole) {
           throw new UnauthorizedException(
-            `Insufficient permissions. Required roles: ${requiredRoles.join(', ')}, User roles: ${userRoles.join(', ')}`
+            `Insufficient permissions. Required roles: ${requiredRoles.join(', ')}, User roles: ${userRoles.join(', ')}`,
           );
         }
       }
@@ -90,11 +93,14 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     return bearer === 'Bearer' ? token : undefined;
   }
 
-  private matchRoles(requiredRoles: string[], userRoles: string[] = []): boolean {
-    return requiredRoles.some(role => 
-      userRoles.some(userRole => 
-        userRole.toLowerCase() === role.toLowerCase()
-      )
+  private matchRoles(
+    requiredRoles: string[],
+    userRoles: string[] = [],
+  ): boolean {
+    return requiredRoles.some((role) =>
+      userRoles.some(
+        (userRole) => userRole.toLowerCase() === role.toLowerCase(),
+      ),
     );
   }
 }
