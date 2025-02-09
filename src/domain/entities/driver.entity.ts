@@ -1,3 +1,4 @@
+import { Attempt } from "./attempt.entity";
 import { Crash } from "./crash.entity";
 import { DriverExperience } from "./driverExperience.entity";
 import { DriverLicense } from "./driverLicense.entity";
@@ -9,8 +10,9 @@ export class Driver {
     public lastname: string,
     public birthdate: Date,
     public addresse: string,
-    public licenses: DriverLicense[],
-    public experiences: DriverExperience[],
-    public crash: Crash
+    public licenses: DriverLicense[] = [],
+    public experiences: DriverExperience[] = [],
+    public crashes: Crash[] = [],
+    public attempts: Attempt[] = []
   ) {}
 }

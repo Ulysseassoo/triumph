@@ -1,3 +1,4 @@
+import { Attempt } from "./attempt.entity";
 import { Maintenance } from "./maintenance.entity";
 import { Partner } from "./partner.entity";
 
@@ -15,7 +16,8 @@ export class Moto {
     public currentMileage: number,
     public price: number,
     public status: MotoStatus,
-    public maintenances: Maintenance[] = []
+    public maintenances: Maintenance[] = [],
+    public attempts: Attempt[] = []
   ) {}
 
   isEligibleForMaintenance(

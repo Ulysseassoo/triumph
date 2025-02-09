@@ -13,8 +13,8 @@ export class CreateAttemptUseCase {
     startKilometer,
     endKilometer,
     status,
-    licenses,
-    experiences,
+    driver,
+    moto,
   }: AttemptWithoutId): Promise<Attempt | null> {
     const attempt = new Attempt(
       v4(),
@@ -23,8 +23,8 @@ export class CreateAttemptUseCase {
       startKilometer,
       endKilometer,
       status,
-      licenses,
-      experiences
+      moto,
+      driver
     );
 
     const newAttempt = await this.attemptRepository.create(attempt);

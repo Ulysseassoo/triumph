@@ -16,7 +16,7 @@ import { JwtAuthGuard } from '../guardAuth/jwt.guard';
 import { Roles } from '../role.decorator';
 import { DriverLicenseService } from 'src/services/driverLicense.service';
 
-@Controller('driverLicenses')
+@Controller('driver-licenses')
 export class DriverLicenseController {
   constructor(private readonly driverLicenseService: DriverLicenseService) {}
 

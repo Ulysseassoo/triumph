@@ -36,6 +36,7 @@ export interface Moto {
   price: number;
   status: MotoStatus;
   maintenances?: Maintenance[];
+  attempts?: Attempt[];
 }
 
 export interface Partner {
@@ -105,35 +106,40 @@ export interface Driver {
   id: string;
   firstname: string;
   lastname: string;
-  birthdate: Date;
+  birthdate: string;
   addresse: string;
-  experiences: DriverExperience[];
-  licenses: DriverLicense[];
+  experiences?: DriverExperience[];
+  licenses?: DriverLicense[];
+  attempts?: Attempt[];
 }
 
 export interface Attempt {
   id: string;
-  startDate: Date;
-  endDate: Date;
-  startKilometer: number;
-  endKilometer: number;
+  startDate: string;
+  endDate: string;
+  startKilometer: string;
+  endKilometer: string;
   status: string;
+  driver: Driver;
+  moto: Moto;
 }
 
 export interface Crash {
   id: string;
   type: string;
-  date: Date;
+  date: string;
   description: string;
   location: string;
   responsability: string;
   consequence: string;
   status: string;
+  driver: Driver;
+  moto: Moto;
 }
 
 export interface DriverExperience {
   id: string;
-  duration: number;
+  duration: string;
   type: string;
   rented: boolean;
   professional: boolean;
@@ -199,17 +205,23 @@ export const createMaintenance = async (data: {
 }) => {
   const response = await apiEntities.post<Maintenance>("/maintenances", data);
   return response.data;
-}
+};
 
-export const updateMaintenance = async (id: string, data: {
-  motoId: string;
-  kilometrageInterval: number;
-  recommandations: string | undefined | null;
-  tempsInterval: number;
-}) => {
-  const response = await apiEntities.put<Maintenance>("/maintenances/" + id, data);
+export const updateMaintenance = async (
+  id: string,
+  data: {
+    motoId: string;
+    kilometrageInterval: number;
+    recommandations: string | undefined | null;
+    tempsInterval: number;
+  }
+) => {
+  const response = await apiEntities.put<Maintenance>(
+    "/maintenances/" + id,
+    data
+  );
   return response.data;
-}
+};
 
 export const scheduleMaintenance = async (data: {
   motoId: string;
@@ -246,7 +258,9 @@ export const getWarranties = async () => {
 };
 
 export const getUserNotifications = async (userId?: string) => {
-  const response = await apiEntities.get<Notification[]>("/notifications/user/" + userId);
+  const response = await apiEntities.get<Notification[]>(
+    "/notifications/user/" + userId
+  );
   return response.data;
 };
 export const addWarranty = async (data: {
@@ -292,14 +306,35 @@ export const getAttempts = async () => {
   return response.data;
 };
 
+export const getAttemptById = async (id: string) => {
+  const response = await apiEntities.get<Attempt>(`/attempts/${id}`);
+  return response.data;
+};
+
 export const addAttempt = async (data: {
   startDate: Date;
   endDate: Date;
   startKilometer: number;
   endKilometer: number;
   status: string;
+  driver: Driver;
+  moto: Moto;
 }) => {
   const response = await apiEntities.post<Attempt>("/attempts", data);
+  return response.data;
+};
+
+export const updateAttempt = async (data: {
+  id: string;
+  startDate: Date;
+  endDate: Date;
+  startKilometer: string;
+  endKilometer: string;
+  status: string;
+  driver: Driver;
+  moto: Moto;
+}) => {
+  const response = await apiEntities.put<Attempt>(`/attempts/${data.id}`, data);
   return response.data;
 };
 
@@ -307,6 +342,11 @@ export const addAttempt = async (data: {
 
 export const getCrashes = async () => {
   const response = await apiEntities.get<Crash[]>("/crashes");
+  return response.data;
+};
+
+export const getCrashById = async (id: string) => {
+  const response = await apiEntities.get<Crash>(`/crashes/${id}`);
   return response.data;
 };
 
@@ -318,13 +358,17 @@ export const addCrash = async (data: {
   responsability: string;
   consequence: string;
   status: string;
+  driver: Driver;
+  moto: Moto;
 }) => {
   const response = await apiEntities.post<Crash>("/crashes", data);
   return response.data;
 };
 
 export const getRepairs = async (breakdownId: string) => {
-  const response = await apiEntities.get<Repair[]>(`/reparations/breakdowns/${breakdownId}`);
+  const response = await apiEntities.get<Repair[]>(
+    `/reparations/breakdowns/${breakdownId}`
+  );
   return response.data;
 };
 
@@ -338,7 +382,9 @@ export const createRepair = async (data: {
 };
 
 export const getCorrectiveActions = async (repairId: string) => {
-  const response = await apiEntities.get<CorrectiveAction[]>(`/corrective-actions/reparation/${repairId}`);
+  const response = await apiEntities.get<CorrectiveAction[]>(
+    `/corrective-actions/reparation/${repairId}`
+  );
   return response.data;
 };
 
@@ -346,7 +392,61 @@ export const createCorrectiveAction = async (data: {
   description: string;
   reparationId: string;
 }) => {
-  const response = await apiEntities.post<CorrectiveAction>(`/corrective-actions`, data);
+  const response = await apiEntities.post<CorrectiveAction>(
+    `/corrective-actions`,
+    data
+  );
+  return response.data;
+};
+
+export const updateCrash = async (data: {
+  id: string;
+  type: string;
+  date: string;
+  description: string;
+  location: string;
+  responsability: string;
+  consequence: string;
+  status: string;
+  driver: Driver;
+  moto: Moto;
+}) => {
+  const response = await apiEntities.put<Crash>(`/crashes/${data.id}}`, data);
+  return response.data;
+};
+
+// experience
+
+export const addDriverExperience = async (data: {
+  duration: string;
+  type: string;
+  rented: boolean;
+  professional: boolean;
+  feedback: string;
+  driver: Driver;
+}) => {
+  const response = await apiEntities.post<DriverExperience>(
+    "/driver-experiences",
+    data
+  );
+  return response.data;
+};
+
+// driving license
+
+export const addDriverLicense = async (data: {
+  licenseNumber: string;
+  category: string;
+  expiryDate: Date;
+  obtainDate: Date;
+  country: string;
+  status: string;
+  driver: Driver;
+}) => {
+  const response = await apiEntities.post<DriverLicense>(
+    "/driver-licenses",
+    data
+  );
   return response.data;
 };
 

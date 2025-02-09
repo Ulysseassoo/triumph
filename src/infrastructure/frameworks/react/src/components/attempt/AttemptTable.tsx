@@ -9,10 +9,13 @@ import {
 import { Attempt } from "@/lib/apiEntities";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
+import { useNavigate } from "react-router-dom";
 interface AttemptTableProps {
   attempts: Attempt[];
 }
 export const AttemptTable = ({ attempts }: AttemptTableProps) => {
+  const navigate = useNavigate()
+  console.log(attempts)
   return (
     <div className="rounded-md border bg-white/80 backdrop-blur-sm">
       <Table>
@@ -24,11 +27,13 @@ export const AttemptTable = ({ attempts }: AttemptTableProps) => {
             <TableHead>Kilométrage de départ</TableHead>
             <TableHead>Kilométrage de fin</TableHead>
             <TableHead>Statut</TableHead>
+            <TableHead>Conducteur</TableHead>
+            <TableHead>Moto</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {attempts.map((attempt) => (
-            <TableRow key={attempt.id}>
+            <TableRow key={attempt.id} style={{ cursor: "pointer" }} onClick={() => navigate(`/essai/${attempt.id}`)}>
               <TableCell>{attempt.id}</TableCell>
               <TableCell>
                 {format(new Date(attempt.startDate), "d MMMM yyyy", {
@@ -43,6 +48,8 @@ export const AttemptTable = ({ attempts }: AttemptTableProps) => {
               <TableCell>{attempt.startKilometer}</TableCell>
               <TableCell>{attempt.endKilometer}</TableCell>
               <TableCell>{attempt.status}</TableCell>
+              <TableCell className="text-center">{attempt.driver ? attempt.driver.firstname + " " + attempt.driver.lastname : "-"}</TableCell>
+              <TableCell>{attempt.moto ? attempt.moto.id : "-"}</TableCell>
             </TableRow>
           ))}
         </TableBody>
