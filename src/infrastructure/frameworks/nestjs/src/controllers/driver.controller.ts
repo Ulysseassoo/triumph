@@ -30,8 +30,9 @@ export class DriverController {
       birthdate,
       addresse,
       licenses,
-      crash,
+      crashes,
       experiences,
+      attempts,
     }: Driver,
   ): Promise<Driver> {
     try {
@@ -42,7 +43,8 @@ export class DriverController {
         addresse,
         licenses,
         experiences,
-        crash,
+        crashes,
+        attempts,
       });
     } catch (error) {
       throw new HttpException(

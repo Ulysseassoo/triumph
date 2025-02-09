@@ -1,7 +1,11 @@
 import { Attempt } from "../../../domain/entities/attempt.entity";
 import { AttemptOrmEntity } from "../entities/attempt.orm-entity";
+import { DriverOrmEntity } from "../entities/driver.orm-entity";
+import { MotoOrmEntity } from "../entities/moto.orm-entity";
+import { DriverMapper } from "./driver.mapper";
 import { DriverExperienceMapper } from "./driverExperience.mapper";
 import { DriverLicenseMapper } from "./driverLicense.mapper";
+import { MotoMapper } from "./moto.mapper";
 
 export class AttemptMapper {
   static toOrmEntity(attempt: Attempt): AttemptOrmEntity {
@@ -12,10 +16,8 @@ export class AttemptMapper {
     ormAttempt.startKilometer = attempt.startKilometer;
     ormAttempt.endKilometer = attempt.endKilometer;
     ormAttempt.status = attempt.status;
-    ormAttempt.licenses =
-      attempt.licenses?.map(DriverLicenseMapper.toOrmEntity) || [];
-    ormAttempt.experiences =
-      attempt.experiences?.map(DriverExperienceMapper.toOrmEntity) || [];
+    ormAttempt.moto = MotoMapper.toOrmEntity(attempt.moto) ?? null;
+    ormAttempt.driver = DriverMapper.toOrmEntity(attempt.driver) ?? null;
     return ormAttempt;
   }
 
@@ -27,8 +29,8 @@ export class AttemptMapper {
       ormAttempt.startKilometer,
       ormAttempt.endKilometer,
       ormAttempt.status,
-      ormAttempt.licenses?.map(DriverLicenseMapper.toDomainEntity) || [],
-      ormAttempt.experiences?.map(DriverExperienceMapper.toDomainEntity) || []
+      ormAttempt.moto ? MotoMapper.toDomainEntity(ormAttempt.moto) : null,
+      ormAttempt.driver ? DriverMapper.toDomainEntity(ormAttempt.driver) : null
     );
   }
 }

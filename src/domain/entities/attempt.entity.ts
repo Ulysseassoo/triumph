@@ -1,5 +1,5 @@
-import { DriverExperience } from "./driverExperience.entity";
-import { DriverLicense } from "./driverLicense.entity";
+import { Driver } from "./driver.entity";
+import { Moto } from "./moto.entity";
 
 export class Attempt {
   constructor(
@@ -9,7 +9,7 @@ export class Attempt {
     public startKilometer: number,
     public endKilometer: number,
     public status: string,
-    public licenses: DriverLicense[],
-    public experiences: DriverExperience[]
+    public moto: Moto,
+    public driver: Driver
   ) {}
 }

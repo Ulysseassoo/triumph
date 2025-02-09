@@ -1,20 +1,26 @@
 import { useEffect, useState } from "react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { AddCrashDialog } from "@/components/crash/AddCrashDialog";
-import { Crash, getCrashes } from "@/lib/apiEntities";
+import { Crash, Driver, getCrashes, getDrivers, getMotos, Moto } from "@/lib/apiEntities";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { CrashTable } from "@/components/crash/CrashTable";
 
 const Crashes = () => {
     const [crashes, setCrashes] = useState<Crash[]>([]);
+    const [drivers, setDrivers] = useState<Driver[]>([])
+    const [motos, setMotos] = useState<Moto[]>([])
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const data = await getCrashes();
+                const drivers = await getDrivers();
+                const motos = await getMotos();
                 setCrashes(data);
+                setDrivers(drivers)
+                setMotos(motos)
             } catch (error) {
                 console.error("Error fetching crashes:", error);
             } finally {
@@ -50,7 +56,7 @@ const Crashes = () => {
                             Gestion des accidents
                         </p>
                     </div>
-                    <AddCrashDialog onCrashAdded={handleCrashAdded}>
+                    <AddCrashDialog onCrashAdded={handleCrashAdded} drivers={drivers} motos={motos}>
                         <Button>
                             <Plus className="mr-2 h-4 w-4" />
                             Ajouter un accident

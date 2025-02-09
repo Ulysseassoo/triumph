@@ -30,8 +30,8 @@ export class AttemptController {
       startKilometer,
       endKilometer,
       status,
-      licenses,
-      experiences,
+      driver,
+      moto,
     }: Attempt,
   ): Promise<Attempt> {
     try {
@@ -41,8 +41,8 @@ export class AttemptController {
         startKilometer,
         endKilometer,
         status,
-        licenses,
-        experiences,
+        driver,
+        moto,
       });
     } catch (error) {
       throw new HttpException(
@@ -60,8 +60,6 @@ export class AttemptController {
     @Query('startKilometer') startKilometer?: number,
     @Query('endKilometer') endKilometer?: number,
     @Query('status') status?: string,
-    @Query('licenses') licenses?: string,
-    @Query('experiences') experiences?: string,
     @Query('offset') offset?: number,
     @Query('limit') limit?: number,
   ): Promise<Attempt[]> {
@@ -72,8 +70,6 @@ export class AttemptController {
         startKilometer ||
         endKilometer ||
         status ||
-        licenses ||
-        experiences ||
         offset ||
         limit
       ) {
@@ -83,8 +79,6 @@ export class AttemptController {
           ...(startKilometer && { startKilometer: Number(startKilometer) }),
           ...(endKilometer && { endKilometer: Number(endKilometer) }),
           ...(status && { status }),
-          ...(licenses && { licenses }),
-          ...(experiences && { experiences }),
           pagination: {
             ...(offset && { offset: Number(offset) }),
             ...(limit && { limit: Number(limit) }),

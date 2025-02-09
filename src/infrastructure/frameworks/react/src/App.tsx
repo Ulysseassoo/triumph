@@ -21,6 +21,8 @@ import Drivers from "./pages/Drivers";
 import Attempts from "./pages/Attempts";
 import Crashes from "./pages/Crashes";
 import DriverDetails from "./pages/DriverDetails";
+import AttemptDetails from "./pages/AttemptDetail";
+import CrashDetails from "./pages/CrashDetail";
 
 const queryClient = new QueryClient();
 
@@ -49,7 +51,11 @@ function App() {
               <Route path="/conducteur/:id" element={<DriverDetails />} />
 
               <Route path="/essais" element={<Attempts />} />
+              <Route path="/essai/:id" element={<AttemptDetails />} />
+
               <Route path="/accidents" element={<Crashes />} />
+              <Route path="/accident/:id" element={<CrashDetails />} />
+
               <Route path="*" element={<NotFound />} />
             </Routes>
             <Toaster />

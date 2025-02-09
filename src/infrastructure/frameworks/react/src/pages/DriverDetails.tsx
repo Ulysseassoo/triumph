@@ -60,13 +60,13 @@ const DriverDetails = () => {
     }, [driver, id, toast])
 
     const handleAddExperienceCard = useCallback((experience: DriverExperience) => {
-        if (driver) {
+        if (driver && driver.experiences) {
             setDriver({ ...driver, experiences: [...driver.experiences, experience] })
         }
     }, [driver])
 
     const handleAddLicenseCard = useCallback((license: DriverLicense) => {
-        if (driver) {
+        if (driver && driver.licenses) {
             setDriver({ ...driver, licenses: [...driver.licenses, license] })
         }
     }, [driver])

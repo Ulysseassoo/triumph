@@ -25,7 +25,8 @@ export class DriverService {
     addresse,
     licenses,
     experiences,
-    crash,
+    crashes,
+    attempts,
   }: DriverWithoutId): Promise<Driver> {
     const createDriverUseCase = new CreateDriverUseCase(this.driverRepository);
 
@@ -36,7 +37,8 @@ export class DriverService {
       addresse,
       licenses,
       experiences,
-      crash,
+      crashes,
+      attempts,
     });
   }
 

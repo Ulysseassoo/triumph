@@ -10,6 +10,7 @@ import {
 } from "typeorm";
 import { PartnerOrmEntity } from "./partner.orm-entity";
 import { CrashOrmEntity } from "./crash.orm-entity";
+import { AttemptOrmEntity } from "./attempt.orm-entity";
 
 @Entity("moto")
 export class MotoOrmEntity {
@@ -30,14 +31,19 @@ export class MotoOrmEntity {
 
   @OneToMany(() => MaintenanceOrmEntity, (maintenance) => maintenance.moto, {
     cascade: true,
-    eager: true
+    eager: true,
   })
   maintenances: MaintenanceOrmEntity[];
 
-  @ManyToOne(() => PartnerOrmEntity, (partner) => partner.motos, { eager: true })
+  @ManyToOne(() => PartnerOrmEntity, (partner) => partner.motos, {
+    eager: true,
+  })
   @JoinColumn({ name: "clientPartnerId" })
   partner: PartnerOrmEntity;
 
-  @ManyToOne(() => CrashOrmEntity, (crash) => crash.moto)
-  crash: CrashOrmEntity;
+  @OneToMany(() => CrashOrmEntity, (crash) => crash.moto)
+  crashes: CrashOrmEntity[];
+
+  @OneToMany(() => AttemptOrmEntity, (attempt) => attempt.moto)
+  attempts: AttemptOrmEntity[];
 }

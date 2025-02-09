@@ -24,8 +24,8 @@ export class AttemptService {
     startKilometer,
     endKilometer,
     status,
-    licenses,
-    experiences,
+    driver,
+    moto,
   }: AttemptWithoutId): Promise<Attempt> {
     const createAttemptUseCase = new CreateAttemptUseCase(
       this.attemptRepository,
@@ -37,8 +37,8 @@ export class AttemptService {
       startKilometer,
       endKilometer,
       status,
-      licenses,
-      experiences,
+      driver,
+      moto,
     });
   }
 

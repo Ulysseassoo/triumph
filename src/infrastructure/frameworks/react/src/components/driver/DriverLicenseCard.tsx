@@ -14,7 +14,7 @@ const DriverLicenseCard = ({ driver, onAddLicense }: { driver: Driver, onAddLice
             </h2>
 
             {
-                driver.licenses.length === 0 ?
+                !driver.licenses || driver.licenses.length === 0 ?
                     <div style={{ textAlign: "center" }}>Ce conducteur n'a pas de permis.</div>
                     :
                     <DriverLicenseTable licenses={driver.licenses} />

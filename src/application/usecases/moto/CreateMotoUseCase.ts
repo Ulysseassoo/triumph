@@ -2,6 +2,7 @@ import { Moto, MotoStatus } from "../../../domain/entities/moto.entity";
 import { v4 } from "uuid";
 import { MotoRepositoryInterface } from "../../repositories/MotoRepositoryInterface";
 import { PartnerRepositoryInterface } from "../../repositories/PartnerRepositoryInterface";
+import { Attempt } from "../../../domain/entities/attempt.entity";
 interface Props {
   model: string;
   clientId: string;

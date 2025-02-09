@@ -1,22 +1,28 @@
 import { useEffect, useState } from "react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { AddAttemptDialog } from "@/components/attempt/AddAttemptDialog";
-import { Attempt, getAttempts } from "@/lib/apiEntities";
+import { Attempt, getAttempts, Driver, getDrivers, getMotos, Moto } from "@/lib/apiEntities";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { AttemptTable } from "@/components/attempt/AttemptTable";
 
 const Attempts = () => {
     const [attempts, setAttempts] = useState<Attempt[]>([]);
+    const [drivers, setDrivers] = useState<Driver[]>([])
+    const [motos, setMotos] = useState<Moto[]>([])
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const data = await getAttempts();
+                const drivers = await getDrivers();
+                const motos = await getMotos();
                 setAttempts(data);
+                setDrivers(drivers)
+                setMotos(motos)
             } catch (error) {
-                console.error("Error fetching attempts:", error);
+                console.error("Error fetching data:", error);
             } finally {
                 setIsLoading(false);
             }
@@ -50,7 +56,7 @@ const Attempts = () => {
                             Gestion des essais
                         </p>
                     </div>
-                    <AddAttemptDialog onAttemptAdded={handleAttemptAdded}>
+                    <AddAttemptDialog onAttemptAdded={handleAttemptAdded} drivers={drivers} motos={motos}>
                         <Button>
                             <Plus className="mr-2 h-4 w-4" />
                             Ajouter une essai

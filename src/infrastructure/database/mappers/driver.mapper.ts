@@ -1,5 +1,6 @@
 import { Driver } from "../../../domain/entities/driver.entity";
 import { DriverOrmEntity } from "../entities/driver.orm-entity";
+import { AttemptMapper } from "./attempt.mapper";
 import { CrashMapper } from "./crash.mapper";
 import { DriverExperienceMapper } from "./driverExperience.mapper";
 import { DriverLicenseMapper } from "./driverLicense.mapper";
@@ -16,9 +17,8 @@ export class DriverMapper {
       driver.licenses?.map(DriverLicenseMapper.toOrmEntity) || [];
     ormDriver.experiences =
       driver.experiences?.map(DriverExperienceMapper.toOrmEntity) || [];
-    ormDriver.crash = driver.crash
-      ? CrashMapper.toOrmEntity(driver.crash)
-      : null;
+    ormDriver.crashes = driver.crashes?.map(CrashMapper.toOrmEntity) || [];
+    ormDriver.attempts = driver.attempts?.map(AttemptMapper.toOrmEntity) || [];
     return ormDriver;
   }
 
@@ -31,7 +31,8 @@ export class DriverMapper {
       ormDriver.addresse,
       ormDriver.licenses?.map(DriverLicenseMapper.toDomainEntity) || [],
       ormDriver.experiences?.map(DriverExperienceMapper.toDomainEntity) || [],
-      ormDriver.crash ? CrashMapper.toDomainEntity(ormDriver.crash) : null
+      ormDriver.crashes?.map(CrashMapper.toDomainEntity) || [],
+      ormDriver.attempts?.map(AttemptMapper.toDomainEntity) || []
     );
   }
 }

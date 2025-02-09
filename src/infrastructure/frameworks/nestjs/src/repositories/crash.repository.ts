@@ -42,7 +42,10 @@ export class CrashRepository implements CrashRepositoryInterface {
 
   async findById(id: string): Promise<Crash> {
     try {
-      const crash = await this.crashRepository.findOneBy({ id });
+      const crash = await this.crashRepository.findOne({
+        where: { id },
+        relations: ['driver', 'moto', 'moto.maintenances'],
+      });
       return crash ? CrashMapper.toDomainEntity(crash) : null;
     } catch (error) {
       throw error;

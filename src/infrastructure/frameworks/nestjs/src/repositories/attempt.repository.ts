@@ -30,6 +30,7 @@ export class AttemptRepository implements AttemptRepositoryInterface {
         where: query,
         skip: filters?.pagination?.offset ?? 0,
         take: filters?.pagination?.limit ?? 10,
+        relations: ['moto', 'driver', 'moto.maintenances'],
       });
 
       return attempts.map((attempt) => AttemptMapper.toDomainEntity(attempt));
@@ -41,7 +42,12 @@ export class AttemptRepository implements AttemptRepositoryInterface {
 
   async findById(id: string): Promise<Attempt> {
     try {
-      const attempt = await this.attemptRepository.findOneBy({ id });
+      const attempt = await this.attemptRepository.findOne({
+        where: {
+          id,
+        },
+        relations: ['moto', 'driver', 'moto.maintenances'],
+      });
       return attempt ? AttemptMapper.toDomainEntity(attempt) : null;
     } catch (error) {
       throw error;

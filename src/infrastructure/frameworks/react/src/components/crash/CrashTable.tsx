@@ -9,12 +9,14 @@ import {
 import { Crash } from "@/lib/apiEntities";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
+import { useNavigate } from "react-router-dom";
 
 interface CrashTableProps {
   crashes: Crash[];
 }
 
 export const CrashTable = ({ crashes }: CrashTableProps) => {
+  const navigate = useNavigate()
   return (
     <div className="rounded-md border bg-white/80 backdrop-blur-sm">
       <Table>
@@ -32,7 +34,7 @@ export const CrashTable = ({ crashes }: CrashTableProps) => {
         </TableHeader>
         <TableBody>
           {crashes.map((crash) => (
-            <TableRow key={crash.id}>
+            <TableRow className="cursor-pointer" key={crash.id} onClick={() => navigate(`/accident/${crash.id}`)}>
               <TableCell>{crash.id}</TableCell>
               <TableCell>{crash.type}</TableCell>
               <TableCell>
