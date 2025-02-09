@@ -13,8 +13,20 @@ export class WarrantyRepository implements WarrantyRepositoryInterface {
     private readonly repository: Repository<Warranty>,
   ) {}
 
-  async save(warranty: Warranty): Promise<void> {
-    await this.repository.save(warranty);
+  async save({
+    motoId,
+    startDate,
+    endDate,
+  }: {
+    motoId: string;
+    startDate: string;
+    endDate: string;
+  }): Promise<Warranty> {
+    return await this.repository.save({
+      motoId,
+      startDate,
+      endDate,
+    });
   }
 
   async findById(id: string): Promise<Warranty | null> {

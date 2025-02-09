@@ -26,9 +26,7 @@ export class CreateMotoUseCase {
       throw new Error("Partner not found");
     }
 
-    console.log("🚀 ~ CreateMotoUseCase ~ execute ~ model:", model);
     const moto = new Moto(v4(), model, partner, currentMileage, price, status);
-    console.log(this.motoRepository);
     const newMoto = await this.motoRepository.create(moto);
     return newMoto;
   }

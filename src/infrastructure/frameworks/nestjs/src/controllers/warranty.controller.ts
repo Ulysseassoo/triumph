@@ -6,23 +6,30 @@ import {
   Param,
   HttpException,
   HttpStatus,
+  BadRequestException,
 } from '@nestjs/common';
 import { WarrantyService } from '../services/warranty.service';
 import { Warranty } from '../../../../../domain/entities/warranty.entity';
+import { CreateWarrantyDto } from 'src/dtos/warranty.dto';
+import { validate } from 'class-validator';
 
 @Controller('warranties')
 export class WarrantyController {
   constructor(private readonly warrantyService: WarrantyService) {}
 
   @Post()
-  async createWarranty(@Body() warranty: Warranty) {
+  async createWarranty(@Body() createWarrantyDto: CreateWarrantyDto) {
     try {
+      const errors = await validate(createWarrantyDto);
+      if (errors.length > 0) {
+        throw new BadRequestException(
+          'Validation failed: ' + errors.toString(),
+        );
+      }
       const createdWarranty =
-        await this.warrantyService.createWarranty(warranty);
-      return {
-        message: 'Warranty created successfully',
-        warranty: createdWarranty,
-      };
+        await this.warrantyService.createWarranty(createWarrantyDto);
+
+        return createdWarranty;
     } catch (error) {
       throw new HttpException(
         error.message || 'Failed to create warranty',

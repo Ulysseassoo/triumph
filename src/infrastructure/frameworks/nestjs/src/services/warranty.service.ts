@@ -1,6 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { WarrantyRepositoryInterface } from '../../../../../application/repositories/WarrantyRepositoryInterface';
 import { Warranty } from '../../../../../domain/entities/warranty.entity';
+import { CreateWarrantyDto } from 'src/dtos/warranty.dto';
 
 @Injectable()
 export class WarrantyService {
@@ -9,9 +10,16 @@ export class WarrantyService {
     private readonly warrantyRepository: WarrantyRepositoryInterface,
   ) {}
 
-  async createWarranty(warranty: Warranty): Promise<Warranty> {
-    await this.warrantyRepository.save(warranty);
-    return warranty;
+  async createWarranty({
+    motoId,
+    startDate,
+    endDate,
+  }: CreateWarrantyDto): Promise<Warranty> {
+    return await this.warrantyRepository.save({
+      motoId,
+      startDate,
+      endDate,
+    });
   }
 
   async findAll(): Promise<Warranty[]> {
