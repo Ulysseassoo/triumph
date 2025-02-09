@@ -6,6 +6,7 @@ import { NotificationOrmEntity } from '../../../../database/entities/notificatio
 import { Notification } from '../../../../../domain/entities/notification.entity';
 import { UserOrmEntity } from '../../../../database/entities/user.orm-entity';
 import { NotificationMapper } from "../../../../database/mappers/notification.mapper";
+import { MailerService } from '@nestjs-modules/mailer';
 @Injectable()
 export class NotificationRepository implements NotificationRepositoryInterface {
   constructor(
@@ -13,12 +14,24 @@ export class NotificationRepository implements NotificationRepositoryInterface {
     private readonly repository: Repository<NotificationOrmEntity>,
     @InjectRepository(UserOrmEntity)
     private readonly userRepository: Repository<UserOrmEntity>,
+    private readonly mailerService: MailerService,
   ) {}
-  sendEmail(to: string, subject: string, text: string): Promise<void> {
-    throw new Error('Method not implemented.');
+  async sendEmail(to: string, subject: string, text: string): Promise<void> {
+    await this.mailerService.sendMail({
+      to,
+      subject,
+      text,
+    });
   }
-  sendAppNotification(userId: string, message: string): Promise<void> {
-    throw new Error('Method not implemented.');
+  async sendAppNotification(userId: string, message: string): Promise<void> {
+    const user = await this.userRepository.findOneBy({ id: userId });
+    const notification = this.repository.create({
+      user,
+      message,
+      date: new Date(),
+    });
+
+    await this.repository.save(notification);
   }
   async create(notification: Notification): Promise<Notification> {
     const ormEntity = this.repository.create(NotificationMapper.toOrmEntity(notification));

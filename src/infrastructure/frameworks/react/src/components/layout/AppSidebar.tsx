@@ -20,10 +20,13 @@ import {
   Shield,
   Users,
   Hospital,
-  Notebook
+  Notebook,
+  ShoppingCart,
+  Package
 } from "lucide-react";
 import { Badge } from "../ui/Badge";
 import { getMaintenances } from "@/services/MaintenanceServices";
+import { getOverdueMaintenances } from "@/utils/maintenanceUtils";
 
 export function AppSidebar() {
   const location = useLocation();
@@ -34,9 +37,7 @@ export function AppSidebar() {
     const fetchMaintenances = async () => {
       try {
         const maintenances = await getMaintenances();
-        const overdue = maintenances.filter(
-          (m) => m.status === "OVERDUE"
-        ).length;
+        const overdue = getOverdueMaintenances(maintenances).length
         setOverdueCount(overdue);
       } catch (error) {
         console.error("Error fetching maintenances:", error);
@@ -87,6 +88,16 @@ export function AppSidebar() {
       title: "Accidents",
       path: "/accidents",
       icon: Hospital,
+    },
+    {
+      title: "Orders",
+      path: "/orders",
+      icon: ShoppingCart,
+    },
+    {
+      title: "Pieces",
+      path: "/pieces",
+      icon: Package,
     },
   ];
 
