@@ -11,6 +11,7 @@ import {
   HttpException,
   HttpStatus,
   HttpCode,
+  UseGuards,
 } from '@nestjs/common';
 import { Maintenance } from '../../../../../domain/entities/maintenance.entity';
 import { MaintenanceService } from 'src/services/maintenance.service';
@@ -22,16 +23,19 @@ import {
 import { validate } from 'class-validator';
 import { NotFoundException as CustomNotFoundException } from '../../../../../application/exceptions/NotFoundException';
 import { BadRequestException as CustomBadRequestException } from '../../../../../application/exceptions/BadRequestException';
+import { JwtAuthGuard } from 'src/guardAuth/jwt.guard';
 
 @Controller('maintenances')
 export class MaintenanceController {
   constructor(private readonly maintenanceService: MaintenanceService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   async findAll(): Promise<Maintenance[]> {
     return await this.maintenanceService.findAll();
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const maintenance = await this.maintenanceService.findById(id);
@@ -41,6 +45,7 @@ export class MaintenanceController {
     return maintenance;
   }
 
+  @UseGuards(JwtAuthGuard)
   @Put(':id')
   async update(
     @Param('id') id: string,
@@ -69,6 +74,7 @@ export class MaintenanceController {
     return await this.maintenanceService.update(existingMaintenance);
   }
 
+  @UseGuards(JwtAuthGuard)
   @HttpCode(204)
   @Delete(':id')
   async delete(@Param('id') id: string) {
@@ -79,6 +85,7 @@ export class MaintenanceController {
     return await this.maintenanceService.delete(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   async createMaintenance(@Body() createMaintenanceDto: CreateMaintenanceDto) {
     const errors = await validate(createMaintenanceDto);
@@ -94,7 +101,10 @@ export class MaintenanceController {
         createMaintenanceDto.recommandations,
       );
     } catch (error) {
-      console.log("🚀 ~ MaintenanceController ~ createMaintenance ~ error:", error)
+      console.log(
+        '🚀 ~ MaintenanceController ~ createMaintenance ~ error:',
+        error,
+      );
       if (error instanceof CustomNotFoundException) {
         throw new HttpException(error.message, HttpStatus.NOT_FOUND);
       } else if (error instanceof CustomBadRequestException) {
@@ -108,6 +118,7 @@ export class MaintenanceController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post(':id/achieved')
   async markAsAchieved(
     @Param('id') id: string,
@@ -127,6 +138,7 @@ export class MaintenanceController {
     };
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('/motos/:motoId/history')
   async getHistory(@Param('motoId') motoId: string) {
     return await this.maintenanceService.findByMotoId(motoId);

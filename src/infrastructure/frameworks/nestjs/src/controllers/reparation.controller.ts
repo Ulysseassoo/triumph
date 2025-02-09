@@ -1,10 +1,21 @@
-import { Controller, Get, Post, Body, Param, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  HttpException,
+  HttpStatus,
+  UseGuards,
+} from '@nestjs/common';
 import { ReparationService } from '../services/reparation.service';
+import { JwtAuthGuard } from 'src/guardAuth/jwt.guard';
 
 @Controller('reparations')
 export class ReparationController {
   constructor(private readonly reparationService: ReparationService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   async createReparation(
     @Body('breakdownId') breakdownId: string,
@@ -12,7 +23,11 @@ export class ReparationController {
     @Body('cost') cost: number,
   ) {
     try {
-      const reparation = await this.reparationService.createReparation(breakdownId, description, cost);
+      const reparation = await this.reparationService.createReparation(
+        breakdownId,
+        description,
+        cost,
+      );
       return {
         message: 'Reparation created successfully',
         reparation,
@@ -24,8 +39,8 @@ export class ReparationController {
       );
     }
   }
-  
 
+  @UseGuards(JwtAuthGuard)
   @Get('/breakdowns/:breakdownId')
   async findByBreakdownId(@Param('breakdownId') breakdownId: string) {
     try {
