@@ -13,40 +13,7 @@ This project is a management system for Triumph Motorcycles, including functiona
 
 ## Project Structure
 
-├── .gitignore
-├── jest.config.ts
-├── package.json
-├── README.md
-├── tsconfig.json
-└── src
-    ├── application
-    │   ├── exceptions
-    │   ├── repositories
-    │   └── usecases
-    ├── domain
-    │   ├── entities
-    │   └── interfaces
-    ├── infrastructure
-    │   ├── database
-    │   ├── frameworks
-    │   │   ├── express
-    │   │   ├── nestjs
-    │   │   └── react
-    │   └── orm
-    └── test
-        ├── useCases
-            ├── addMaintenanceUseCase.spec.ts
-            ├── listUserUseCase.spec.ts
-        ├── attempt.service.spec.ts
-        ├── breakdown.service.spec.ts
-        ├── corrective-action.service.spec.ts
-        ├── crash.service.spec.ts
-        ├── driver.service.spec.ts
-        ├── driverLicense.spec.ts
-        ├── maintenance.service.spec.ts
-        ├── moto.service.spec.ts
-        ├── notification.service.spec.ts
-        └── order.service.spec.ts
+![Project Structure](https://private-user-images.githubusercontent.com/73486687/411360294-49da7b27-dff8-4b68-a32b-73233e24464c.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MzkxMzgyNDUsIm5iZiI6MTczOTEzNzk0NSwicGF0aCI6Ii83MzQ4NjY4Ny80MTEzNjAyOTQtNDlkYTdiMjctZGZmOC00YjY4LWEzMmItNzMyMzNlMjQ0NjRjLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTAyMDklMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUwMjA5VDIxNTIyNVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTJlNDE3YmExZmQ4Mjc3ZWE4MWI1ZWIyOGUzY2UzMzg2ZjIwNGQxNjIzZDkyNmRkMWM2ZTJmNTU4Y2IxZjY0YWYmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0._mYsITMPv_weJgAF5KmJTozWxb2z6A6S4t4hz_7EdDY)
 
 ## Prerequisites
 
