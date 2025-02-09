@@ -31,6 +31,7 @@ import CrashDetails from "./pages/CrashDetail";
 const queryClient = new QueryClient();
 
 function App() {
+
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>

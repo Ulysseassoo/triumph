@@ -2,13 +2,15 @@ import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Crash, CrashStatus, Driver, Moto } from "@/lib/apiEntities";
 import { Card } from "../ui/Card";
 import { Button } from "../ui/Button";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/Form";
 import { useToast } from "@/components/ui/use-toast";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { CrashStatus, Crash } from "@/interfaces/CrashInterface";
+import { Driver } from "@/interfaces/DriverInterface";
+import { Moto } from "@/interfaces/MotoInterface";
 
 export const formSchema = z.object({
     type: z.string().min(1, "Type requis"),

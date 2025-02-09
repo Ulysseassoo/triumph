@@ -20,9 +20,11 @@ import {
 } from "../ui/Form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { addDriverLicense, Driver, DriverLicense, DriverLicenseStatus } from "@/lib/apiEntities";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Button } from "../ui/Button";
+import { Driver } from "@/interfaces/DriverInterface";
+import { DriverLicense, DriverLicenseStatus } from "@/interfaces/DriverLicenseInterface";
+import { addDriverLicense } from "@/services/DriverLicenseServices";
 
 const formSchema = z.object({
   licenseNumber: z.string().min(1, "Numéro requis"),

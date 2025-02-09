@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { AddDriverDialog } from "@/components/driver/AddDriverDialog";
-import { Driver, getDrivers } from "@/lib/apiEntities";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { DriverTable } from "@/components/driver/DriverTable";
+import { Driver } from "@/interfaces/DriverInterface";
+import { getDrivers } from "@/services/DriverServices";
 const Drivers = () => {
     const [drivers, setDrivers] = useState<Driver[]>([]);
     const [isLoading, setIsLoading] = useState(true);

@@ -2,8 +2,13 @@ import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { useToast } from "@/hooks/use-toast";
-import { Attempt, Driver, getAttemptById, getDrivers, getMotos, Moto, updateAttempt } from "@/lib/apiEntities";
 import AttemptInformations, { AttemptFormValues } from "@/components/attempt/AttemptInformations";
+import { Attempt } from "@/interfaces/AttemptInterface";
+import { Driver } from "@/interfaces/DriverInterface";
+import { Moto } from "@/interfaces/MotoInterface";
+import { getAttemptById, updateAttempt } from "@/services/AttemptServices";
+import { getDrivers } from "@/services/DriverServices";
+import { getMotos } from "@/services/MotoServices";
 
 const AttemptDetails = () => {
     const { id } = useParams();

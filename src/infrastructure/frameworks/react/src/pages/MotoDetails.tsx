@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { MaintenanceTimeline } from "@/components/maintenance/MaintenanceTimeline";
-import { getMaintenanceHistory, getMotoById, Maintenance } from "@/lib/apiEntities";
 import { useToast } from "@/hooks/use-toast";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/Card";
+import { Maintenance } from "@/interfaces/MaintenanceInterface";
+import { getMaintenanceHistory } from "@/services/MaintenanceServices";
+import { getMotoById } from "@/services/MotoServices";
 
 const MotoDetails = () => {
   const { id } = useParams();

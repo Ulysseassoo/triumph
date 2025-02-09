@@ -1,9 +1,10 @@
-import { Driver, DriverLicense } from '@/lib/apiEntities'
 import { DriverLicenseTable } from '../driverLicense/DriverLicenseTable'
 import { Card } from '../ui/Card'
 import { Plus } from 'lucide-react'
 import { Button } from '../ui/Button'
 import { AddDriverLicenseDialog } from '../driverLicense/AddDriverLicenseDialog'
+import { Driver } from '@/interfaces/DriverInterface'
+import { DriverLicense } from '@/interfaces/DriverLicenseInterface'
 
 const DriverLicenseCard = ({ driver, onAddLicense }: { driver: Driver, onAddLicense: (license: DriverLicense) => void }) => {
 

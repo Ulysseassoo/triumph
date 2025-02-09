@@ -24,7 +24,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     if (token) {
       fetchUser()
         .then((userData) => {
-          if(userData) {
+          if (userData) {
             setUser(userData);
           }
         })

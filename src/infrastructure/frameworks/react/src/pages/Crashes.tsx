@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { AddCrashDialog } from "@/components/crash/AddCrashDialog";
-import { Crash, Driver, getCrashes, getDrivers, getMotos, Moto } from "@/lib/apiEntities";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { CrashTable } from "@/components/crash/CrashTable";
+import { Crash } from "@/interfaces/CrashInterface";
+import { Driver } from "@/interfaces/DriverInterface";
+import { Moto } from "@/interfaces/MotoInterface";
+import { getCrashes } from "@/services/CrashServices";
+import { getDrivers } from "@/services/DriverServices";
+import { getMotos } from "@/services/MotoServices";
 
 const Crashes = () => {
     const [crashes, setCrashes] = useState<Crash[]>([]);

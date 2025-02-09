@@ -20,9 +20,12 @@ import {
 } from "../ui/Form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { addCrash, Crash, CrashStatus, Driver, Moto } from "@/lib/apiEntities";
 import { Button } from "../ui/Button";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { Crash, CrashStatus } from "@/interfaces/CrashInterface";
+import { Driver } from "@/interfaces/DriverInterface";
+import { Moto } from "@/interfaces/MotoInterface";
+import { addCrash } from "@/services/CrashServices";
 
 const formSchema = z.object({
   type: z.string().min(1, "Type d'accident requis"),

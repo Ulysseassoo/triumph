@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { WarrantyTable } from "@/components/warranty/WarrantyTable";
 import { AddWarrantyDialog } from "@/components/warranty/AddWarrantyDialog";
-import { getWarranties, Warranty } from "@/lib/apiEntities";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { getWarranties } from "@/services/WarrantyServices";
+import { Warranty } from "@/interfaces/WarrantyInterface";
 const Warranties = () => {
   const [warranties, setWarranties] = useState<Warranty[]>([]);
   const [isLoading, setIsLoading] = useState(true);

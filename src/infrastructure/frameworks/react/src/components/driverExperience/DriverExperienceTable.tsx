@@ -6,7 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { DriverExperience } from "@/lib/apiEntities";
+import { DriverExperience } from "@/interfaces/DriverExperienceInterface";
 import { useNavigate } from "react-router-dom";
 interface ExperienceTableProps {
   experiences: DriverExperience[];

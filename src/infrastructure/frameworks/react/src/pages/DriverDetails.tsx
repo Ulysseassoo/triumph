@@ -2,11 +2,14 @@
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { Driver, DriverExperience, DriverLicense, getDriverById, updateDriver } from "@/lib/apiEntities";
 import { useToast } from "@/hooks/use-toast";
 import DriverInformations, { DriverFormValues } from "@/components/driver/DriverInformations";
 import DriverExperienceCard from "@/components/driver/DriverExperienceCard";
 import DriverLicenseCard from "@/components/driver/DriverLicenseCard";
+import { DriverExperience } from "@/interfaces/DriverExperienceInterface";
+import { Driver } from "@/interfaces/DriverInterface";
+import { DriverLicense } from "@/interfaces/DriverLicenseInterface";
+import { getDriverById, updateDriver } from "@/services/DriverServices";
 
 const DriverDetails = () => {
     const { id } = useParams();

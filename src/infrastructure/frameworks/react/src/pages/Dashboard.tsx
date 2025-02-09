@@ -3,17 +3,16 @@ import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { MaintenanceCard } from "@/components/dashboard/MaintenanceCard";
 import { MotoTable } from "@/components/dashboard/MotoTable";
-import {
-  getMaintenances,
-  getMotos,
-  type Maintenance,
-  type Moto,
-} from "@/lib/apiEntities";
+
 import { Bike, Wrench, AlertTriangle } from "lucide-react";
 import {
   getOverdueMaintenances,
   getPendingMaintenances,
 } from "@/utils/maintenanceUtils";
+import { Maintenance } from "@/interfaces/MaintenanceInterface";
+import { Moto } from "@/interfaces/MotoInterface";
+import { getMaintenances } from "@/services/MaintenanceServices";
+import { getMotos } from "@/services/MotoServices";
 
 const Dashboard = () => {
   const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
@@ -29,7 +28,7 @@ const Dashboard = () => {
         setMotos(motosData);
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
-      } 
+      }
     };
 
     fetchData();

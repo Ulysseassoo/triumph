@@ -54,9 +54,9 @@ const MotorcycleForm = ({ onSubmit, isSubmitting, defaultValues }: MotorcycleFor
             <FormItem>
               <FormLabel>Kilométrage</FormLabel>
               <FormControl>
-                <Input 
-                  type="number" 
-                  placeholder="Kilométrage" 
+                <Input
+                  type="number"
+                  placeholder="Kilométrage"
                   {...field}
                   onChange={(e) => field.onChange(parseInt(e.target.value))}
                 />

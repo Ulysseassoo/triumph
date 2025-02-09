@@ -1,9 +1,10 @@
-import { Driver, DriverExperience } from '@/lib/apiEntities'
 import { DriverExperienceTable } from '../driverExperience/DriverExperienceTable'
 import { Card } from '../ui/Card'
 import { Button } from '../ui/Button'
 import { Plus } from 'lucide-react'
 import { AddDriverExperienceDialog } from '../driverExperience/AddDriverExperienceDialog'
+import { DriverExperience } from '@/interfaces/DriverExperienceInterface'
+import { Driver } from '@/interfaces/DriverInterface'
 
 const DriverExperienceCard = ({ driver, onAddExperience }: { driver: Driver, onAddExperience: (experience: DriverExperience) => void }) => {
     return (

@@ -7,11 +7,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Breakdown } from "@/lib/apiEntities";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { Link } from "react-router-dom";
 import { Badge } from "../ui/Badge";
+import { Breakdown } from "@/interfaces/BreakdownInterface";
 
 interface BreakdownTableProps {
   breakdowns: Breakdown[];
@@ -52,10 +52,10 @@ export const BreakdownTable = ({ breakdowns }: BreakdownTableProps) => {
                 <Link to={`/pannes/${breakdown.id}`} className="block">
                   <Badge variant={
                     breakdown.status === "RESOLVED" ? "default" :
-                    breakdown.status === "DIAGNOSED" ? "secondary" : "destructive"
+                      breakdown.status === "DIAGNOSED" ? "secondary" : "destructive"
                   }>
                     {breakdown.status === "RESOLVED" ? "Résolu" :
-                     breakdown.status === "DIAGNOSED" ? "Diagnostiqué" : "En attente"}
+                      breakdown.status === "DIAGNOSED" ? "Diagnostiqué" : "En attente"}
                   </Badge>
                 </Link>
               </TableCell>

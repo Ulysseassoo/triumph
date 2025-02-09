@@ -6,10 +6,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Warranty } from "@/lib/apiEntities";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { Badge } from "../ui/Badge";
+import { Warranty } from "@/interfaces/WarrantyInterface";
 interface WarrantyTableProps {
   warranties: Warranty[];
 }

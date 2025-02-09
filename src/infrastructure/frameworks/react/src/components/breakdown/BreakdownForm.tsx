@@ -5,10 +5,10 @@ import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
-import { reportBreakdown } from "@/lib/apiEntities";
 import { useState } from "react";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/Form";
 import { Button } from "../ui/Button";
+import { reportBreakdown } from "@/services/BreakdownServices";
 
 const formSchema = z.object({
   motoId: z.string().min(1, "Veuillez sélectionner une moto"),

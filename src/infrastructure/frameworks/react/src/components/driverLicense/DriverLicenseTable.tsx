@@ -6,7 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { DriverLicense } from "@/lib/apiEntities";
+import { DriverLicense } from "@/interfaces/DriverLicenseInterface";
 import { useNavigate } from "react-router-dom";
 interface LicenseTableProps {
   licenses: DriverLicense[];

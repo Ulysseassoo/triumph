@@ -1,6 +1,6 @@
-import { Maintenance } from "@/lib/apiEntities";
 import { Card, CardHeader, CardTitle, CardContent } from "../ui/Card";
 import { Badge } from "../ui/Badge";
+import { Maintenance } from "@/interfaces/MaintenanceInterface";
 
 interface MaintenanceCardProps {
   maintenance: Maintenance;
