@@ -1,4 +1,12 @@
-import { BadRequestException, Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  Post,
+} from '@nestjs/common';
 import { validate } from 'class-validator';
 import { CreateMotoDto } from 'src/dtos/moto.dto';
 import { MotoService } from 'src/services/moto.service';
@@ -20,7 +28,7 @@ export class MotoController {
       createMotoDto.clientId,
       createMotoDto.currentMileage,
       createMotoDto.price,
-      createMotoDto.status
+      createMotoDto.status,
     );
   }
 
@@ -36,5 +44,15 @@ export class MotoController {
   @Get()
   async findAll(): Promise<Moto[]> {
     return await this.motoService.findAll();
+  }
+
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    const moto = await this.motoService.findById(id);
+    console.log("🚀 ~ MotoController ~ findOne ~ moto:", moto)
+    if (!moto) {
+      throw new NotFoundException('Moto not found');
+    }
+    return moto;
   }
 }

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const apiEntities = axios.create({
-  baseURL: "http://localhost:5002",
+  baseURL: "http://localhost:5000",
   headers: {
     "Content-Type": "application/json",
   },
@@ -159,12 +159,27 @@ export const getMotos = async () => {
   return response.data;
 };
 
+export const getMotoById = async (motoId: string | undefined) => {
+  const response = await apiEntities.get<Moto>("/motos/" + motoId);
+  return response.data;
+};
+
 export const getMaintenanceHistory = async (motoId: string) => {
   const response = await apiEntities.get<Maintenance[]>(
-    `/maintenances/historique/${motoId}`
+    `/maintenances/motos/${motoId}/history`
   );
   return response.data;
 };
+
+export const createMaintenance = async (data: {
+  motoId: string;
+  kilometrageInterval: number;
+  recommandations: string;
+  tempsInterval: number;
+}) => {
+  const response = await apiEntities.post<Maintenance>("/maintenances", data);
+  return response.data;
+}
 
 export const scheduleMaintenance = async (data: {
   motoId: string;

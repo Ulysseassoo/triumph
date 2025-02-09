@@ -19,7 +19,7 @@ const NotificationsPopover = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       refetch();
-    }, 60000);
+    }, 600000);
     return () => clearInterval(interval);
   }, [refetch]);
   const unreadCount = notifications?.filter((notificqtion) => !notificqtion.isRead).length || 0;

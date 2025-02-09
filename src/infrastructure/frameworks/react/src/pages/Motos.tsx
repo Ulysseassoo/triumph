@@ -21,7 +21,7 @@ import { useState } from "react";
 import { Plus, Trash, Edit } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/Button";
-import MotorcycleForm from "@/components/moto/MotoForm";
+import MotoForm from "@/components/moto/MotoForm";
 import { getMotos } from "@/lib/apiEntities";
 import { getLastPlannedMaintenanceDate } from "@/utils/maintenanceUtils";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
@@ -143,7 +143,7 @@ const Motorcycles = () => {
                   {selectedMoto ? "Modifier la moto" : "Nouvelle moto"}
                 </DialogTitle>
               </DialogHeader>
-              <MotorcycleForm
+              <MotoForm
                 onSubmit={handleSubmit}
                 isSubmitting={createMoto.isPending || updateMoto.isPending}
                 defaultValues={selectedMoto || undefined}
@@ -180,7 +180,7 @@ const Motorcycles = () => {
                     </TableCell>
                     <TableCell className="space-x-2">
                       <Button asChild variant="outline" size="sm">
-                        <Link to={`/dashboard/motorcycles/${moto.id}`}>
+                        <Link to={`/motos/${moto.id}`}>
                           Voir plus
                         </Link>
                       </Button>

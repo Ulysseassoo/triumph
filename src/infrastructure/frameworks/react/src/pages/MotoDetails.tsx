@@ -2,10 +2,9 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { MaintenanceTimeline } from "@/components/maintenance/MaintenanceTimeline";
-import { getMaintenanceHistory, Maintenance, Moto } from "@/lib/apiEntities";
+import { getMaintenanceHistory, getMotoById, Maintenance } from "@/lib/apiEntities";
 import { useToast } from "@/hooks/use-toast";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/Card";
 
 const MotoDetails = () => {
@@ -14,10 +13,7 @@ const MotoDetails = () => {
   const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
   const { data: moto, isLoading } = useQuery({
     queryKey: ["moto", id],
-    queryFn: async () => {
-      const response = await axios.get<Moto>(`/api/motos/${id}`);
-      return response.data;
-    },
+    queryFn: async () => getMotoById(id),
   });
 
   useEffect(() => {

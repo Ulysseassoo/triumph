@@ -8,4 +8,5 @@ export interface MaintenanceRepositoryInterface {
   delete(id: string): Promise<void>;
   save: (maintenance: Maintenance) => Promise<Maintenance>;
   findByMotoId(motoId: string): Promise<Maintenance[]>;
+  findLatestByMotoId(motoId: string): Promise<Maintenance | null>;
 }

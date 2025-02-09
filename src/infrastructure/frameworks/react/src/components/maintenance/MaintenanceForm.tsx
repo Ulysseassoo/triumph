@@ -1,27 +1,35 @@
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "react-day-picker";
-import { Form, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "../ui/Form";
+import { FormField, FormItem, FormLabel, FormControl, FormMessage, Form } from "../ui/Form";
+import { Button } from "../ui/Button";
+import { Maintenance } from "@/lib/apiEntities";
+
 const formSchema = z.object({
   motoId: z.string().min(1, "Veuillez sélectionner une moto"),
-  plannedDate: z.string().min(1, "Veuillez sélectionner une date"),
+  kilometrageInterval: z.preprocess((val) => Number(val), z.number().min(1, "Veuillez entrer un kilométrage valide")),
+  tempsInterval: z.preprocess((val) => Number(val), z.number().min(1, "Veuillez entrer un temps en mois valide")),
+  recommandations: z.string().optional(),
 });
+
 interface MaintenanceFormProps {
-  onSubmit: (values: any) => void;
+  onSubmit: (values: z.infer<typeof formSchema>) => void;
   isSubmitting?: boolean;
-  defaultValues?: Partial<z.infer<typeof formSchema>>;
+  defaultValues?: Maintenance;
 }
+
 const MaintenanceForm = ({ onSubmit, isSubmitting, defaultValues }: MaintenanceFormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      motoId: "",
-      plannedDate: "",
-      ...defaultValues,
+      motoId: defaultValues?.motoId || "",
+      kilometrageInterval: defaultValues?.maintenanceInterval.mileage || 0,
+      tempsInterval: defaultValues?.maintenanceInterval.timeInMonths || 0,
+      recommandations: defaultValues?.recommandations || "",
     },
   });
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -40,12 +48,38 @@ const MaintenanceForm = ({ onSubmit, isSubmitting, defaultValues }: MaintenanceF
         />
         <FormField
           control={form.control}
-          name="plannedDate"
+          name="kilometrageInterval"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Date planifiée</FormLabel>
+              <FormLabel>Intervalle de kilométrage</FormLabel>
               <FormControl>
-                <Input type="date" {...field} />
+                <Input type="number" placeholder="Kilométrage" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="tempsInterval"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Intervalle de temps (mois)</FormLabel>
+              <FormControl>
+                <Input type="number" placeholder="Temps en mois" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="recommandations"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Recommandations</FormLabel>
+              <FormControl>
+                <Input placeholder="Recommandations" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -58,4 +92,5 @@ const MaintenanceForm = ({ onSubmit, isSubmitting, defaultValues }: MaintenanceF
     </Form>
   );
 };
+
 export default MaintenanceForm;

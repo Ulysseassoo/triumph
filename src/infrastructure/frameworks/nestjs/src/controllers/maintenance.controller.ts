@@ -94,6 +94,7 @@ export class MaintenanceController {
         createMaintenanceDto.recommandations,
       );
     } catch (error) {
+      console.log("🚀 ~ MaintenanceController ~ createMaintenance ~ error:", error)
       if (error instanceof CustomNotFoundException) {
         throw new HttpException(error.message, HttpStatus.NOT_FOUND);
       } else if (error instanceof CustomBadRequestException) {

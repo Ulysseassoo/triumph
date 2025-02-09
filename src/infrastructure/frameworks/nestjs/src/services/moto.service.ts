@@ -43,4 +43,8 @@ export class MotoService {
   async findAll(): Promise<Moto[]> {
     return await this.motoRepository.findAll();
   }
+
+  async findById(id: string): Promise<Moto | null> {
+    return await this.motoRepository.findById(id);
+  }
 }

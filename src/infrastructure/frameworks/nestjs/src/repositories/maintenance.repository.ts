@@ -12,6 +12,14 @@ export class MaintenanceRepository implements MaintenanceRepositoryInterface {
     @InjectRepository(MaintenanceOrmEntity)
     private readonly repository: Repository<MaintenanceOrmEntity>,
   ) {}
+  async findLatestByMotoId(motoId: string): Promise<Maintenance | null> {
+    const latestMaintenance = await this.repository.findOne({
+      where: { motoId },
+      order: { achievedDate: 'DESC' },
+    });
+
+    return latestMaintenance ? MaintenanceMapper.toDomainEntity(latestMaintenance) : null;
+  }
   async findById(id: string): Promise<Maintenance | null> {
     const maintenance = await this.repository.findOneBy({ id });
     return maintenance ? MaintenanceMapper.toDomainEntity(maintenance) : null;

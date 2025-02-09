@@ -20,8 +20,10 @@ export class NotificationRepository implements NotificationRepositoryInterface {
   sendAppNotification(userId: string, message: string): Promise<void> {
     throw new Error('Method not implemented.');
   }
-  create(notification: Notification): Promise<Notification> {
-    throw new Error('Method not implemented.');
+  async create(notification: Notification): Promise<Notification> {
+    const ormEntity = this.repository.create(NotificationMapper.toOrmEntity(notification));
+    const savedEntity = await this.repository.save(ormEntity);
+    return NotificationMapper.toDomainEntity(savedEntity);
   }
   findById(id: string): Promise<Notification | null> {
     throw new Error('Method not implemented.');

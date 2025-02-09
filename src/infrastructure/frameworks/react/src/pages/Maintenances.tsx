@@ -19,8 +19,9 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
-import { getMaintenances, Maintenance } from "@/lib/apiEntities";
+import { getMaintenances, Maintenance, createMaintenance } from "@/lib/apiEntities";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
+import { Link } from "react-router-dom";
 
 const Maintenances = () => {
   const { toast } = useToast();
@@ -34,9 +35,14 @@ const Maintenances = () => {
     queryFn: async () => getMaintenances(),
   });
 
-  const createMaintenance = useMutation({
-    mutationFn: (data: Omit<Maintenance, "id">) =>
-      axios.post("/api/maintenances", data),
+  const createMaintenanceApi = useMutation({
+    mutationFn: (data: {
+      motoId: string;
+      kilometrageInterval: number;
+      recommandations: string;
+      tempsInterval: number;
+    }) =>
+      createMaintenance(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["maintenances"] });
       toast({
@@ -77,11 +83,11 @@ const Maintenances = () => {
     },
   });
 
-  const handleSubmit = (values: Maintenance) => {
+  const handleSubmit = (values: Omit<Maintenance, "id">) => {
     if (selectedMaintenance) {
-      updateMaintenance.mutate({ ...values });
+      updateMaintenance.mutate({ ...values, id: selectedMaintenance.id });
     } else {
-      createMaintenance.mutate(values);
+      createMaintenanceApi.mutate(values);
     }
   };
 
@@ -122,7 +128,7 @@ const Maintenances = () => {
               <MaintenanceForm
                 onSubmit={handleSubmit}
                 isSubmitting={
-                  createMaintenance.isPending || updateMaintenance.isPending
+                  createMaintenanceApi.isPending || updateMaintenance.isPending
                 }
                 defaultValues={selectedMaintenance || undefined}
               />
@@ -136,7 +142,8 @@ const Maintenances = () => {
                 <TableHead>ID</TableHead>
                 <TableHead>Moto</TableHead>
                 <TableHead>Date planifiée</TableHead>
-                <TableHead>Statut</TableHead>
+                <TableHead>Type d'entretien</TableHead>
+                <TableHead>Date de réalisation</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -148,14 +155,24 @@ const Maintenances = () => {
                   <TableCell>
                     {new Date(maintenance.plannedDate).toLocaleDateString()}
                   </TableCell>
-                  <TableCell>{maintenance.status}</TableCell>
+                  <TableCell>{maintenance.maintenanceType}</TableCell>
                   <TableCell>
+                    {maintenance.achievedDate
+                      ? new Date(maintenance.achievedDate).toLocaleDateString()
+                      : "Non réalisé"}
+                  </TableCell>
+                  <TableCell className="space-x-2">
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() => handleEdit(maintenance)}
                     >
                       Éditer
+                    </Button>
+                    <Button asChild variant="outline" size="sm">
+                      <Link to={`/maintenances/${maintenance.id}`}>
+                        Voir plus
+                      </Link>
                     </Button>
                   </TableCell>
                 </TableRow>

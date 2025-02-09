@@ -1,7 +1,7 @@
 
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Wrench, Calendar, AlertTriangle } from "lucide-react";
+import { Wrench, Calendar } from "lucide-react";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { Card } from "../ui/Card";
@@ -12,14 +12,12 @@ interface MaintenanceTimelineProps {
 }
 
 export const MaintenanceTimeline = ({ maintenances }: MaintenanceTimelineProps) => {
-  const getStatusIcon = (status: Maintenance["status"]) => {
+  const getStatusIcon = (status: Maintenance["maintenanceType"]) => {
     switch (status) {
-      case "COMPLETED":
+      case MaintenanceType.CURATIF:
         return <Wrench className="h-4 w-4 text-green-500" />;
-      case "DUE":
+      case MaintenanceType.PREVENTIF:
         return <Calendar className="h-4 w-4 text-yellow-500" />;
-      case "OVERDUE":
-        return <AlertTriangle className="h-4 w-4 text-red-500" />;
     }
   };
 
@@ -31,7 +29,7 @@ export const MaintenanceTimeline = ({ maintenances }: MaintenanceTimelineProps) 
           {maintenances.map((maintenance, index) => (
             <div key={maintenance.id}>
               <div className="flex items-start gap-4">
-                <div className="mt-1">{getStatusIcon(maintenance.status)}</div>
+                <div className="mt-1">{getStatusIcon(maintenance.maintenanceType)}</div>
                 <div className="flex-1">
                   <div className="flex items-center justify-between">
                     <h4 className="font-medium">
@@ -41,6 +39,9 @@ export const MaintenanceTimeline = ({ maintenances }: MaintenanceTimelineProps) 
                       {format(new Date(maintenance.plannedDate), "d MMMM yyyy", { locale: fr })}
                     </span>
                   </div>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    Intervalle de maintenance : {maintenance.maintenanceInterval.mileage} km / {maintenance.maintenanceInterval.timeInMonths} mois
+                  </p>
                   {maintenance.pieces && maintenance.pieces.length > 0 && (
                     <div className="mt-2">
                       <p className="text-sm font-medium text-muted-foreground mb-1">Pièces remplacées :</p>
