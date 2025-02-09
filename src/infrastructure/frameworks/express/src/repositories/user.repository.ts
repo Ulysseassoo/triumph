@@ -238,7 +238,6 @@ export class TypeOrmUserRepository implements UserRepositoryInterface {
   async getUserValidate(email: string, password: string): Promise<User | null> {
     try {
       const user = await this.findByEmail(email);
-      console.log("🚀 ~ TypeOrmUserRepository ~ getUserValidate ~ user:", user)
       if (!user) {
         throw new Error ('User not found');
 
