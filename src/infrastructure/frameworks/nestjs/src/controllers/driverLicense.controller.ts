@@ -152,6 +152,7 @@ export class DriverLicenseController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Roles('staff')
   @Delete(':id')
   async delete(@Param('id') id: string): Promise<void> {
     try {

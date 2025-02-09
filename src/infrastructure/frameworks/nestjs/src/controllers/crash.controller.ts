@@ -21,6 +21,7 @@ export class CrashController {
   constructor(private readonly crashService: CrashService) {}
 
   @UseGuards(JwtAuthGuard)
+  @Roles('staff')
   @Post()
   async create(
     @Body()
@@ -156,6 +157,7 @@ export class CrashController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Roles('staff')
   @Delete(':id')
   async delete(@Param('id') id: string): Promise<void> {
     try {

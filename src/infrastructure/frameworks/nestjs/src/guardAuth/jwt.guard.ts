@@ -1,9 +1,13 @@
-import { Injectable, ExecutionContext, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  ExecutionContext,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { Observable } from 'rxjs';
 import * as jwt from 'jsonwebtoken';
 import { Reflector } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
+import axios from 'axios';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -14,9 +18,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     super();
   }
 
-  canActivate(
-    context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const token = this.extractJwtFromHeader(request);
 
@@ -33,40 +35,44 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
       const decoded = jwt.verify(token, accessTokenSecret) as jwt.JwtPayload & {
         id: string;
-        email: string;
-        role?: string[];
-        isVerified?: boolean;
       };
 
-  
+      const { data: user } = await axios.get(
+        `http://localhost:5001/users/${decoded.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
 
-      
-      if (!decoded.isVerified) {
+      if (!user) {
+        throw new UnauthorizedException('User not found');
+      }
+
+      if (!user.isVerified) {
         throw new UnauthorizedException('Email not verified');
       }
 
-      const userRoles = Array.isArray(decoded.role) ? decoded.role : 
-                       typeof decoded.role === 'string' ? [decoded.role] : 
-                       [];
+      const userRoles = Array.isArray(user.role)
+        ? user.role
+        : typeof user.role === 'string'
+          ? [user.role]
+          : [];
 
+      request.user = user;
 
-      request.user = {
-        id: decoded.id,
-        email: decoded.email,
-        role: userRoles,
-        isVerified: decoded.isVerified
-      };
-
-      const requiredRoles = this.reflector.get<string[]>('roles', context.getHandler());
-    
+      const requiredRoles = this.reflector.get<string[]>(
+        'roles',
+        context.getHandler(),
+      );
 
       if (requiredRoles && requiredRoles.length > 0) {
         const hasRole = this.matchRoles(requiredRoles, userRoles);
 
-
         if (!hasRole) {
           throw new UnauthorizedException(
-            `Insufficient permissions. Required roles: ${requiredRoles.join(', ')}, User roles: ${userRoles.join(', ')}`
+            `Insufficient permissions. Required roles: ${requiredRoles.join(', ')}, User roles: ${userRoles.join(', ')}`,
           );
         }
       }
@@ -90,11 +96,14 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     return bearer === 'Bearer' ? token : undefined;
   }
 
-  private matchRoles(requiredRoles: string[], userRoles: string[] = []): boolean {
-    return requiredRoles.some(role => 
-      userRoles.some(userRole => 
-        userRole.toLowerCase() === role.toLowerCase()
-      )
+  private matchRoles(
+    requiredRoles: string[],
+    userRoles: string[] = [],
+  ): boolean {
+    return requiredRoles.some((role) =>
+      userRoles.some(
+        (userRole) => userRole.toLowerCase() === role.toLowerCase(),
+      ),
     );
   }
 }

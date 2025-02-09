@@ -1,5 +1,5 @@
-import { UserOrmEntity } from './../entities/user.orm-entity';
-import { User } from '../../../domain/entities/user.entity';
+import { UserOrmEntity } from "./../entities/user.orm-entity";
+import { User } from "../../../domain/entities/user.entity";
 
 export class UserMapper {
   static toOrmEntity(user: User): UserOrmEntity {
@@ -20,7 +20,7 @@ export class UserMapper {
       ormUser.email,
       ormUser.password,
       ormUser.isVerified,
-      ormUser.role,
+      ormUser.role
     );
   }
 }
