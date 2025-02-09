@@ -21,6 +21,7 @@ export class AttemptController {
   constructor(private readonly attemptService: AttemptService) {}
 
   @UseGuards(JwtAuthGuard)
+  @Roles('staff')
   @Post()
   async create(
     @Body()
@@ -146,6 +147,7 @@ export class AttemptController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Roles('staff')
   @Delete(':id')
   async delete(@Param('id') id: string): Promise<void> {
     try {
