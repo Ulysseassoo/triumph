@@ -17,6 +17,10 @@ import { CrashRepository } from 'src/repositories/crash.repository';
 import { DriverLicenseOrmEntity } from '../../../../database/entities/driverLicense.orm-entity';
 import { DriverExperienceOrmEntity } from '../../../../database/entities/driverExperience.orm-entity';
 import { CrashOrmEntity } from '../../../../database/entities/crash.orm-entity';
+import { AttemptOrmEntity } from '../../../../database/entities/attempt.orm-entity';
+import { AttemptController } from 'src/controllers/attempt.controller';
+import { AttemptService } from 'src/services/attempt.service';
+import { AttemptRepository } from 'src/repositories/attempt.repository';
 
 @Module({
   imports: [
@@ -26,6 +30,7 @@ import { CrashOrmEntity } from '../../../../database/entities/crash.orm-entity';
       DriverLicenseOrmEntity,
       DriverExperienceOrmEntity,
       CrashOrmEntity,
+      AttemptOrmEntity,
     ]),
   ],
   controllers: [
@@ -33,6 +38,7 @@ import { CrashOrmEntity } from '../../../../database/entities/crash.orm-entity';
     DriverLicenseController,
     DriverExperienceController,
     CrashController,
+    AttemptController,
   ],
   providers: [
     DriverService,
@@ -41,6 +47,8 @@ import { CrashOrmEntity } from '../../../../database/entities/crash.orm-entity';
     DriverLicenseRepository,
     DriverExperienceService,
     DriverExperienceRepository,
+    AttemptService,
+    AttemptRepository,
     CrashService,
     CrashRepository,
     {
@@ -58,6 +66,10 @@ import { CrashOrmEntity } from '../../../../database/entities/crash.orm-entity';
     {
       provide: 'CrashRepositoryInterface',
       useClass: CrashRepository,
+    },
+    {
+      provide: 'AttemptRepositoryInterface',
+      useClass: AttemptRepository,
     },
   ],
   exports: [DriverService, 'DriverRepositoryInterface', TypeOrmModule],

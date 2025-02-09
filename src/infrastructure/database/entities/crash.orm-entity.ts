@@ -1,4 +1,10 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { DriverOrmEntity } from "./driver.orm-entity";
 import { MotoOrmEntity } from "./moto.orm-entity";
 
@@ -28,9 +34,13 @@ export class CrashOrmEntity {
   @Column()
   status: string;
 
-  @OneToMany(() => DriverOrmEntity, (driver) => driver.crash)
+  @ManyToOne(() => DriverOrmEntity, (driver) => driver.crashes, {
+    onDelete: "CASCADE",
+  })
   driver: DriverOrmEntity;
 
-  @OneToMany(() => MotoOrmEntity, (moto) => moto.crash)
+  @ManyToOne(() => MotoOrmEntity, (moto) => moto.crashes, {
+    onDelete: "CASCADE",
+  })
   moto: MotoOrmEntity;
 }

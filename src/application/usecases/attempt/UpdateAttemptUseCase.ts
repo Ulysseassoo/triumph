@@ -11,8 +11,8 @@ export class UpdateAttemptUseCase {
     startKilometer,
     endKilometer,
     status,
-    experiences,
-    licenses,
+    driver,
+    moto,
   }: Attempt): Promise<Attempt> {
     const attempt = await this.attemptRepo.findById(id);
 
@@ -26,8 +26,8 @@ export class UpdateAttemptUseCase {
       ...(startKilometer && { startKilometer }),
       ...(endKilometer && { endKilometer }),
       ...(status && { status }),
-      ...(experiences && { experiences }),
-      ...(licenses && { licenses }),
+      ...(driver && { driver }),
+      ...(moto && { moto }),
     };
 
     const updatedAttempt = await this.attemptRepo.update(id, updateData);

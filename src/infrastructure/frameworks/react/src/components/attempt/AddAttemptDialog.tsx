@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -20,18 +20,23 @@ import {
 } from "../ui/Form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { addAttempt, Attempt } from "@/lib/apiEntities";
+import { addAttempt, Attempt, Driver, Moto } from "@/lib/apiEntities";
 import { Button } from "../ui/Button";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 const formSchema = z.object({
   startDate: z.string().min(1, "Début d'essai requis"),
   endDate: z.string().min(1, "Fin d'essai requis"),
   startKilometer: z.number(),
   endKilometer: z.number(),
   status: z.string().min(1, "Statut requis"),
+  driver: z.string().min(1, "Conducteur requis"),
+  moto: z.string().min(1, "Moto requise"),
 });
 interface AddAttemptDialogProps {
   children: React.ReactNode;
   onAttemptAdded: (attempt: Attempt) => void;
+  drivers: Driver[];
+  motos: Moto[];
 }
 
 type FormValues = {
@@ -40,12 +45,20 @@ type FormValues = {
   startKilometer: number,
   endKilometer: number,
   status: string,
+  driver: string
+  moto: string
 };
 
-export const AddAttemptDialog = ({ children, onAttemptAdded }: AddAttemptDialogProps) => {
+export const AddAttemptDialog = ({ children, onAttemptAdded, drivers, motos }: AddAttemptDialogProps) => {
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const driverOptions = useMemo(() => {
+    return drivers.map((driver) => ({ id: driver.id, name: `${driver.firstname} ${driver.lastname}`, value: driver.id }))
+  }, [drivers])
+  const motoOptions = useMemo(() => {
+    return motos.map((moto) => ({ id: moto.id, name: `${moto.id} ${moto.model}`, value: moto.id }))
+  }, [motos])
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -54,6 +67,8 @@ export const AddAttemptDialog = ({ children, onAttemptAdded }: AddAttemptDialogP
       startKilometer: 0,
       endKilometer: 0,
       status: "En cours",
+      driver: "",
+      moto: ""
     },
   });
   const onSubmit = async (values: FormValues) => {
@@ -65,6 +80,8 @@ export const AddAttemptDialog = ({ children, onAttemptAdded }: AddAttemptDialogP
         startKilometer: values.startKilometer,
         endKilometer: values.endKilometer,
         status: values.status,
+        driver: drivers.filter(driver => driver.id === values.driver)[0],
+        moto: motos.filter(moto => moto.id === values.moto)[0],
       });
       onAttemptAdded(attempt);
       toast({
@@ -161,12 +178,64 @@ export const AddAttemptDialog = ({ children, onAttemptAdded }: AddAttemptDialogP
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="driver"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Conducteur</FormLabel>
+                  <FormControl>
+                    <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Choisir un conducteur" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          {
+                            driverOptions.map((driver) => {
+                              return <SelectItem key={driver.id} value={driver.value}>{driver.name}</SelectItem>
+                            })
+                          }
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="moto"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Moto</FormLabel>
+                  <FormControl>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Choisir une moto" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          {
+                            motoOptions.map((moto) => {
+                              return <SelectItem key={moto.id} value={moto.value}>{moto.name}</SelectItem>
+                            })
+                          }
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <Button type="submit" disabled={isSubmitting}>
               Ajouter l'essai
             </Button>
           </form>
         </Form>
       </DialogContent>
-    </Dialog>
+    </Dialog >
   );
 };

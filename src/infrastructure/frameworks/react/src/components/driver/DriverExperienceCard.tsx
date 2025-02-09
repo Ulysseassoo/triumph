@@ -13,10 +13,10 @@ const DriverExperienceCard = ({ driver, onAddExperience }: { driver: Driver, onA
             </h2>
 
             {
-                driver.experiences.length === 0 ?
+                !driver.experiences || driver.experiences.length === 0 ?
                     <div style={{ textAlign: "center" }}>Ce conducteur n'a pas d'expériences.</div>
                     :
-                    <DriverExperienceTable experiences={driver.experiences} />
+                    <DriverExperienceTable experiences={driver.experiences ?? []} />
             }
 
             <AddDriverExperienceDialog driver={driver} onDriverExperienceAdded={onAddExperience}>

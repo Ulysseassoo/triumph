@@ -8,6 +8,7 @@ import {
 import { DriverLicenseOrmEntity } from "./driverLicense.orm-entity";
 import { DriverExperienceOrmEntity } from "./driverExperience.orm-entity";
 import { CrashOrmEntity } from "./crash.orm-entity";
+import { AttemptOrmEntity } from "./attempt.orm-entity";
 
 @Entity("driver")
 export class DriverOrmEntity {
@@ -35,6 +36,9 @@ export class DriverOrmEntity {
   )
   experiences: DriverExperienceOrmEntity[];
 
-  @ManyToOne(() => CrashOrmEntity, (crash) => crash.driver)
-  crash: CrashOrmEntity;
+  @OneToMany(() => CrashOrmEntity, (crash) => crash.driver)
+  crashes: CrashOrmEntity[];
+
+  @OneToMany(() => AttemptOrmEntity, (attempt) => attempt.driver)
+  attempts: AttemptOrmEntity[];
 }

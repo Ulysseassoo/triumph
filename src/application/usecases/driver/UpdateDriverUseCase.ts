@@ -12,7 +12,8 @@ export class UpdateDriverUseCase {
     addresse,
     licenses,
     experiences,
-    crash,
+    crashes,
+    attempts,
   }: Driver): Promise<Driver> {
     const driver = await this.driverRepo.findById(id);
 
@@ -27,7 +28,8 @@ export class UpdateDriverUseCase {
       ...(addresse && { addresse }),
       ...(licenses && { licenses }),
       ...(experiences && { experiences }),
-      ...(crash && { crash }),
+      ...(attempts && { attempts }),
+      ...(crashes && { crashes }),
     };
 
     const updatedDriver = await this.driverRepo.update(id, updateData);

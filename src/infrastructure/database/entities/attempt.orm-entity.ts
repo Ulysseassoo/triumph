@@ -1,6 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from "typeorm";
-import { DriverLicenseOrmEntity } from "./driverLicense.orm-entity";
-import { DriverExperienceOrmEntity } from "./driverExperience.orm-entity";
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+import { MotoOrmEntity } from "./moto.orm-entity";
+import { DriverOrmEntity } from "./driver.orm-entity";
 
 @Entity("attempt")
 export class AttemptOrmEntity {
@@ -22,12 +22,13 @@ export class AttemptOrmEntity {
   @Column()
   status: string;
 
-  @OneToMany(() => DriverLicenseOrmEntity, (license) => license.driver)
-  licenses: DriverLicenseOrmEntity[];
+  @ManyToOne(() => MotoOrmEntity, (moto) => moto.attempts, {
+    onDelete: "CASCADE",
+  })
+  moto: MotoOrmEntity;
 
-  @OneToMany(
-    () => DriverExperienceOrmEntity,
-    (driverExperience) => driverExperience.driver
-  )
-  experiences: DriverExperienceOrmEntity[];
+  @ManyToOne(() => DriverOrmEntity, (driver) => driver.attempts, {
+    onDelete: "CASCADE",
+  })
+  driver: DriverOrmEntity;
 }

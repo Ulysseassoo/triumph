@@ -2,6 +2,7 @@ import { MotoOrmEntity } from "./../entities/moto.orm-entity";
 import { Moto } from "../../../domain/entities/moto.entity";
 import { MaintenanceMapper } from "./maintenance.mapper";
 import { PartnerMapper } from "./partner.mapper";
+import { AttemptMapper } from "./attempt.mapper";
 
 export class MotoMapper {
   static toOrmEntity(moto: Moto): MotoOrmEntity {
@@ -13,6 +14,7 @@ export class MotoMapper {
     ormMoto.price = moto.price;
     ormMoto.status = moto.status;
     ormMoto.maintenances = moto.maintenances.map(MaintenanceMapper.toOrmEntity);
+    ormMoto.attempts = moto?.attempts?.map(AttemptMapper.toOrmEntity) || [];
     return ormMoto;
   }
 
@@ -24,7 +26,8 @@ export class MotoMapper {
       ormMoto.currentMileage,
       ormMoto.price,
       ormMoto.status,
-      ormMoto.maintenances.map(MaintenanceMapper.toDomainEntity)
+      ormMoto.maintenances.map(MaintenanceMapper.toDomainEntity),
+      ormMoto.attempts ? ormMoto.attempts.map(AttemptMapper.toDomainEntity) : []
     );
   }
 }

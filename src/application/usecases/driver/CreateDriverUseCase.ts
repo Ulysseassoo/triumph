@@ -14,7 +14,8 @@ export class CreateDriverUseCase {
     addresse,
     licenses,
     experiences,
-    crash,
+    crashes,
+    attempts,
   }: DriverWithoutId): Promise<Driver | null> {
     const driver = new Driver(
       v4(),
@@ -24,7 +25,8 @@ export class CreateDriverUseCase {
       addresse,
       licenses,
       experiences,
-      crash
+      crashes,
+      attempts
     );
 
     const newDriver = await this.driverRepository.create(driver);

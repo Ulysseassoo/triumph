@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -20,8 +20,9 @@ import {
 } from "../ui/Form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { addCrash, Crash } from "@/lib/apiEntities";
+import { addCrash, Crash, Driver, Moto } from "@/lib/apiEntities";
 import { Button } from "../ui/Button";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 const formSchema = z.object({
   type: z.string().min(1, "Type d'accident requis"),
@@ -31,11 +32,15 @@ const formSchema = z.object({
   responsability: z.string().min(1, "Responsabilités requises"),
   consequence: z.string().min(1, "Conséquences requises"),
   status: z.string().min(1, "Statut requis"),
+  driver: z.string().min(1, "Statut requis"),
+  moto: z.string().min(1, "Statut requis"),
 });
 
 interface AddCrashDialogProps {
   children: React.ReactNode;
   onCrashAdded: (crash: Crash) => void;
+  drivers: Driver[],
+  motos: Moto[]
 }
 
 type FormValues = {
@@ -46,12 +51,20 @@ type FormValues = {
   responsability: string,
   consequence: string,
   status: string,
+  driver: string;
+  moto: string
 };
 
-export const AddCrashDialog = ({ children, onCrashAdded }: AddCrashDialogProps) => {
+export const AddCrashDialog = ({ children, onCrashAdded, drivers, motos }: AddCrashDialogProps) => {
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const driverOptions = useMemo(() => {
+    return drivers.map((driver) => ({ id: driver.id, name: `${driver.firstname} ${driver.lastname}`, value: driver.id }))
+  }, [drivers])
+  const motoOptions = useMemo(() => {
+    return motos.map((moto) => ({ id: moto.id, name: `${moto.id} ${moto.model}`, value: moto.id }))
+  }, [motos])
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -63,11 +76,12 @@ export const AddCrashDialog = ({ children, onCrashAdded }: AddCrashDialogProps) 
       responsability: "",
       consequence: "",
       status: "",
+      driver: "",
+      moto: ""
     },
   });
 
   const onSubmit = async (values: FormValues) => {
-    console.log("values")
     try {
       setIsSubmitting(true);
       const crash = await addCrash({
@@ -78,6 +92,8 @@ export const AddCrashDialog = ({ children, onCrashAdded }: AddCrashDialogProps) 
         responsability: values.responsability,
         consequence: values.consequence,
         status: values.status,
+        driver: drivers.filter(driver => driver.id === values.driver)[0],
+        moto: motos.filter(moto => moto.id === values.moto)[0],
       });
       onCrashAdded(crash);
       toast({
@@ -123,19 +139,34 @@ export const AddCrashDialog = ({ children, onCrashAdded }: AddCrashDialogProps) 
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="date"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Date de l'accident</FormLabel>
-                  <FormControl>
-                    <Input type="date" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="grid gap-4 md:grid-cols-2">
+              <FormField
+                control={form.control}
+                name="date"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Date de l'accident</FormLabel>
+                    <FormControl>
+                      <Input type="date" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="location"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Le lieu</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Ex: Rue accident" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
             <FormField
               control={form.control}
               name="description"
@@ -144,19 +175,6 @@ export const AddCrashDialog = ({ children, onCrashAdded }: AddCrashDialogProps) 
                   <FormLabel>Description de l'accident</FormLabel>
                   <FormControl>
                     <Input placeholder="Ex: Collision entre deux véhicules" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="location"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Le lieu</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Ex: Rue accident" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -201,6 +219,62 @@ export const AddCrashDialog = ({ children, onCrashAdded }: AddCrashDialogProps) 
                 </FormItem>
               )}
             />
+            <div className="grid gap-4 md:grid-cols-2">
+
+              <FormField
+                control={form.control}
+                name="driver"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Conducteur</FormLabel>
+                    <FormControl>
+                      <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Choisir un conducteur" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            {
+                              driverOptions.map((driver) => {
+                                return <SelectItem key={driver.id} value={driver.value}>{driver.name}</SelectItem>
+                              })
+                            }
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="moto"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Moto</FormLabel>
+                    <FormControl>
+                      <Select onValueChange={field.onChange} value={field.value}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Choisir une moto" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            {
+                              motoOptions.map((moto) => {
+                                return <SelectItem key={moto.id} value={moto.value}>{moto.name}</SelectItem>
+                              })
+                            }
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
             <Button type="submit" disabled={isSubmitting}>
               Ajouter l'accident
             </Button>

@@ -2,7 +2,8 @@ import { Moto, MotoStatus } from '../../../../../domain/entities/moto.entity';
 import { MotoRepositoryInterface } from './../../../../../application/repositories/MotoRepositoryInterface';
 import { PartnerRepositoryInterface } from './../../../../../application/repositories/PartnerRepositoryInterface';
 import { Injectable, Inject } from '@nestjs/common';
-import { CreateMotoUseCase } from "../../../../../application/usecases/moto/CreateMotoUseCase";
+import { CreateMotoUseCase } from '../../../../../application/usecases/moto/CreateMotoUseCase';
+import { AttemptRepositoryInterface } from '../../../../../application/repositories/AttemptRepositoryInterface';
 
 @Injectable()
 export class MotoService {
@@ -11,6 +12,8 @@ export class MotoService {
     private readonly motoRepository: MotoRepositoryInterface,
     @Inject('PartnerRepositoryInterface')
     private readonly partnerRepository: PartnerRepositoryInterface,
+    @Inject('AttemptRepositoryInterface')
+    private readonly attemptRepository: AttemptRepositoryInterface,
   ) {}
 
   async createMoto(
@@ -20,7 +23,10 @@ export class MotoService {
     price: number,
     status: MotoStatus,
   ) {
-    const createMotoUseCase = new CreateMotoUseCase(this.motoRepository, this.partnerRepository);
+    const createMotoUseCase = new CreateMotoUseCase(
+      this.motoRepository,
+      this.partnerRepository,
+    );
     return await createMotoUseCase.execute({
       model,
       clientId,
