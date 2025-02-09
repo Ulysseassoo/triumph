@@ -16,10 +16,14 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import MaintenanceForm from "@/components/maintenance/MaintenanceForm";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
-import { getMaintenances, Maintenance, createMaintenance } from "@/lib/apiEntities";
+import {
+  getMaintenances,
+  Maintenance,
+  createMaintenance,
+  updateMaintenance,
+} from "@/lib/apiEntities";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Link } from "react-router-dom";
 
@@ -41,8 +45,7 @@ const Maintenances = () => {
       kilometrageInterval: number;
       recommandations: string;
       tempsInterval: number;
-    }) =>
-      createMaintenance(data),
+    }) => createMaintenance(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["maintenances"] });
       toast({
@@ -61,9 +64,14 @@ const Maintenances = () => {
     },
   });
 
-  const updateMaintenance = useMutation({
+  const updateMaintenanceMutation = useMutation({
     mutationFn: (data: Maintenance) =>
-      axios.put(`/api/maintenances/${data.id}`, data),
+      updateMaintenance(data.id, {
+        motoId: data.motoId,
+        kilometrageInterval: data.maintenanceInterval.mileage,
+        recommandations: data.recommandations,
+        tempsInterval: data.maintenanceInterval.timeInMonths,
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["maintenances"] });
       toast({
@@ -73,7 +81,8 @@ const Maintenances = () => {
       setIsDialogOpen(false);
       setSelectedMaintenance(null);
     },
-    onError: () => {
+    onError: (error) => {
+      console.log("🚀 ~ Maintenances ~ error:", error);
       toast({
         title: "Erreur",
         description:
@@ -85,7 +94,17 @@ const Maintenances = () => {
 
   const handleSubmit = (values: Omit<Maintenance, "id">) => {
     if (selectedMaintenance) {
-      updateMaintenance.mutate({ ...values, id: selectedMaintenance.id });
+      console.log("update", selectedMaintenance);
+      console.log(values);
+      updateMaintenanceMutation.mutate({
+        ...selectedMaintenance,
+        id: selectedMaintenance.id,
+        maintenanceInterval: {
+          mileage: values.kilometrageInterval,
+          timeInMonths: values.tempsInterval,
+        },
+        recommandations: values.recommandations,
+      });
     } else {
       createMaintenanceApi.mutate(values);
     }
@@ -128,7 +147,8 @@ const Maintenances = () => {
               <MaintenanceForm
                 onSubmit={handleSubmit}
                 isSubmitting={
-                  createMaintenanceApi.isPending || updateMaintenance.isPending
+                  createMaintenanceApi.isPending ||
+                  updateMaintenanceMutation.isPending
                 }
                 defaultValues={selectedMaintenance || undefined}
               />

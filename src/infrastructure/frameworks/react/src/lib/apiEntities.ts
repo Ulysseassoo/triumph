@@ -201,6 +201,16 @@ export const createMaintenance = async (data: {
   return response.data;
 }
 
+export const updateMaintenance = async (id: string, data: {
+  motoId: string;
+  kilometrageInterval: number;
+  recommandations: string | undefined | null;
+  tempsInterval: number;
+}) => {
+  const response = await apiEntities.put<Maintenance>("/maintenances/" + id, data);
+  return response.data;
+}
+
 export const scheduleMaintenance = async (data: {
   motoId: string;
   modelType: "STREET_TRIPLE" | "TIGER_SPORT_660";
