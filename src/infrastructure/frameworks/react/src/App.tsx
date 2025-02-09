@@ -23,6 +23,8 @@ import Drivers from "./pages/Drivers";
 import Attempts from "./pages/Attempts";
 import Crashes from "./pages/Crashes";
 import DriverDetails from "./pages/DriverDetails";
+import BreakdownDetails from "./pages/BreakdownDetails";
+import MaintenanceDetails from "./pages/MaintenanceDetails";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +40,7 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/motos/:id" element={<MotoDetails />} />
               <Route path="/pannes" element={<Breakdowns />} />
+              <Route path="/pannes/:id" element={<BreakdownDetails />} />
               <Route path="/garanties" element={<Warranties />} />
               <Route path="/pieces/user" element={<PieceUser />} />
               <Route path="/create/piece" element={<CreatePiece />} />
@@ -48,6 +51,7 @@ function App() {
               <Route path="/orders/edit/:id" element={<OrderEdit />} />
               <Route path="/motos" element={<Motos />} />
               <Route path="/maintenances" element={<Maintenances />} />
+              <Route path="/maintenances/:id" element={<MaintenanceDetails />} />
               <Route path="/conducteurs" element={<Drivers />} />
               <Route path="/conducteur/:id" element={<DriverDetails />} />
               <Route path="/essais" element={<Attempts />} />

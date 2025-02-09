@@ -24,8 +24,9 @@ export class ReparationController {
       );
     }
   }
+  
 
-  @Get('breakdown/:breakdownId')
+  @Get('/breakdowns/:breakdownId')
   async findByBreakdownId(@Param('breakdownId') breakdownId: string) {
     try {
       return await this.reparationService.findByBreakdownId(breakdownId);

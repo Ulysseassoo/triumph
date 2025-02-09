@@ -149,6 +149,21 @@ export interface DriverLicense {
   country: string;
 }
 
+export interface Repair {
+  id: string;
+  breakdownId: string;
+  description: string;
+  cost: number;
+  date: string;
+}
+
+export interface CorrectiveAction {
+  id: string;
+  repairId: string;
+  description: string;
+  date: string;
+}
+
 export const getMaintenances = async () => {
   const response = await apiEntities.get<Maintenance[]>("/maintenances");
   return response.data;
@@ -168,6 +183,11 @@ export const getMaintenanceHistory = async (motoId: string) => {
   const response = await apiEntities.get<Maintenance[]>(
     `/maintenances/motos/${motoId}/history`
   );
+  return response.data;
+};
+
+export const getMaintenanceById = async (id: string | undefined) => {
+  const response = await apiEntities.get<Maintenance>("/maintenances/" + id);
   return response.data;
 };
 
@@ -204,6 +224,10 @@ export const reportBreakdown = async (data: {
 
 export const getBreakdowns = async () => {
   const response = await apiEntities.get<Breakdown[]>("/breakdowns");
+  return response.data;
+};
+export const getBreakdownById = async (id: string | undefined) => {
+  const response = await apiEntities.get<Breakdown>("/breakdowns/" + id);
   return response.data;
 };
 export const getWarranties = async () => {
@@ -286,6 +310,33 @@ export const addCrash = async (data: {
   status: string;
 }) => {
   const response = await apiEntities.post<Crash>("/crashes", data);
+  return response.data;
+};
+
+export const getRepairs = async (breakdownId: string) => {
+  const response = await apiEntities.get<Repair[]>(`/reparations/breakdowns/${breakdownId}`);
+  return response.data;
+};
+
+export const createRepair = async (data: {
+  description: string;
+  cost: number;
+  breakdownId: string;
+}) => {
+  const response = await apiEntities.post<Repair>(`/reparations`, data);
+  return response.data;
+};
+
+export const getCorrectiveActions = async (repairId: string) => {
+  const response = await apiEntities.get<CorrectiveAction[]>(`/corrective-actions/reparation/${repairId}`);
+  return response.data;
+};
+
+export const createCorrectiveAction = async (data: {
+  description: string;
+  reparationId: string;
+}) => {
+  const response = await apiEntities.post<CorrectiveAction>(`/corrective-actions`, data);
   return response.data;
 };
 

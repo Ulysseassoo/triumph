@@ -272,8 +272,6 @@ export class FixturesService {
   }
 
   private async createBreakdowns(motos: MotoOrmEntity[]) {
-    const breakdowns: BreakdownOrmEntity[] = [];
-
     for (const moto of motos) {
       const numberOfBreakdowns = Math.floor(Math.random() * 2) + 2;
       for (let i = 0; i < numberOfBreakdowns; i++) {
@@ -283,10 +281,34 @@ export class FixturesService {
         breakdown.date = new Date();
         breakdown.description = `Breakdown description ${i + 1} for moto ${moto.id}`;
 
-        breakdowns.push(breakdown);
+        await this.breakdownRepo.save(breakdown);
+
+        await this.createRepairsAndActions(breakdown);
+      }
+    }
+  }
+
+  private async createRepairsAndActions(breakdown: BreakdownOrmEntity) {
+    for (let i = 0; i < 4; i++) {
+      const repair = new ReparationOrmEntity();
+      repair.id = v4();
+      repair.breakdownId = breakdown.id;
+      repair.description = `Repair description ${i + 1} for breakdown ${breakdown.id}`;
+      repair.cost = Math.floor(Math.random() * 1000) + 100;
+      repair.date = new Date(new Date().setDate(new Date().getDate() + i * 7));
+
+      await this.reparationRepo.save(repair);
+
+      for (let j = 0; j < 4; j++) {
+        const action = new CorrectiveActionOrmEntity();
+        action.id = v4();
+        action.reparationId = repair.id;
+        action.description = `Corrective action ${j + 1} for repair ${repair.id}`;
+        action.date = new Date(new Date().setDate(repair.date.getDate() + j * 2));
+
+        await this.correctiveActionRepo.save(action);
       }
     }
 
-    await this.breakdownRepo.save(breakdowns);
   }
 }

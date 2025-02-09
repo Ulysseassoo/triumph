@@ -40,6 +40,7 @@ export class BreakdownService {
   }
 
   async findAll(): Promise<Breakdown[]> {
+    console.log('BreakdownService.findAll()', this.breakdownRepository.findAll());
     return await this.breakdownRepository.findAll();
   }
 

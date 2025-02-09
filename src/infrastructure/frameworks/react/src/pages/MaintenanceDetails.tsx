@@ -1,84 +1,86 @@
-
-import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
-import { Driver, getDriverById, updateDriver } from "@/lib/apiEntities";
-import { useToast } from "@/hooks/use-toast";
-import DriverInformations from "@/components/driver/DriverInformations";
-import DriverExperienceCard from "@/components/driver/DriverExperienceCard";
-import DriverLicenseCard from "@/components/driver/DriverLicenseCard";
+import { useQuery } from "@tanstack/react-query";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/Card";
+import { getMaintenanceById } from "@/lib/apiEntities";
 
-const DriverDetails = () => {
-    const { id } = useParams();
-    const { toast } = useToast();
-    const [driver, setDriver] = useState<Driver | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
+const MaintenanceDetails = () => {
+  const { id } = useParams();
+  const { data: maintenance } = useQuery({
+    queryKey: ["maintenance", id],
+    queryFn: async () => getMaintenanceById(id),
+  });
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                if (!id) return;
-                const driver = await getDriverById(id);
-                setDriver(driver);
-            } catch (error) {
-                console.error(`Error fetching driver with id ${id}:`, error);
-                toast({
-                    variant: "destructive",
-                    title: "Erreur",
-                    description: "Impossible de charger le conducteur",
-                });
-            } finally {
-                setIsLoading(false);
-            }
-        };
+  if (!maintenance) {
+    return <div>Maintenance non trouvée</div>;
+  }
 
-        fetchData();
-    }, [id, toast]);
-
-
-    const handleUpdateUser = useCallback(async (data: Driver) => {
-        try {
-            const newDriver = { ...driver, ...data }
-            await updateDriver(newDriver)
-            setDriver(newDriver);
-        } catch (error) {
-            console.error(`Error updating driver with id ${id}:`, error);
-            toast({
-                variant: "destructive",
-                title: "Erreur",
-                description: "Impossible de mettre à jour le conducteur",
-            });
-        }
-    }, [driver, id, toast])
-
-    if (isLoading) {
-        return <div>Chargement...</div>;
-    }
-
-    if (!driver) {
-        return (
-            <DashboardLayout>
-                <div className="text-red-500">Conduteur introuvable</div>
-            </DashboardLayout>
-        )
-    }
-
-    return (
-        <DashboardLayout>
-            <div className="space-y-8 animate-fade-in">
+  return (
+    <DashboardLayout>
+      <div className="space-y-8 animate-fade-in">
+        <div>
+          <Card>
+            <CardHeader>
+              <CardTitle>Maintenance ID: {maintenance.id}</CardTitle>
+              <CardDescription>Moto ID: {maintenance.motoId}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight">
-                        Détails du conducteur
-                    </h1>
+                  <p className="text-sm font-medium">Kilométrage actuel</p>
+                  <p className="text-2xl font-bold">{maintenance.mileage} km</p>
                 </div>
-                <DriverInformations driver={driver} onUpdate={handleUpdateUser} />
-                <div className="grid gap-4 md:grid-cols-2">
-                    <DriverExperienceCard driver={driver} />
-                    <DriverLicenseCard driver={driver} />
+                <div>
+                  <p className="text-sm font-medium">Type d'entretien</p>
+                  <p className="text-2xl font-bold">{maintenance.maintenanceType}</p>
                 </div>
-            </div>
-        </DashboardLayout>
-    );
+                <div>
+                  <p className="text-sm font-medium">Date planifiée</p>
+                  <p className="text-2xl font-bold">{new Date(maintenance.plannedDate).toLocaleDateString()}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium">Date de réalisation</p>
+                  <p className="text-2xl font-bold">
+                    {maintenance.achievedDate ? new Date(maintenance.achievedDate).toLocaleDateString() : "Non réalisé"}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium">Intervalle de maintenance</p>
+                  <p className="text-2xl font-bold">
+                    {maintenance.maintenanceInterval.mileage} km / {maintenance.maintenanceInterval.timeInMonths} mois
+                  </p>
+                </div>
+                {maintenance.recommandations && (
+                  <div>
+                    <p className="text-sm font-medium">Recommandations</p>
+                    <p className="text-2xl font-bold">{maintenance.recommandations}</p>
+                  </div>
+                )}
+                {maintenance.cost && (
+                  <div>
+                    <p className="text-sm font-medium">Coût</p>
+                    <p className="text-2xl font-bold">{maintenance.cost}€</p>
+                  </div>
+                )}
+                {maintenance.pieces && maintenance.pieces.length > 0 && (
+                  <div className="col-span-2">
+                    <p className="text-sm font-medium">Pièces remplacées</p>
+                    <ul className="list-disc list-inside">
+                      {maintenance.pieces.map((piece, index) => (
+                        <li key={index} className="text-2xl font-bold">
+                          {piece.name} (x{piece.quantity})
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </DashboardLayout>
+  );
 };
 
-export default DriverDetails;
+export default MaintenanceDetails;
