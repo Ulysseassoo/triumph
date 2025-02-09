@@ -237,6 +237,47 @@ export class FixturesService {
           p.quantity,
         );
       }
+
+      // Ajouter 1/2 entretiens passés
+      const pastMaintenanceCount = Math.floor(Math.random() * 2) + 1;
+      for (let i = 0; i < pastMaintenanceCount; i++) {
+        const pastMaintenance = new MaintenanceOrmEntity();
+        pastMaintenance.id = v4();
+        pastMaintenance.moto = moto;
+        pastMaintenance.maintenanceType = template.type;
+        pastMaintenance.plannedDate = new Date();
+        pastMaintenance.plannedDate.setMonth(
+          pastMaintenance.plannedDate.getMonth() -
+            template.interval.timeInMonths * (i + 1),
+        );
+        pastMaintenance.mileage =
+          moto.currentMileage - template.interval.mileage * (i + 1);
+        pastMaintenance.maintenanceInterval = template.interval;
+        pastMaintenance.recommandations = template.recommendation;
+        pastMaintenance.cost = template.pieces.reduce(
+          (sum, p) => sum + p.piece.cost * p.quantity,
+          150,
+        ); // Main d'œuvre
+
+        // Association des pièces
+        pastMaintenance.pieces = template.pieces.map((p) => {
+          const piece = new PieceOrmEntity();
+          Object.assign(piece, p.piece);
+          piece.quantity = p.quantity;
+          return piece;
+        });
+
+        await this.maintenanceRepo.save(pastMaintenance);
+
+        // Mise à jour du stock
+        for (const p of template.pieces) {
+          await this.pieceRepo.decrement(
+            { id: p.piece.id },
+            'quantity',
+            p.quantity,
+          );
+        }
+      }
     }
   }
 

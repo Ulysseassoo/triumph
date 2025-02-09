@@ -27,6 +27,8 @@ import BreakdownDetails from "./pages/BreakdownDetails";
 import MaintenanceDetails from "./pages/MaintenanceDetails";
 import AttemptDetails from "./pages/AttemptDetail";
 import CrashDetails from "./pages/CrashDetail";
+import Orders from "./pages/Orders";
+import Pieces from "./pages/Pieces";
 
 const queryClient = new QueryClient();
 
@@ -62,7 +64,8 @@ function App() {
 
               <Route path="/accidents" element={<Crashes />} />
               <Route path="/accident/:id" element={<CrashDetails />} />
-
+              <Route path="/orders" element={<Orders />} />
+              <Route path="/pieces" element={<Pieces />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <Toaster />
