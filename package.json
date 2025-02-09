@@ -8,10 +8,20 @@
     "clean-architecture": "file:",
     "pg": "^8.13.1",
     "reflect-metadata": "^0.2.2",
-    "sqlite3": "^5.1.7",
     "typeorm": "^0.3.20"
   },
+  "scripts": {
+    "test": "cross-env ENVIRONMENT=test LOAD_DOTENV=false jest",
+    "test:watch": "cross-env ENVIRONMENT=test LOAD_DOTENV=false jest --watch",
+    "test:coverage": "cross-env ENVIRONMENT=test LOAD_DOTENV=false jest --coverage"
+  },
   "devDependencies": {
-    "@types/uuid": "^10.0.0"
+    "@types/jest": "^29.5.14",
+    "@types/uuid": "^10.0.0",
+    "cross-env": "^7.0.3",
+    "jest": "^29.7.0",
+    "sqlite3": "^5.1.7",
+    "ts-jest": "^29.2.5",
+    "ts-node": "^10.9.2"
   }
 }

@@ -11,7 +11,11 @@ export class MaintenanceOrmEntity {
   @Column({ type: 'uuid' })
   motoId: string;
 
-  @Column({ type: 'enum', enum: MaintenanceType })
+  @Column({
+    type: "simple-enum",
+    enum: MaintenanceType,
+    default: MaintenanceType.PREVENTIF,
+  })
   maintenanceType: MaintenanceType;
 
   @Column({ type: 'date' })

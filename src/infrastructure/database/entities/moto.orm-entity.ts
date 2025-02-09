@@ -26,7 +26,11 @@ export class MotoOrmEntity {
   @Column({ type: "decimal" })
   price: number;
 
-  @Column({ type: "enum", enum: MotoStatus })
+  @Column({
+    type: "simple-enum",
+    enum: MotoStatus,
+    default: MotoStatus.InService,
+  })
   status: MotoStatus;
 
   @OneToMany(() => MaintenanceOrmEntity, (maintenance) => maintenance.moto, {

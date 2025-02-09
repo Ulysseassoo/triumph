@@ -36,6 +36,5 @@ export const AppDataSource = () => {
 			});
 		}
 	}
-	console.log(dataSource.options)
 	return dataSource;
 }
