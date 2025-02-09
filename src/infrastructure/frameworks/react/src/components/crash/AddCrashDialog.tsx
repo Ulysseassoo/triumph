@@ -20,7 +20,7 @@ import {
 } from "../ui/Form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { addCrash, Crash, Driver, Moto } from "@/lib/apiEntities";
+import { addCrash, Crash, CrashStatus, Driver, Moto } from "@/lib/apiEntities";
 import { Button } from "../ui/Button";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
@@ -75,7 +75,7 @@ export const AddCrashDialog = ({ children, onCrashAdded, drivers, motos }: AddCr
       location: "",
       responsability: "",
       consequence: "",
-      status: "",
+      status: CrashStatus.GOING,
       driver: "",
       moto: ""
     },
@@ -206,17 +206,25 @@ export const AddCrashDialog = ({ children, onCrashAdded, drivers, motos }: AddCr
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="status"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Status</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Ex: Status de l'accident" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Choisir un statut" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {Object.values(CrashStatus).map((status) => (
+                        <SelectItem key={status} value={status}>
+                          {status}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               )}
             />
             <div className="grid gap-4 md:grid-cols-2">

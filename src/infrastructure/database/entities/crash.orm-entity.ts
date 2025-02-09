@@ -7,6 +7,7 @@ import {
 } from "typeorm";
 import { DriverOrmEntity } from "./driver.orm-entity";
 import { MotoOrmEntity } from "./moto.orm-entity";
+import { CrashStatus } from "../../../domain/entities/crash.entity";
 
 @Entity("crash")
 export class CrashOrmEntity {
@@ -31,8 +32,8 @@ export class CrashOrmEntity {
   @Column()
   consequence: string;
 
-  @Column()
-  status: string;
+  @Column({ type: "enum", enum: CrashStatus, nullable: true })
+  status: CrashStatus;
 
   @ManyToOne(() => DriverOrmEntity, (driver) => driver.crashes, {
     onDelete: "CASCADE",

@@ -15,7 +15,6 @@ interface AttemptTableProps {
 }
 export const AttemptTable = ({ attempts }: AttemptTableProps) => {
   const navigate = useNavigate()
-  console.log(attempts)
   return (
     <div className="rounded-md border bg-white/80 backdrop-blur-sm">
       <Table>
