@@ -16,6 +16,11 @@ import { WarrantyOrmEntity } from '../../../../database/entities/warranty.orm-en
 import { MotoStatus } from '../../../../../domain/entities/moto.entity';
 import { MaintenanceType } from '../../../../../domain/entities/maintenance.entity';
 import { MotoMapper } from '../../../../database/mappers/moto.mapper';
+import { DriverOrmEntity } from '../../../../database/entities/driver.orm-entity';
+import { DriverLicenseOrmEntity } from '../../../../database/entities/driverLicense.orm-entity';
+import { DriverExperienceOrmEntity } from '../../../../database/entities/driverExperience.orm-entity';
+import { CrashOrmEntity } from '../../../../database/entities/crash.orm-entity';
+import { AttemptOrmEntity } from '../../../../database/entities/attempt.orm-entity';
 
 @Injectable()
 export class FixturesService {
@@ -42,6 +47,16 @@ export class FixturesService {
     private correctiveActionRepo: Repository<CorrectiveActionOrmEntity>,
     @InjectRepository(NotificationOrmEntity)
     private notificationRepo: Repository<NotificationOrmEntity>,
+    @InjectRepository(DriverLicenseOrmEntity)
+    private licenseRepo: Repository<DriverLicenseOrmEntity>,
+    @InjectRepository(DriverOrmEntity)
+    private driverRepo: Repository<DriverOrmEntity>,
+    @InjectRepository(DriverExperienceOrmEntity)
+    private experienceRepo: Repository<DriverExperienceOrmEntity>,
+    @InjectRepository(CrashOrmEntity)
+    private crashRepo: Repository<CrashOrmEntity>,
+    @InjectRepository(AttemptOrmEntity)
+    private attemptRepo: Repository<AttemptOrmEntity>,
   ) {}
 
   async clearDatabase() {
@@ -54,6 +69,10 @@ export class FixturesService {
     await this.maintenanceRepo.delete({});
     await this.motoRepo.delete({});
     await this.notificationRepo.delete({});
+    await this.licenseRepo.delete({});
+    await this.experienceRepo.delete({});
+    await this.crashRepo.delete({});
+    await this.attemptRepo.delete({});
   }
 
   async loadFixtures() {
@@ -65,6 +84,7 @@ export class FixturesService {
     await this.createNotifications();
     await this.createWarranties(motos);
     await this.createBreakdowns(motos);
+    await this.createDrivers(motos);
 
     console.log('Fixtures loaded successfully!');
   }
@@ -310,5 +330,162 @@ export class FixturesService {
       }
     }
 
+  }
+
+  async createDrivers(motos: MotoOrmEntity[]): Promise<DriverOrmEntity[]> {
+    // Création des conducteurs
+    const drivers = await this.driverRepo.save([
+      this.createDriver('Jean', 'Dupont', '1990-05-15', '12 rue de Paris, 75001 Paris'),
+      this.createDriver('Marie', 'Martin', '1985-08-22', '5 avenue des Champs-Élysées, 75008 Paris'),
+      this.createDriver('Pierre', 'Leroy', '1995-02-10', '8 rue de Lyon, 69002 Lyon')
+    ]);
+  
+    // Licences
+    await this.createLicenses(drivers);
+  
+    // Expériences
+    await this.createExperiences(drivers);
+  
+    // Accidents
+    await this.createCrashes(drivers, motos);
+  
+    // Essais
+    await this.createAttempts(drivers, motos);
+  
+    return drivers;
+  }
+  
+  private createDriver(firstname: string, lastname: string, birthdate: string, address: string): DriverOrmEntity {
+    const driver = new DriverOrmEntity();
+    driver.firstname = firstname;
+    driver.lastname = lastname;
+    driver.birthdate = new Date(birthdate);
+    driver.addresse = address;
+    return driver;
+  }
+  
+  private async createLicenses(drivers: DriverOrmEntity[]) {
+    const licenses = drivers.flatMap(driver => [
+      this.createLicense(driver, 'B123456789', 'B', '2025-12-31', '2020-01-01', 'France', 'Valid'),
+      this.createLicense(driver, 'A987654321', 'A', '2024-06-30', '2018-03-15', 'France', 'Valid')
+    ]);
+    
+    await this.licenseRepo.save(licenses);
+  }
+  
+  private createLicense(
+    driver: DriverOrmEntity,
+    number: string,
+    category: string,
+    expiry: string,
+    obtain: string,
+    country: string,
+    status: string
+  ): DriverLicenseOrmEntity {
+    const license = new DriverLicenseOrmEntity();
+    license.licenseNumber = number;
+    license.category = category;
+    license.expiryDate = new Date(expiry);
+    license.obtainDate = new Date(obtain);
+    license.country = country;
+    license.status = status;
+    license.driver = driver;
+    return license;
+  }
+  
+  private async createExperiences(drivers: DriverOrmEntity[]) {
+    const experiences = drivers.map(driver => 
+      this.createExperience(driver, '5 ans', 'Moto', false, true, 'Expérience professionnelle en livraison urbaine')
+    );
+    
+    await this.experienceRepo.save(experiences);
+  }
+  
+  private createExperience(
+    driver: DriverOrmEntity,
+    duration: string,
+    type: string,
+    rented: boolean,
+    professional: boolean,
+    feedback: string
+  ): DriverExperienceOrmEntity {
+    const exp = new DriverExperienceOrmEntity();
+    exp.duration = duration;
+    exp.type = type;
+    exp.rented = rented;
+    exp.professional = professional;
+    exp.feedback = feedback;
+    exp.driver = driver;
+    return exp;
+  }
+  
+  private async createCrashes(drivers: DriverOrmEntity[], motos: MotoOrmEntity[]) {
+    const crashes = drivers.flatMap((driver, index) => {
+      const moto = motos[index % motos.length];
+      return [
+        this.createCrash(driver, moto, 'Collision', '2023-03-15', 'Accrochage avec un véhicule stationné', 
+          'Paris 15e', 'Responsabilité partagée', 'Rayure sur carénage', 'Résolu'),
+        this.createCrash(driver, moto, 'Chute', '2022-08-10', 'Perte de contrôle en virage', 
+          'Route de montagne', 'Faute du conducteur', 'Rétroviseur cassé', 'En cours')
+      ];
+    });
+    
+    await this.crashRepo.save(crashes);
+  }
+  
+  private createCrash(
+    driver: DriverOrmEntity,
+    moto: MotoOrmEntity,
+    type: string,
+    date: string,
+    description: string,
+    location: string,
+    responsability: string,
+    consequence: string,
+    status: string
+  ): CrashOrmEntity {
+    const crash = new CrashOrmEntity();
+    crash.type = type;
+    crash.date = new Date(date);
+    crash.description = description;
+    crash.location = location;
+    crash.responsability = responsability;
+    crash.consequence = consequence;
+    crash.status = status;
+    crash.driver = driver;
+    crash.moto = moto;
+    return crash;
+  }
+  
+  private async createAttempts(drivers: DriverOrmEntity[], motos: MotoOrmEntity[]) {
+    const attempts = drivers.flatMap((driver, index) => {
+      const moto = motos[index % motos.length];
+      return [
+        this.createAttempt(moto, driver, '2023-01-10', '2023-01-10', 1500, 1520, 'Terminé'),
+        this.createAttempt(moto, driver, '2023-02-15', '2023-02-15', 2000, 2035, 'Annulé')
+      ];
+    });
+    
+    await this.attemptRepo.save(attempts);
+  }
+  
+  private createAttempt(
+    moto: MotoOrmEntity,
+    driver: DriverOrmEntity,
+    start: string,
+    end: string,
+    startKm: number,
+    endKm: number,
+    status: string
+  ): AttemptOrmEntity {
+    const attempt = new AttemptOrmEntity();
+    attempt.startDate = new Date(start);
+    attempt.endDate = new Date(end);
+    attempt.startKilometer = startKm;
+    attempt.endKilometer = endKm;
+    attempt.status = status;
+    attempt.moto = moto;
+    attempt.driver = driver;
+    return attempt;
   }
 }

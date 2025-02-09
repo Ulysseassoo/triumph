@@ -13,6 +13,10 @@ import { BreakdownModule } from './breakdown.module';
 import { ReparationModule } from './reparation.module';
 import { CorrectiveActionModule } from './corrective-action.module';
 import { NotificationModule } from './notification.module';
+import { DriverModule } from './driver.module';
+import { AttemptModule } from './attempt.module';
+import { CrashModule } from './crash.module';
+import { DriverExperienceModule } from './driverExperience.module';
 
 @Module({
   imports: [
@@ -27,6 +31,10 @@ import { NotificationModule } from './notification.module';
     ReparationModule,
     CorrectiveActionModule,
     NotificationModule,
+    DriverModule,
+    AttemptModule,
+    CrashModule,
+    DriverExperienceModule,
   ],
   providers: [FixturesService],
   exports: [FixturesService],

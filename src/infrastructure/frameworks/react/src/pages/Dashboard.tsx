@@ -14,7 +14,6 @@ import {
   getOverdueMaintenances,
   getPendingMaintenances,
 } from "@/utils/maintenanceUtils";
-import { BreakdownStepper } from "@/components/breakdown/BreakdownStepper";
 
 const Dashboard = () => {
   const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
@@ -86,10 +85,6 @@ const Dashboard = () => {
             <h2 className="text-xl font-semibold">Motos</h2>
             <MotoTable motos={motos} />
           </div>
-        </div>
-
-        <div className="mt-8">
-          <BreakdownStepper />
         </div>
       </div>
     </DashboardLayout>
