@@ -1,14 +1,23 @@
-import { PieceOrmEntity } from './piece.orm-entity';
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, OneToMany } from "typeorm";
-import { MaintenanceInterval, MaintenanceType } from './../../../domain/entities/maintenance.entity';
+import { PieceOrmEntity } from "./piece.orm-entity";
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  OneToMany,
+} from "typeorm";
+import {
+  MaintenanceInterval,
+  MaintenanceType,
+} from "./../../../domain/entities/maintenance.entity";
 import { MotoOrmEntity } from "./moto.orm-entity";
 
-@Entity('maintenance')
+@Entity("maintenance")
 export class MaintenanceOrmEntity {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column({ type: 'uuid' })
+  @Column({ type: "uuid" })
   motoId: string;
 
   @Column({
@@ -18,27 +27,30 @@ export class MaintenanceOrmEntity {
   })
   maintenanceType: MaintenanceType;
 
-  @Column({ type: 'date' })
+  @Column({ type: "date" })
   plannedDate: Date;
 
-  @Column({ type: 'int' })
+  @Column({ type: "int" })
   mileage: number;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ type: "date", nullable: true })
   achievedDate: Date | null;
 
-  @Column({ type: 'json' })
+  @Column({ type: "json" })
   maintenanceInterval: MaintenanceInterval;
 
-  @Column({ type: 'text', nullable: true })
+  @Column({ type: "text", nullable: true })
   recommandations: string | null;
 
-  @Column({ type: 'decimal', nullable: true })
+  @Column({ type: "decimal", nullable: true })
   cost: number | null;
 
-  @ManyToOne(() => MotoOrmEntity, moto => moto.maintenances)
+  @ManyToOne(() => MotoOrmEntity, (moto) => moto.maintenances)
   moto: MotoOrmEntity;
 
-  @OneToMany(() => PieceOrmEntity, piece => piece.maintenance, { cascade: true, eager: true })
+  @OneToMany(() => PieceOrmEntity, (piece) => piece.maintenance, {
+    cascade: true,
+    eager: true,
+  })
   pieces: PieceOrmEntity[];
 }

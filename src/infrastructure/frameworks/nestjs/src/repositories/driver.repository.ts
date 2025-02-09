@@ -27,7 +27,7 @@ export class DriverRepository implements DriverRepositoryInterface {
       const drivers = await this.driverRepository.find({
         where: query,
         skip: filters?.pagination?.offset ?? 0,
-        take: filters?.pagination?.limit ?? 10,
+        take: filters?.pagination?.limit ?? 100,
       });
 
       return drivers.map((driver) => DriverMapper.toDomainEntity(driver));
